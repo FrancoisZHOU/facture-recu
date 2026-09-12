@@ -146,7 +146,9 @@ header h1{font-size:19px;font-weight:800;letter-spacing:.06em;}
 #tTabMemo,#tTabRecon{display:none;}
 body.memoOpen #tTabMemo{display:inline-block;}
 body:not(.memoOpen) #tChipMemo,body:not(.memoOpen) #tChipList{display:none;}
-#ossLic{margin-top:6px;text-align:center;font-size:11px;color:#3A404B;padding:10px 4px 2px;
+body.pasteMode #inText{min-height:150px;font-family:var(--mono);font-size:13px;}
+body.pasteMode #pasteQuick,body.pasteMode #nbDate{display:none;}
+#ossLic{margin-top:6px;text-align:center;font-size:11px;color:#3A404B;padding:12px 4px 14px;
   user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none;cursor:default;}
 #licSheet pre{white-space:pre-wrap;font-size:11px;line-height:1.45;color:var(--faded);
   font-family:var(--mono);max-height:50vh;overflow:auto;margin:0 0 12px;}
@@ -363,7 +365,8 @@ body:not(.memoOpen) #tChipMemo,body:not(.memoOpen) #tChipList{display:none;}
 
 <div id="noteBar">
   <div id="noteChips">
-    <button class="chip on" data-k="memo" id="tChipMemo"></button>
+    <button class="chip on" data-k="paste" id="tChipPaste"></button>
+    <button class="chip" data-k="memo" id="tChipMemo"></button>
     <button class="chip" data-k="list" id="tChipList"></button>
     <button class="chip" data-k="km" id="tChipKm"></button>
     <input type="date" id="nbDate">
@@ -529,7 +532,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 /* ============ i18n ============ */
 const I18N={
 zh:{drLbl:s=>"☁ Drive自动存档:"+s,drOff:"未开启",drConn:"连接中…",drOk:x=>"已连接 · 最近 "+x,drFail:c=>"上传失败 "+c,drNoAuth:"未授权",drClosed:"已关闭",drNet:"网络波动·稍后自动重试",drScript:"脚本加载失败·看网络",drConfOff:"关闭Drive自动存档?(本地数据不受影响)",tabRecon:"💳 对账",reconSum:(n,ok,sus,miss)=>n+" 笔 · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · 缺 "+miss:""),stMiss:"缺票",stSus:"疑似",stOk:"有票",stNa:"无需",stRecWait:"待流水",stRecLate:"流水已到·无扣款",noBank:"流水未导入 — 月结时把对账单发Claude",confSus:(a,b)=>"确认配对?\n流水: "+a+"\n票据: "+b,pickLink:"输入编号手动配对,0=标记无需票据,留空取消:",tLinked:"已配对 ✓",tNa:"已标记无需票据",tReset:"已重置为自动",reconEmpty:"还没有流水。每月把对账单发Claude,粘贴流水块进来。",pasteBtn:"📋 粘贴导入(万能吃口)",pasteTitle:"📋 粘贴导入",pastePh:"粘贴Claude给你的JSON代码块,里程/备忘/清单通吃,重复自动跳过",pasteGo:"导入",badPaste:"解析失败,检查粘贴内容",tPasted:(a,s)=>"新增"+a+" · 跳过"+s,basePrompt:"本次出发点(只对这一条生效,存后自动回到KOUUNN)",appTitle:"KOUUNN仓",snap:"拍 票 据",snapSub:"自动压缩 · 自动记时 · 存入本机",importB:"📁 导入照片 / PDF发票(按文件时间归月)",
-chipMemo:"📝 记录",chipList:"☑ 清单",chipKm:"🚗 里程",memoOpenBtn:"📝 记事",ossLic:"开源许可 (JSZip)",pasteConf:(n,det,s)=>"识别到 "+n+" 条("+det+")"+(s?",另有 "+s+" 条已存在将跳过":"")+"\n导入?",pasteNone:"全部已存在,无新内容",undoTx:n=>"已导入 "+n+" 条",undoBtn:"撤销",tUndone:n=>"已撤销 "+n+" 条",kRec:"票据",kKm:"里程",kBank:"流水",kMemo:"记事",
+chipMemo:"📝 记录",chipList:"☑ 清单",chipKm:"🚗 里程",chipPaste:"📋 粘贴",phPaste:"粘贴Claude给你的代码块(票据/里程/流水通吃),重复自动跳过",logPaste:"导入",memoOpenBtn:"📝 记事",ossLic:"开源许可 (JSZip)",pasteConf:(n,det,s)=>"识别到 "+n+" 条("+det+")"+(s?",另有 "+s+" 条已存在将跳过":"")+"\n导入?",pasteNone:"全部已存在,无新内容",undoTx:n=>"已导入 "+n+" 条",undoBtn:"撤销",tUndone:n=>"已撤销 "+n+" 条",kRec:"票据",kKm:"里程",kBank:"流水",kMemo:"记事",
 phMemo:"想到什么倒什么,语音、粘贴都行",phList:"一行一项,粘贴多行自动拆条",phKm:"点下方地点,或输入地点名(多段用逗号分隔)",
 log:"记",rtOn:"⇄ 往返",rtOff:"→ 单程",clear:"清空",yearBtn:"📄 年度里程表",otherPlace:"＋其他…",asTitle:"🚗 顺路记里程?",
 searchPh:"🔍 搜索…",tabAll:"全部",tabRecu:"🧾 票据",tabMemo:"📝 记事",tabKm:"🚗 里程",
@@ -564,7 +567,7 @@ rmTitle:"⏰ 提醒",rmQ1:"1小时后",rmQ2:"今晚20:00",rmQ3:"明早9:00",rmOf
 off0:"准点",off10:"提前10分",off30:"提前30分",off60:"提前1小时",off1d:"提前1天",
 rmAlarm:"⏰ 设系统闹钟",rmIcs:"📅 日历提醒",pickTime:"先选时间",icsDone:"已生成,点开进日历 ✓"},
 en:{drLbl:s=>"☁ Drive auto-backup: "+s,drOff:"off",drConn:"connecting…",drOk:x=>"on · last "+x,drFail:c=>"upload failed "+c,drNoAuth:"not authorized",drClosed:"off",drNet:"network hiccup · will retry",drScript:"script failed · check network",drConfOff:"Turn off Drive auto-backup? (local data untouched)",tabRecon:"💳 Recon",reconSum:(n,ok,sus,miss)=>n+" lines · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · missing "+miss:""),stMiss:"missing",stSus:"likely",stOk:"matched",stNa:"n/a",stRecWait:"awaiting statement",stRecLate:"statement in · no debit",noBank:"No statement yet — send it to Claude at month close",confSus:(a,b)=>"Confirm match?\nBank: "+a+"\nReceipt: "+b,pickLink:"Enter number to link manually, 0 = no receipt needed, blank = cancel:",tLinked:"Linked ✓",tNa:"Marked as no receipt needed",tReset:"Reset to auto",reconEmpty:"No bank lines yet. Send the monthly statement to Claude and paste the block.",pasteBtn:"📋 Paste import",pasteTitle:"📋 Paste import",pastePh:"Paste the JSON block from Claude — trips/notes/lists, dupes auto-skipped",pasteGo:"Import",badPaste:"Cannot parse, check the paste",tPasted:(a,s)=>"Added "+a+" · skipped "+s,basePrompt:"Start point for this entry only (reverts to KOUUNN after saving)",appTitle:"KOUUNN Vault",snap:"SNAP RECEIPT",snapSub:"auto-compress · timestamp · stored locally",importB:"📁 Import photos / PDF invoices (by file date)",
-chipMemo:"📝 Note",chipList:"☑ List",chipKm:"🚗 Trip",memoOpenBtn:"📝 Notes",ossLic:"Open-source licenses (JSZip)",pasteConf:(n,det,s)=>"Found "+n+" entries ("+det+")"+(s?", "+s+" already exist and will be skipped":"")+"\nImport?",pasteNone:"All already exist, nothing new",undoTx:n=>"Imported "+n,undoBtn:"Undo",tUndone:n=>"Undone "+n,kRec:"receipts",kKm:"trips",kBank:"bank",kMemo:"notes",
+chipMemo:"📝 Note",chipList:"☑ List",chipKm:"🚗 Trip",chipPaste:"📋 Paste",phPaste:"Paste the code block from Claude (receipts/trips/bank), dupes skipped",logPaste:"Import",memoOpenBtn:"📝 Notes",ossLic:"Open-source licenses (JSZip)",pasteConf:(n,det,s)=>"Found "+n+" entries ("+det+")"+(s?", "+s+" already exist and will be skipped":"")+"\nImport?",pasteNone:"All already exist, nothing new",undoTx:n=>"Imported "+n,undoBtn:"Undo",tUndone:n=>"Undone "+n,kRec:"receipts",kKm:"trips",kBank:"bank",kMemo:"notes",
 phMemo:"Dump anything. Voice or paste works",phList:"One item per line. Paste splits rows",phKm:"Tap a place below, or type (comma = legs)",
 log:"Log",rtOn:"⇄ round",rtOff:"→ one-way",clear:"Clear",yearBtn:"📄 Yearly mileage",otherPlace:"＋ Other…",asTitle:"🚗 Log the trip too?",
 searchPh:"🔍 Search…",tabAll:"All",tabRecu:"🧾 Receipts",tabMemo:"📝 Notes",tabKm:"🚗 Trips",
@@ -600,7 +603,7 @@ rmTitle:"⏰ Reminder",rmQ1:"In 1 hour",rmQ2:"Tonight 20:00",rmQ3:"Tomorrow 9:00
 off0:"On time",off10:"10 min before",off30:"30 min before",off60:"1 h before",off1d:"1 day before",
 rmAlarm:"⏰ System alarm",rmIcs:"📅 Calendar",pickTime:"Pick a time first",icsDone:"Created — open it into calendar ✓"},
 fr:{drLbl:s=>"☁ Sauvegarde Drive : "+s,drOff:"désactivée",drConn:"connexion…",drOk:x=>"active · dernière "+x,drFail:c=>"échec envoi "+c,drNoAuth:"non autorisé",drClosed:"désactivée",drNet:"réseau instable · nouvel essai",drScript:"script non chargé · réseau",drConfOff:"Désactiver la sauvegarde Drive ? (données locales intactes)",tabRecon:"💳 Rappro",reconSum:(n,ok,sus,miss)=>n+" lignes · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · manque "+miss:""),stMiss:"manque",stSus:"probable",stOk:"OK",stNa:"s/o",stRecWait:"en attente du relevé",stRecLate:"relevé reçu · non débité",noBank:"Relevé non importé — envoyez-le à Claude",confSus:(a,b)=>"Confirmer ?\nBanque : "+a+"\nReçu : "+b,pickLink:"Numéro pour lier, 0 = sans reçu, vide = annuler :",tLinked:"Lié ✓",tNa:"Marqué sans reçu",tReset:"Auto rétabli",reconEmpty:"Aucune ligne bancaire. Envoyez le relevé à Claude et collez le bloc.",pasteBtn:"📋 Import par collage",pasteTitle:"📋 Import par collage",pastePh:"Collez le bloc JSON de Claude — trajets/notes/listes, doublons ignorés",pasteGo:"Importer",badPaste:"Illisible, vérifiez le collage",tPasted:(a,s)=>"Ajouté "+a+" · ignoré "+s,basePrompt:"Départ pour cette entrée seule (retour à KOUUNN après)",appTitle:"KOUUNN Vault",snap:"PHOTO REÇU",snapSub:"compression auto · horodaté · stocké local",importB:"📁 Importer photos / factures PDF (date du fichier)",
-chipMemo:"📝 Note",chipList:"☑ Liste",chipKm:"🚗 Trajet",memoOpenBtn:"📝 Notes",ossLic:"Licences open source (JSZip)",pasteConf:(n,det,s)=>n+" entrées détectées ("+det+")"+(s?", "+s+" déjà présentes seront ignorées":"")+"\nImporter ?",pasteNone:"Tout existe déjà, rien de nouveau",undoTx:n=>"Importé "+n,undoBtn:"Annuler",tUndone:n=>"Annulé "+n,kRec:"reçus",kKm:"trajets",kBank:"banque",kMemo:"notes",
+chipMemo:"📝 Note",chipList:"☑ Liste",chipKm:"🚗 Trajet",chipPaste:"📋 Coller",phPaste:"Collez le bloc de Claude (reçus/trajets/banque), doublons ignorés",logPaste:"Importer",memoOpenBtn:"📝 Notes",ossLic:"Licences open source (JSZip)",pasteConf:(n,det,s)=>n+" entrées détectées ("+det+")"+(s?", "+s+" déjà présentes seront ignorées":"")+"\nImporter ?",pasteNone:"Tout existe déjà, rien de nouveau",undoTx:n=>"Importé "+n,undoBtn:"Annuler",tUndone:n=>"Annulé "+n,kRec:"reçus",kKm:"trajets",kBank:"banque",kMemo:"notes",
 phMemo:"Déversez tout. Voix ou collage OK",phList:"Un élément par ligne. Coller découpe",phKm:"Touchez un lieu, ou tapez (virgule = étapes)",
 log:"Noter",rtOn:"⇄ A/R",rtOff:"→ aller",clear:"Effacer",yearBtn:"📄 Kilométrage annuel",otherPlace:"＋ Autre…",asTitle:"🚗 Noter le trajet aussi ?",
 searchPh:"🔍 Rechercher…",tabAll:"Tout",tabRecu:"🧾 Reçus",tabMemo:"📝 Notes",tabKm:"🚗 Trajets",
@@ -643,7 +646,7 @@ function applyLang(){
   document.getElementById('langBtn').textContent=LANG==='zh'?'中':LANG.toUpperCase();
   document.title=t('appTitle');
   ['appTitle:appTitle','tSnap:snap','tSnapSub:snapSub','importBtn:importB',
-   'tChipMemo:chipMemo','tChipList:chipList','tChipKm:chipKm','noteAdd:log',
+   'tChipPaste:chipPaste','tChipMemo:chipMemo','tChipList:chipList','tChipKm:chipKm',
    'exportAll:exportAll','gateText:gateText','gateExport:gateBtn','gateLater:gateLater',
    'vDel:del','vClose:close','vOpen:openPdf','neSave:save','neDel:del','neCancel:cancel','neTitle:editNote',
    'asTitle:asTitle','bkExport:bkExport','bkImport:bkImport','bkCancel:bkCancel',
@@ -1027,7 +1030,7 @@ document.getElementById('asDate').onchange=async e=>{
 };
 
 /* ============ 记录录入(三模式) ============ */
-let noteKind='memo',tripRound=true,focusT0=null;
+let noteKind='paste',tripRound=true,focusT0=null;
 document.getElementById('inText').addEventListener('focus',()=>{if(!focusT0)focusT0=Date.now();});
 function parseTokens(v){
   v=String(v||'').trim();
@@ -1105,7 +1108,9 @@ function renderSuggest(filter){
 }
 function syncPh(){
   document.getElementById('inText').placeholder=
-    noteKind==='km'?t('phKm'):noteKind==='list'?t('phList'):t('phMemo');
+    noteKind==='paste'?t('phPaste'):noteKind==='km'?t('phKm'):noteKind==='list'?t('phList'):t('phMemo');
+  document.getElementById('noteAdd').textContent=noteKind==='paste'?t('logPaste'):t('log');
+  document.body.classList.toggle('pasteMode',noteKind==='paste');
 }
 function updateHint(){
   const v=document.getElementById('inText').value;
@@ -1138,7 +1143,8 @@ document.getElementById('inText').addEventListener('keydown',e=>{
 async function addNote(){
   const tEl=document.getElementById('inText'),kEl=document.getElementById('noteKm');
   let raw=tEl.value;
-  const feed=tryParseFeed(raw.trim());
+  const feed=noteKind==='km'?null:tryParseFeed(raw.trim());
+  if(noteKind==='paste'&&!feed&&/[{\[]/.test(raw)){toast(t('badPaste'));return;}
   if(feed){
     const n=await importNotesList(feed);
     if(n){tEl.value='';kEl.value='';pendingAtts=[];focusT0=null;kmAuto=null;curBase=BASE;renderPending();updateHint();}
@@ -1152,7 +1158,7 @@ async function addNote(){
   const dur=focusT0?Math.round((now-focusT0)/1000):null;
   const dk=document.getElementById('nbDate').value||dateKeyOf(now);
   const geo=await getGeo();
-  const rec={id:uid('n'),capturedAt:now,dateKey:dk,kind:noteKind,
+  const rec={id:uid('n'),capturedAt:now,dateKey:dk,kind:noteKind==='paste'?'memo':noteKind,
     atts:pendingAtts,geo:geo,ext:{},
     events:[{k:'create',t:now,dur:dur}]};
   if(noteKind==='km'){
@@ -1251,16 +1257,22 @@ function reconLive(){return Number(sessionStorage.getItem('reconUntil')||0)>Date
 function reconTouch(){sessionStorage.setItem('reconUntil',String(Date.now()+RECON_TTL));}
 function enterRecon(){closeSheet('syncSheet');reconTouch();viewTab='recon';render();window.scrollTo({top:0,behavior:'smooth'});}
 (function(){
-  const el=document.getElementById('ossLic');let t0=0,live=false;
-  el.addEventListener('pointerdown',e=>{t0=Date.now();live=true;});
-  el.addEventListener('pointercancel',()=>{live=false;});
-  el.addEventListener('pointerleave',()=>{live=false;});
-  el.addEventListener('pointerup',e=>{
-    if(!live)return;live=false;
-    const held=Date.now()-t0;
-    if(held>=5000||reconLive()){enterRecon();return;}
-    closeSheet('syncSheet');openSheet('licSheet');
+  const el=document.getElementById('ossLic');let hold=null,fired=false;
+  const stop=e=>{e.preventDefault();e.stopPropagation();};
+  el.addEventListener('click',stop);
+  el.addEventListener('pointerdown',e=>{
+    stop(e);fired=false;clearTimeout(hold);
+    hold=setTimeout(()=>{fired=true;enterRecon();},5000);
   });
+  const done=e=>{
+    stop(e);clearTimeout(hold);
+    if(fired||e.type!=='pointerup')return;
+    if(reconLive()){setTimeout(enterRecon,80);return;}
+    setTimeout(()=>{closeSheet('syncSheet');openSheet('licSheet');},80);
+  };
+  el.addEventListener('pointerup',done);
+  el.addEventListener('pointercancel',done);
+  el.addEventListener('pointerleave',done);
   document.getElementById('licClose').onclick=()=>closeSheet('licSheet');
   document.getElementById('licSheet').onclick=e=>{if(e.target.id==='licSheet')closeSheet('licSheet');};
 })();
@@ -1821,6 +1833,7 @@ function tryParseFeed(raw){
   }catch(e){return null;}
 }
 document.getElementById('inText').addEventListener('paste',async e=>{
+  if(noteKind==='km')return;
   const txt=(e.clipboardData||window.clipboardData).getData('text');
   const list=tryParseFeed(txt);
   if(!list)return;
@@ -2206,7 +2219,7 @@ async function askPersist(){
 }
 (async()=>{
   applyLang();
-  document.getElementById('tChipKm').click();
+  document.getElementById('tChipPaste').click();
   document.getElementById('nbDate').value=dateKeyOf(Date.now());
   await openDB();
   await render();

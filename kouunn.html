@@ -148,6 +148,7 @@ body.memoOpen #tTabMemo{display:inline-block;}
 body:not(.memoOpen) #tChipMemo,body:not(.memoOpen) #tChipList{display:none;}
 body.pasteMode #inText{min-height:150px;font-family:var(--mono);font-size:13px;}
 body.pasteMode #pasteQuick,body.pasteMode #nbDate{display:none;}
+body.kmMode #recBtn,body.kmMode #imgBtn,body.kmMode #vidBtn,body.kmMode #fileBtn,body.kmMode #pasteQuick,body.kmMode #pendWrap{display:none;}
 #ossLic{margin-top:6px;text-align:center;font-size:11px;color:#3A404B;padding:12px 4px 14px;
   user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none;cursor:default;}
 #licSheet pre{white-space:pre-wrap;font-size:11px;line-height:1.45;color:var(--faded);
@@ -1111,6 +1112,7 @@ function syncPh(){
     noteKind==='paste'?t('phPaste'):noteKind==='km'?t('phKm'):noteKind==='list'?t('phList'):t('phMemo');
   document.getElementById('noteAdd').textContent=noteKind==='paste'?t('logPaste'):t('log');
   document.body.classList.toggle('pasteMode',noteKind==='paste');
+  document.body.classList.toggle('kmMode',noteKind==='km');
 }
 function updateHint(){
   const v=document.getElementById('inText').value;

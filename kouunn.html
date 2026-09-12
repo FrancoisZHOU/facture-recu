@@ -140,9 +140,22 @@ header h1{font-size:19px;font-weight:800;letter-spacing:.06em;}
 #searchBox{width:100%;background:var(--panel);border:1px solid #2B303A;color:var(--text);
   border-radius:99px;padding:10px 16px;font-size:13.5px;}
 #searchBox:focus{outline:none;border-color:#57606F;}
-#viewTabs{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap;}
-.vtab{background:none;border:1px solid #3A404B;color:var(--faded);font-size:12.5px;
-  padding:6px 14px;border-radius:99px;cursor:pointer;}
+#viewTabs{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;}
+.vtab{background:none;border:1px solid #3A404B;color:var(--faded);font-size:15px;
+  padding:12px 22px;min-height:48px;border-radius:99px;cursor:pointer;}
+#tTabMemo,#tTabRecon{display:none;}
+body.memoOpen #tTabMemo{display:inline-block;}
+body:not(.memoOpen) #tChipMemo,body:not(.memoOpen) #tChipList{display:none;}
+#ossLic{margin-top:6px;text-align:center;font-size:11px;color:#3A404B;padding:10px 4px 2px;
+  user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none;cursor:default;}
+#licSheet pre{white-space:pre-wrap;font-size:11px;line-height:1.45;color:var(--faded);
+  font-family:var(--mono);max-height:50vh;overflow:auto;margin:0 0 12px;}
+#undoBar{position:fixed;top:0;left:0;right:0;z-index:95;display:none;justify-content:center;
+  padding:10px 14px;background:var(--paper);color:#1B1D22;font-size:13.5px;font-weight:700;gap:14px;
+  align-items:center;box-shadow:0 2px 12px rgba(0,0,0,.5);}
+#undoBar.show{display:flex;}
+#undoBar button{background:#1B1D22;color:var(--paper);border:none;border-radius:99px;padding:8px 16px;
+  font-size:13.5px;font-weight:700;}
 .vtab.on{background:var(--paper);color:#1B1D22;border-color:var(--paper);font-weight:700;}
 
 #ledger{margin-top:14px;}
@@ -480,10 +493,26 @@ header h1{font-size:19px;font-weight:800;letter-spacing:.06em;}
     <button class="sBtn sec" id="pasteBtn"></button>
     <button class="sBtn sec" id="notesCopy"></button>
     <button class="sBtn sec" id="notesCsv"></button>
+    <button class="sBtn sec" id="memoOpenBtn"></button>
     <button class="sBtn ghost" id="bkCancel"></button>
+    <div id="ossLic" oncontextmenu="return false"></div>
   </div>
 </div>
 <input type="file" id="bkFile" accept=".json,application/json" hidden>
+<div class="sheet" id="licSheet">
+  <div class="sheetCard">
+    <h3 style="font-size:14px;color:var(--faded);">JSZip — MIT License</h3>
+    <pre>Copyright (c) 2009-2016 Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</pre>
+    <button class="sBtn ghost" id="licClose"></button>
+  </div>
+</div>
+<div id="undoBar"><span id="undoTx"></span><button id="undoBtn"></button></div>
 
 <div class="sheet" id="pasteSheet">
   <div class="sheetCard">
@@ -500,7 +529,7 @@ header h1{font-size:19px;font-weight:800;letter-spacing:.06em;}
 /* ============ i18n ============ */
 const I18N={
 zh:{drLbl:s=>"☁ Drive自动存档:"+s,drOff:"未开启",drConn:"连接中…",drOk:x=>"已连接 · 最近 "+x,drFail:c=>"上传失败 "+c,drNoAuth:"未授权",drClosed:"已关闭",drNet:"网络波动·稍后自动重试",drScript:"脚本加载失败·看网络",drConfOff:"关闭Drive自动存档?(本地数据不受影响)",tabRecon:"💳 对账",reconSum:(n,ok,sus,miss)=>n+" 笔 · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · 缺 "+miss:""),stMiss:"缺票",stSus:"疑似",stOk:"有票",stNa:"无需",stRecWait:"待流水",stRecLate:"流水已到·无扣款",noBank:"流水未导入 — 月结时把对账单发Claude",confSus:(a,b)=>"确认配对?\n流水: "+a+"\n票据: "+b,pickLink:"输入编号手动配对,0=标记无需票据,留空取消:",tLinked:"已配对 ✓",tNa:"已标记无需票据",tReset:"已重置为自动",reconEmpty:"还没有流水。每月把对账单发Claude,粘贴流水块进来。",pasteBtn:"📋 粘贴导入(万能吃口)",pasteTitle:"📋 粘贴导入",pastePh:"粘贴Claude给你的JSON代码块,里程/备忘/清单通吃,重复自动跳过",pasteGo:"导入",badPaste:"解析失败,检查粘贴内容",tPasted:(a,s)=>"新增"+a+" · 跳过"+s,basePrompt:"本次出发点(只对这一条生效,存后自动回到KOUUNN)",appTitle:"KOUUNN仓",snap:"拍 票 据",snapSub:"自动压缩 · 自动记时 · 存入本机",importB:"📁 导入照片 / PDF发票(按文件时间归月)",
-chipMemo:"📝 记录",chipList:"☑ 清单",chipKm:"🚗 里程",
+chipMemo:"📝 记录",chipList:"☑ 清单",chipKm:"🚗 里程",memoOpenBtn:"📝 记事",ossLic:"开源许可 (JSZip)",pasteConf:(n,det,s)=>"识别到 "+n+" 条("+det+")"+(s?",另有 "+s+" 条已存在将跳过":"")+"\n导入?",pasteNone:"全部已存在,无新内容",undoTx:n=>"已导入 "+n+" 条",undoBtn:"撤销",tUndone:n=>"已撤销 "+n+" 条",kRec:"票据",kKm:"里程",kBank:"流水",kMemo:"记事",
 phMemo:"想到什么倒什么,语音、粘贴都行",phList:"一行一项,粘贴多行自动拆条",phKm:"点下方地点,或输入地点名(多段用逗号分隔)",
 log:"记",rtOn:"⇄ 往返",rtOff:"→ 单程",clear:"清空",yearBtn:"📄 年度里程表",otherPlace:"＋其他…",asTitle:"🚗 顺路记里程?",
 searchPh:"🔍 搜索…",tabAll:"全部",tabRecu:"🧾 票据",tabMemo:"📝 记事",tabKm:"🚗 里程",
@@ -535,7 +564,7 @@ rmTitle:"⏰ 提醒",rmQ1:"1小时后",rmQ2:"今晚20:00",rmQ3:"明早9:00",rmOf
 off0:"准点",off10:"提前10分",off30:"提前30分",off60:"提前1小时",off1d:"提前1天",
 rmAlarm:"⏰ 设系统闹钟",rmIcs:"📅 日历提醒",pickTime:"先选时间",icsDone:"已生成,点开进日历 ✓"},
 en:{drLbl:s=>"☁ Drive auto-backup: "+s,drOff:"off",drConn:"connecting…",drOk:x=>"on · last "+x,drFail:c=>"upload failed "+c,drNoAuth:"not authorized",drClosed:"off",drNet:"network hiccup · will retry",drScript:"script failed · check network",drConfOff:"Turn off Drive auto-backup? (local data untouched)",tabRecon:"💳 Recon",reconSum:(n,ok,sus,miss)=>n+" lines · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · missing "+miss:""),stMiss:"missing",stSus:"likely",stOk:"matched",stNa:"n/a",stRecWait:"awaiting statement",stRecLate:"statement in · no debit",noBank:"No statement yet — send it to Claude at month close",confSus:(a,b)=>"Confirm match?\nBank: "+a+"\nReceipt: "+b,pickLink:"Enter number to link manually, 0 = no receipt needed, blank = cancel:",tLinked:"Linked ✓",tNa:"Marked as no receipt needed",tReset:"Reset to auto",reconEmpty:"No bank lines yet. Send the monthly statement to Claude and paste the block.",pasteBtn:"📋 Paste import",pasteTitle:"📋 Paste import",pastePh:"Paste the JSON block from Claude — trips/notes/lists, dupes auto-skipped",pasteGo:"Import",badPaste:"Cannot parse, check the paste",tPasted:(a,s)=>"Added "+a+" · skipped "+s,basePrompt:"Start point for this entry only (reverts to KOUUNN after saving)",appTitle:"KOUUNN Vault",snap:"SNAP RECEIPT",snapSub:"auto-compress · timestamp · stored locally",importB:"📁 Import photos / PDF invoices (by file date)",
-chipMemo:"📝 Note",chipList:"☑ List",chipKm:"🚗 Trip",
+chipMemo:"📝 Note",chipList:"☑ List",chipKm:"🚗 Trip",memoOpenBtn:"📝 Notes",ossLic:"Open-source licenses (JSZip)",pasteConf:(n,det,s)=>"Found "+n+" entries ("+det+")"+(s?", "+s+" already exist and will be skipped":"")+"\nImport?",pasteNone:"All already exist, nothing new",undoTx:n=>"Imported "+n,undoBtn:"Undo",tUndone:n=>"Undone "+n,kRec:"receipts",kKm:"trips",kBank:"bank",kMemo:"notes",
 phMemo:"Dump anything. Voice or paste works",phList:"One item per line. Paste splits rows",phKm:"Tap a place below, or type (comma = legs)",
 log:"Log",rtOn:"⇄ round",rtOff:"→ one-way",clear:"Clear",yearBtn:"📄 Yearly mileage",otherPlace:"＋ Other…",asTitle:"🚗 Log the trip too?",
 searchPh:"🔍 Search…",tabAll:"All",tabRecu:"🧾 Receipts",tabMemo:"📝 Notes",tabKm:"🚗 Trips",
@@ -571,7 +600,7 @@ rmTitle:"⏰ Reminder",rmQ1:"In 1 hour",rmQ2:"Tonight 20:00",rmQ3:"Tomorrow 9:00
 off0:"On time",off10:"10 min before",off30:"30 min before",off60:"1 h before",off1d:"1 day before",
 rmAlarm:"⏰ System alarm",rmIcs:"📅 Calendar",pickTime:"Pick a time first",icsDone:"Created — open it into calendar ✓"},
 fr:{drLbl:s=>"☁ Sauvegarde Drive : "+s,drOff:"désactivée",drConn:"connexion…",drOk:x=>"active · dernière "+x,drFail:c=>"échec envoi "+c,drNoAuth:"non autorisé",drClosed:"désactivée",drNet:"réseau instable · nouvel essai",drScript:"script non chargé · réseau",drConfOff:"Désactiver la sauvegarde Drive ? (données locales intactes)",tabRecon:"💳 Rappro",reconSum:(n,ok,sus,miss)=>n+" lignes · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · manque "+miss:""),stMiss:"manque",stSus:"probable",stOk:"OK",stNa:"s/o",stRecWait:"en attente du relevé",stRecLate:"relevé reçu · non débité",noBank:"Relevé non importé — envoyez-le à Claude",confSus:(a,b)=>"Confirmer ?\nBanque : "+a+"\nReçu : "+b,pickLink:"Numéro pour lier, 0 = sans reçu, vide = annuler :",tLinked:"Lié ✓",tNa:"Marqué sans reçu",tReset:"Auto rétabli",reconEmpty:"Aucune ligne bancaire. Envoyez le relevé à Claude et collez le bloc.",pasteBtn:"📋 Import par collage",pasteTitle:"📋 Import par collage",pastePh:"Collez le bloc JSON de Claude — trajets/notes/listes, doublons ignorés",pasteGo:"Importer",badPaste:"Illisible, vérifiez le collage",tPasted:(a,s)=>"Ajouté "+a+" · ignoré "+s,basePrompt:"Départ pour cette entrée seule (retour à KOUUNN après)",appTitle:"KOUUNN Vault",snap:"PHOTO REÇU",snapSub:"compression auto · horodaté · stocké local",importB:"📁 Importer photos / factures PDF (date du fichier)",
-chipMemo:"📝 Note",chipList:"☑ Liste",chipKm:"🚗 Trajet",
+chipMemo:"📝 Note",chipList:"☑ Liste",chipKm:"🚗 Trajet",memoOpenBtn:"📝 Notes",ossLic:"Licences open source (JSZip)",pasteConf:(n,det,s)=>n+" entrées détectées ("+det+")"+(s?", "+s+" déjà présentes seront ignorées":"")+"\nImporter ?",pasteNone:"Tout existe déjà, rien de nouveau",undoTx:n=>"Importé "+n,undoBtn:"Annuler",tUndone:n=>"Annulé "+n,kRec:"reçus",kKm:"trajets",kBank:"banque",kMemo:"notes",
 phMemo:"Déversez tout. Voix ou collage OK",phList:"Un élément par ligne. Coller découpe",phKm:"Touchez un lieu, ou tapez (virgule = étapes)",
 log:"Noter",rtOn:"⇄ A/R",rtOff:"→ aller",clear:"Effacer",yearBtn:"📄 Kilométrage annuel",otherPlace:"＋ Autre…",asTitle:"🚗 Noter le trajet aussi ?",
 searchPh:"🔍 Rechercher…",tabAll:"Tout",tabRecu:"🧾 Reçus",tabMemo:"📝 Notes",tabKm:"🚗 Trajets",
@@ -618,7 +647,7 @@ function applyLang(){
    'exportAll:exportAll','gateText:gateText','gateExport:gateBtn','gateLater:gateLater',
    'vDel:del','vClose:close','vOpen:openPdf','neSave:save','neDel:del','neCancel:cancel','neTitle:editNote',
    'asTitle:asTitle','bkExport:bkExport','bkImport:bkImport','bkCancel:bkCancel',
-   'notesCopy:notesCopy','notesCsv:notesCsv',
+   'notesCopy:notesCopy','notesCsv:notesCsv','memoOpenBtn:memoOpenBtn','ossLic:ossLic','licClose:close','undoBtn:undoBtn',
    'tTabAll:tabAll','tTabRecu:tabRecu','tTabMemo:tabMemo','tTabKm:tabKm','tTabRecon:tabRecon',
    'rmTitle:rmTitle','rmQ1:rmQ1','rmQ2:rmQ2','rmQ3:rmQ3','rmOffLbl:rmOffLbl',
    'rmAlarm:rmAlarm','rmIcs:rmIcs','rmCancel:cancel',
@@ -1111,9 +1140,8 @@ async function addNote(){
   let raw=tEl.value;
   const feed=tryParseFeed(raw.trim());
   if(feed){
-    tEl.value='';kEl.value='';pendingAtts=[];focusT0=null;kmAuto=null;curBase=BASE;
-    renderPending();updateHint();
-    await importNotesList(feed);
+    const n=await importNotesList(feed);
+    if(n){tEl.value='';kEl.value='';pendingAtts=[];focusT0=null;kmAuto=null;curBase=BASE;renderPending();updateHint();}
     return;
   }
   let text=raw.trim();
@@ -1190,6 +1218,8 @@ async function yearReport(){
 
 /* ============ 搜索/视图 ============ */
 let query='',viewTab=localStorage.getItem('viewTab')||'all',liveURLs=[];
+if(viewTab==='memo'||viewTab==='recon'){viewTab='all';localStorage.setItem('viewTab','all');}
+let memoOpen=false;
 document.getElementById('searchBox').addEventListener('input',e=>{
   query=e.target.value.trim().toLowerCase();render();
 });
@@ -1203,6 +1233,38 @@ document.getElementById('viewTabs').onclick=e=>{
   localStorage.setItem('viewTab',viewTab);
   render();
 };
+function openMemo(){
+  memoOpen=true;document.body.classList.add('memoOpen');
+  viewTab='memo';localStorage.setItem('viewTab','all');
+  document.getElementById('tChipMemo').click();
+  render();
+  document.getElementById('noteBar').scrollIntoView({behavior:'smooth',block:'start'});
+}
+document.getElementById('memoOpenBtn').onclick=()=>{
+  closeSheet('syncSheet');
+  if(!notesUnlocked&&localStorage.getItem('pinHash')){askUnlock(openMemo);return;}
+  openMemo();
+};
+/* ---- 对账暗门:开源许可 静默长按5秒 / 30分钟会话 ---- */
+const RECON_TTL=30*60*1000;
+function reconLive(){return Number(sessionStorage.getItem('reconUntil')||0)>Date.now();}
+function reconTouch(){sessionStorage.setItem('reconUntil',String(Date.now()+RECON_TTL));}
+function enterRecon(){closeSheet('syncSheet');reconTouch();viewTab='recon';render();window.scrollTo({top:0,behavior:'smooth'});}
+(function(){
+  const el=document.getElementById('ossLic');let t0=0,live=false;
+  el.addEventListener('pointerdown',e=>{t0=Date.now();live=true;});
+  el.addEventListener('pointercancel',()=>{live=false;});
+  el.addEventListener('pointerleave',()=>{live=false;});
+  el.addEventListener('pointerup',e=>{
+    if(!live)return;live=false;
+    const held=Date.now()-t0;
+    if(held>=5000||reconLive()){enterRecon();return;}
+    closeSheet('syncSheet');openSheet('licSheet');
+  });
+  document.getElementById('licClose').onclick=()=>closeSheet('licSheet');
+  document.getElementById('licSheet').onclick=e=>{if(e.target.id==='licSheet')closeSheet('licSheet');};
+})();
+document.addEventListener('click',()=>{if(viewTab==='recon')reconTouch();},true);
 function qMatchNote(n){
   if(!query)return true;
   if((n.text||'').toLowerCase().includes(query))return true;
@@ -1243,7 +1305,7 @@ async function render(){
   for(const mk of months){
     const rList=(viewTab==='all'||viewTab==='recu')?(groups[mk]||[]):[];
     const kList=(viewTab==='all'||viewTab==='km')?(kgroups[mk]||[]):[];
-    const mList=(viewTab==='all'||viewTab==='memo')?(mgroups[mk]||[]):[];
+    const mList=((viewTab==='all'&&memoOpen)||viewTab==='memo')?(mgroups[mk]||[]):[];
     if(!rList.length&&!kList.length&&!mList.length)continue;
     const [y,m]=mk.split('-');
     const sec=document.createElement('div');sec.className='month';
@@ -1688,9 +1750,41 @@ document.getElementById('pasteBtn').onclick=()=>{closeSheet('syncSheet');openShe
 document.getElementById('pasteQuick').onclick=()=>{openSheet('pasteSheet');setTimeout(()=>document.getElementById('pasteTx').focus(),100);};
 document.getElementById('pasteCancel').onclick=()=>closeSheet('pasteSheet');
 document.getElementById('pasteSheet').onclick=e=>{if(e.target.id==='pasteSheet')closeSheet('pasteSheet');};
+let undoBatch=null,undoTimer=null;
+function showUndo(batchId,n){
+  undoBatch=batchId;
+  document.getElementById('undoTx').textContent=t('undoTx',n);
+  document.getElementById('undoBar').classList.add('show');
+  clearTimeout(undoTimer);undoTimer=setTimeout(hideUndo,60000);
+}
+function hideUndo(){undoBatch=null;document.getElementById('undoBar').classList.remove('show');}
+document.getElementById('undoBtn').onclick=async()=>{
+  if(!undoBatch)return;
+  const b=undoBatch;hideUndo();
+  const all=await noteAll();let n=0;
+  for(const x of all){if(x.ext&&x.ext.batch===b){await noteDel(x.id);n++;}}
+  toast(t('tUndone',n));render();
+};
 async function importNotesList(list){
   const have=new Set((await noteAll()).map(n=>n.id));
   let added=0,skipped=0;
+  /* 预检:先算清楚要进多少条,再问 */
+  const plan=[];const cnt={};let dup=0;
+  for(const e of list){
+    const d=String(e.d||e.date||'').trim();const k=e.k||e.kind||'memo';
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(d)||!['km','memo','list','rec','bank'].includes(k))continue;
+    const text=String(e.t||e.text||'').trim();const km=parseFloat(e.km);const amt=parseFloat(e.amt);
+    const items=Array.isArray(e.items)?e.items.map(x=>String(x).trim()).filter(Boolean):null;
+    if((k==='rec'||k==='bank')&&!(amt>0))continue;
+    if(!text&&!(km>0)&&!(items&&items.length)&&!(amt>0))continue;
+    const id=pHash(d+'|'+k+'|'+text+'|'+(km>0?km:'')+'|'+(amt>0?amt:'')+'|'+(items?items.join(';'):''));
+    if(have.has(id)){dup++;continue;}
+    plan.push(e);cnt[k]=(cnt[k]||0)+1;
+  }
+  if(!plan.length){toast(t('pasteNone'),3000);return 0;}
+  const det=Object.keys(cnt).map(k=>t(k==='rec'?'kRec':k==='km'?'kKm':k==='bank'?'kBank':'kMemo')+' '+cnt[k]).join(' · ');
+  if(!confirm(t('pasteConf',plan.length,det,dup)))return 0;
+  const batchId=uid('b');
   for(const e of list){
     const d=String(e.d||e.date||'').trim();
     const k=e.k||e.kind||'memo';
@@ -1705,7 +1799,7 @@ async function importNotesList(list){
     const id=pHash(d+'|'+k+'|'+text+'|'+(km>0?km:'')+'|'+(amt>0?amt:'')+'|'+(items?items.join(';'):''));
     if(have.has(id)){skipped++;continue;}
     const rec={id:id,capturedAt:Date.now(),dateKey:d,kind:k,text:text,
-      atts:[],geo:null,ext:{src:'paste'},
+      atts:[],geo:null,ext:{src:'paste',batch:batchId},
       events:[{k:'create',t:Date.now(),dur:null}]};
     if(k==='km')rec.km=km>0?fmtKm(km):null;
     if(k==='rec'||k==='bank'){rec.amt=Math.round(amt*100)/100;if(e.ref)rec.ref=String(e.ref);if(e.tva)rec.tva=parseFloat(e.tva)||null;}
@@ -1713,6 +1807,7 @@ async function importNotesList(list){
     await notePut(rec);have.add(id);added++;
   }
   toast(t('tPasted',added,skipped),3200);
+  if(added)showUndo(batchId,added);
   render();
   return added;
 }
@@ -1737,9 +1832,8 @@ document.getElementById('pasteGo').onclick=async()=>{
   if(!raw){toast(t('tSay'));return;}
   const list=tryParseFeed(raw);
   if(!list){toast(t('badPaste'));return;}
-  document.getElementById('pasteTx').value='';
-  closeSheet('pasteSheet');
-  await importNotesList(list);
+  const n=await importNotesList(list);
+  if(n){document.getElementById('pasteTx').value='';closeSheet('pasteSheet');}
 };
 document.getElementById('bkImport').onclick=()=>{
   closeSheet('syncSheet');
@@ -2112,6 +2206,7 @@ async function askPersist(){
 }
 (async()=>{
   applyLang();
+  document.getElementById('tChipKm').click();
   document.getElementById('nbDate').value=dateKeyOf(Date.now());
   await openDB();
   await render();

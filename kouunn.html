@@ -1085,7 +1085,10 @@ function renderSuggest(filter){
       if(pl.u){tEl.value=pl.name;document.getElementById('noteKm').value=pl.km;kmAuto=pl.km;}
       else{
         const tokens=parseTokens(tEl.value);
-        if(tokens[tokens.length-1]!==pl.name)tokens.push(pl.name);
+        const known=loadPlaces();const last=tokens[tokens.length-1];
+        /* 末尾是没打完的半截字(不在地点库里)→用chip替换它;否则追加 */
+        if(last&&last!==pl.name&&!known[last])tokens[tokens.length-1]=pl.name;
+        else if(last!==pl.name)tokens.push(pl.name);
         tEl.value=tokens.join(', ');
       }
       syncTrip();

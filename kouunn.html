@@ -182,6 +182,19 @@ body.kmMode #recBtn,body.kmMode #imgBtn,body.kmMode #vidBtn,body.kmMode #fileBtn
 .nline .nk{flex-shrink:0;font-size:12px;}
 .nline .nt{flex:1;min-width:0;word-break:break-word;}
 .nline .nkm{font-family:var(--mono);color:var(--ok);flex-shrink:0;font-size:12px;}
+.nline.nf{background:rgba(210,66,42,.10);border-radius:8px;margin:2px 0;cursor:pointer;}
+.nline.nf .nt{color:#F2B4A6;}
+.nline.nf .na{font-family:var(--mono);flex-shrink:0;font-size:12px;color:var(--paper-dim);}
+.nline.nf .ns{flex-shrink:0;font-size:10.5px;font-family:var(--mono);padding:2px 8px;border-radius:99px;background:rgba(210,66,42,.25);color:#F2B4A6;}
+#lkHead{font-size:15px;font-weight:700;}
+#lkSub{font-family:var(--mono);font-size:11.5px;color:var(--faded);display:flex;justify-content:space-between;}
+#lkThumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;min-height:20px;}
+#lkThumbs .thumb .lx{position:absolute;top:2px;right:2px;background:rgba(10,11,14,.75);color:#F0977F;
+  border-radius:99px;width:20px;height:20px;font-size:12px;display:flex;align-items:center;justify-content:center;}
+#lkBtns{display:flex;gap:8px;}
+#lkBtns .sBtn{flex:1;}
+#chkPre{white-space:pre-wrap;font-family:var(--mono);font-size:12px;line-height:1.6;color:var(--text);
+  background:var(--ink);border:1px solid #3A404B;border-radius:9px;padding:10px 12px;max-height:50vh;overflow:auto;}
 .card{background:var(--panel);border:1px solid #2B303A;border-radius:12px;
   padding:11px 13px;margin-bottom:9px;cursor:pointer;}
 .card:active{background:var(--panel-2);}
@@ -518,6 +531,35 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 </div>
 <div id="undoBar"><span id="undoTx"></span><button id="undoBtn"></button></div>
 
+<div class="sheet" id="lkSheet">
+  <div class="sheetCard">
+    <div id="lkHead"></div>
+    <div id="lkSub"><span id="lkTip"></span><span id="lkProg"></span></div>
+    <div id="lkThumbs"></div>
+    <div id="lkBtns">
+      <button class="sBtn pri" id="lkCamBtn"></button>
+      <button class="sBtn sec" id="lkGalBtn"></button>
+    </div>
+    <div id="lkBtns2" style="display:flex;gap:8px;">
+      <button class="sBtn sec" id="lkNext" style="flex:1;"></button>
+      <button class="sBtn ghost" id="lkClose"></button>
+    </div>
+  </div>
+</div>
+<input type="file" id="lkCam" accept="image/*" capture="environment" multiple hidden>
+<input type="file" id="lkGal" accept="image/*,application/pdf" multiple hidden>
+
+<div class="sheet" id="chkSheet">
+  <div class="sheetCard">
+    <h3 id="chkTitle" style="font-size:15px;"></h3>
+    <pre id="chkPre"></pre>
+    <div style="display:flex;gap:10px;">
+      <button class="sBtn pri" id="chkCopy" style="flex:1;"></button>
+      <button class="sBtn ghost" id="chkClose"></button>
+    </div>
+  </div>
+</div>
+
 <div class="sheet" id="pasteSheet">
   <div class="sheetCard">
     <h3 id="pasteTitle" style="font-size:15px;"></h3>
@@ -566,7 +608,11 @@ lockedNotes:n=>"🔒 "+n+" 条记事 · 点击解锁",lockSet:"首次使用:设�
 lockAsk:"输入PIN查看记事",lockAgain:"再输一遍确认",lockDiff:"两次不一致,重新设置",lockBad:"不对,再试",lockDigits:"4-8位数字",lockOk:"已解锁 ✓",lockNeed:"记事内容需要先解锁",
 rmTitle:"⏰ 提醒",rmQ1:"1小时后",rmQ2:"今晚20:00",rmQ3:"明早9:00",rmOffLbl:"日历提醒偏移(可多选)",
 off0:"准点",off10:"提前10分",off30:"提前30分",off60:"提前1小时",off1d:"提前1天",
-rmAlarm:"⏰ 设系统闹钟",rmIcs:"📅 日历提醒",pickTime:"先选时间",icsDone:"已生成,点开进日历 ✓"},
+rmAlarm:"⏰ 设系统闹钟",rmIcs:"📅 日历提醒",pickTime:"先选时间",icsDone:"已生成,点开进日历 ✓",
+lkTip:"把这张票的文件挂上(可多张)",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 拍照",lkGal:"🖼 相册 / 文件",lkSkip:"跳过 ›",lkNext:"下一条 ›",lkDone:"✓ 完成",lkClose:"关闭",
+nfTag:"缺文件",tLinkedN:n=>"已挂 "+n+" 张 ✓",confDelLinked:"删掉这个文件?(记录保留,会重新标缺文件)",
+chkTitle:m=>"#检查 "+m,chkNone:"本月记录都有文件 ✓",chkCopy:"📋 复制",
+chkRep:(n,ok,miss)=>"记录 "+n+" · 有文件 "+ok+" · 缺文件 "+miss,chkMissH:"⚠ 缺文件的记录:",chkOrphH:n=>"无记录的文件("+n+"):",chkMonthBad:"月份格式:#检查 2026-09"},
 en:{drLbl:s=>"☁ Drive auto-backup: "+s,drOff:"off",drConn:"connecting…",drOk:x=>"on · last "+x,drFail:c=>"upload failed "+c,drNoAuth:"not authorized",drClosed:"off",drNet:"network hiccup · will retry",drScript:"script failed · check network",drConfOff:"Turn off Drive auto-backup? (local data untouched)",tabRecon:"💳 Recon",reconSum:(n,ok,sus,miss)=>n+" lines · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · missing "+miss:""),stMiss:"missing",stSus:"likely",stOk:"matched",stNa:"n/a",stRecWait:"awaiting statement",stRecLate:"statement in · no debit",noBank:"No statement yet — send it to Claude at month close",confSus:(a,b)=>"Confirm match?\nBank: "+a+"\nReceipt: "+b,pickLink:"Enter number to link manually, 0 = no receipt needed, blank = cancel:",tLinked:"Linked ✓",tNa:"Marked as no receipt needed",tReset:"Reset to auto",reconEmpty:"No bank lines yet. Send the monthly statement to Claude and paste the block.",pasteBtn:"📋 Paste import",pasteTitle:"📋 Paste import",pastePh:"Paste the JSON block from Claude — trips/notes/lists, dupes auto-skipped",pasteGo:"Import",badPaste:"Cannot parse, check the paste",tPasted:(a,s)=>"Added "+a+" · skipped "+s,basePrompt:"Start point for this entry only (reverts to KOUUNN after saving)",appTitle:"KOUUNN Vault",snap:"SNAP RECEIPT",snapSub:"auto-compress · timestamp · stored locally",importB:"📁 Import photos / PDF invoices (by file date)",
 chipMemo:"📝 Note",chipList:"☑ List",chipKm:"🚗 Trip",chipPaste:"📋 Paste",phPaste:"Paste the code block from Claude (receipts/trips/bank), dupes skipped",logPaste:"Import",memoOpenBtn:"📝 Notes",ossLic:"Open-source licenses (JSZip)",pasteConf:(n,det,s)=>"Found "+n+" entries ("+det+")"+(s?", "+s+" already exist and will be skipped":"")+"\nImport?",pasteNone:"All already exist, nothing new",undoTx:n=>"Imported "+n,undoBtn:"Undo",tUndone:n=>"Undone "+n,kRec:"receipts",kKm:"trips",kBank:"bank",kMemo:"notes",
 phMemo:"Dump anything. Voice or paste works",phList:"One item per line. Paste splits rows",phKm:"Tap a place below, or type (comma = legs)",
@@ -602,7 +648,11 @@ lockedNotes:n=>"🔒 "+n+" notes · tap to unlock",lockSet:"First time: set a 4-
 lockAsk:"Enter PIN to view notes",lockAgain:"Type it again to confirm",lockDiff:"Didn't match, start over",lockBad:"Wrong, try again",lockDigits:"4-8 digits",lockOk:"Unlocked ✓",lockNeed:"Notes need unlocking first",
 rmTitle:"⏰ Reminder",rmQ1:"In 1 hour",rmQ2:"Tonight 20:00",rmQ3:"Tomorrow 9:00",rmOffLbl:"Calendar alert offsets (multi)",
 off0:"On time",off10:"10 min before",off30:"30 min before",off60:"1 h before",off1d:"1 day before",
-rmAlarm:"⏰ System alarm",rmIcs:"📅 Calendar",pickTime:"Pick a time first",icsDone:"Created — open it into calendar ✓"},
+rmAlarm:"⏰ System alarm",rmIcs:"📅 Calendar",pickTime:"Pick a time first",icsDone:"Created — open it into calendar ✓",
+lkTip:"Attach this receipt's file(s)",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 Camera",lkGal:"🖼 Gallery / files",lkSkip:"Skip ›",lkNext:"Next ›",lkDone:"✓ Done",lkClose:"Close",
+nfTag:"no file",tLinkedN:n=>"Attached "+n+" ✓",confDelLinked:"Delete this file? (record stays, flagged again)",
+chkTitle:m=>"#check "+m,chkNone:"Every record this month has a file ✓",chkCopy:"📋 Copy",
+chkRep:(n,ok,miss)=>"records "+n+" · with file "+ok+" · missing "+miss,chkMissH:"⚠ Records without file:",chkOrphH:n=>"Files without record ("+n+"):",chkMonthBad:"Month format: #检查 2026-09"},
 fr:{drLbl:s=>"☁ Sauvegarde Drive : "+s,drOff:"désactivée",drConn:"connexion…",drOk:x=>"active · dernière "+x,drFail:c=>"échec envoi "+c,drNoAuth:"non autorisé",drClosed:"désactivée",drNet:"réseau instable · nouvel essai",drScript:"script non chargé · réseau",drConfOff:"Désactiver la sauvegarde Drive ? (données locales intactes)",tabRecon:"💳 Rappro",reconSum:(n,ok,sus,miss)=>n+" lignes · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · manque "+miss:""),stMiss:"manque",stSus:"probable",stOk:"OK",stNa:"s/o",stRecWait:"en attente du relevé",stRecLate:"relevé reçu · non débité",noBank:"Relevé non importé — envoyez-le à Claude",confSus:(a,b)=>"Confirmer ?\nBanque : "+a+"\nReçu : "+b,pickLink:"Numéro pour lier, 0 = sans reçu, vide = annuler :",tLinked:"Lié ✓",tNa:"Marqué sans reçu",tReset:"Auto rétabli",reconEmpty:"Aucune ligne bancaire. Envoyez le relevé à Claude et collez le bloc.",pasteBtn:"📋 Import par collage",pasteTitle:"📋 Import par collage",pastePh:"Collez le bloc JSON de Claude — trajets/notes/listes, doublons ignorés",pasteGo:"Importer",badPaste:"Illisible, vérifiez le collage",tPasted:(a,s)=>"Ajouté "+a+" · ignoré "+s,basePrompt:"Départ pour cette entrée seule (retour à KOUUNN après)",appTitle:"KOUUNN Vault",snap:"PHOTO REÇU",snapSub:"compression auto · horodaté · stocké local",importB:"📁 Importer photos / factures PDF (date du fichier)",
 chipMemo:"📝 Note",chipList:"☑ Liste",chipKm:"🚗 Trajet",chipPaste:"📋 Coller",phPaste:"Collez le bloc de Claude (reçus/trajets/banque), doublons ignorés",logPaste:"Importer",memoOpenBtn:"📝 Notes",ossLic:"Licences open source (JSZip)",pasteConf:(n,det,s)=>n+" entrées détectées ("+det+")"+(s?", "+s+" déjà présentes seront ignorées":"")+"\nImporter ?",pasteNone:"Tout existe déjà, rien de nouveau",undoTx:n=>"Importé "+n,undoBtn:"Annuler",tUndone:n=>"Annulé "+n,kRec:"reçus",kKm:"trajets",kBank:"banque",kMemo:"notes",
 phMemo:"Déversez tout. Voix ou collage OK",phList:"Un élément par ligne. Coller découpe",phKm:"Touchez un lieu, ou tapez (virgule = étapes)",
@@ -638,7 +688,11 @@ lockedNotes:n=>"🔒 "+n+" notes · touchez pour déverrouiller",lockSet:"Premi�
 lockAsk:"PIN pour voir les notes",lockAgain:"Retapez pour confirmer",lockDiff:"Différent, recommencez",lockBad:"Faux, réessayez",lockDigits:"4-8 chiffres",lockOk:"Déverrouillé ✓",lockNeed:"Notes à déverrouiller d'abord",
 rmTitle:"⏰ Rappel",rmQ1:"Dans 1 h",rmQ2:"Ce soir 20h",rmQ3:"Demain 9h",rmOffLbl:"Décalages d'alerte (multi)",
 off0:"À l'heure",off10:"10 min avant",off30:"30 min avant",off60:"1 h avant",off1d:"1 jour avant",
-rmAlarm:"⏰ Alarme système",rmIcs:"📅 Calendrier",pickTime:"Choisissez l'heure",icsDone:"Créé — ouvrez-le dans le calendrier ✓"}
+rmAlarm:"⏰ Alarme système",rmIcs:"📅 Calendrier",pickTime:"Choisissez l'heure",icsDone:"Créé — ouvrez-le dans le calendrier ✓",
+lkTip:"Joindre le(s) fichier(s) de ce reçu",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 Photo",lkGal:"🖼 Galerie / fichiers",lkSkip:"Passer ›",lkNext:"Suivant ›",lkDone:"✓ Terminé",lkClose:"Fermer",
+nfTag:"sans fichier",tLinkedN:n=>n+" joint(s) ✓",confDelLinked:"Supprimer ce fichier ? (l'entrée reste, re-signalée)",
+chkTitle:m=>"#vérif "+m,chkNone:"Toutes les entrées du mois ont un fichier ✓",chkCopy:"📋 Copier",
+chkRep:(n,ok,miss)=>"entrées "+n+" · avec fichier "+ok+" · sans "+miss,chkMissH:"⚠ Entrées sans fichier :",chkOrphH:n=>"Fichiers sans entrée ("+n+") :",chkMonthBad:"Format : #检查 2026-09"}
 };
 let LANG=localStorage.getItem('lang')||'zh';
 const t=(k,...a)=>{const v=(I18N[LANG]||I18N.zh)[k];return typeof v==='function'?v(...a):v;};
@@ -655,7 +709,8 @@ function applyLang(){
    'tTabAll:tabAll','tTabRecu:tabRecu','tTabMemo:tabMemo','tTabKm:tabKm','tTabRecon:tabRecon',
    'rmTitle:rmTitle','rmQ1:rmQ1','rmQ2:rmQ2','rmQ3:rmQ3','rmOffLbl:rmOffLbl',
    'rmAlarm:rmAlarm','rmIcs:rmIcs','rmCancel:cancel',
-   'pasteBtn:pasteBtn','pasteTitle:pasteTitle','pasteGo:pasteGo','pasteCancel:cancel'
+   'pasteBtn:pasteBtn','pasteTitle:pasteTitle','pasteGo:pasteGo','pasteCancel:cancel',
+   'lkTip:lkTip','lkCamBtn:lkCam','lkGalBtn:lkGal','lkClose:lkClose','chkCopy:chkCopy','chkClose:close'
   ].forEach(p=>{const[i,k]=p.split(':');setTx(i,k);});
   document.getElementById('tEmpty').innerHTML=t('empty');
   document.getElementById('vLabel').placeholder=t('labelPh');
@@ -1148,6 +1203,8 @@ document.getElementById('inText').addEventListener('keydown',e=>{
 async function addNote(){
   const tEl=document.getElementById('inText'),kEl=document.getElementById('noteKm');
   let raw=tEl.value;
+  const cm=noteKind==='paste'?raw.trim().match(CHK_RE):null;
+  if(cm){tEl.value='';await runCheck(cm[2]);return;}
   const feed=noteKind==='km'?null:tryParseFeed(raw.trim());
   if(noteKind==='paste'&&!feed&&/[{\[]/.test(raw)){toast(t('badPaste'));return;}
   if(feed){
@@ -1306,24 +1363,26 @@ async function render(){
   emp.style.display=(all.length||notes.length)?'none':'block';
   document.getElementById('exportAll').disabled=!(all.length||notes.length);
 
-  const groups={},kgroups={},mgroups={};
+  const groups={},kgroups={},mgroups={},fgroups={};
   for(const r of all){if(!qMatchRec(r))continue;(groups[monthOf(r.dateKey)]=groups[monthOf(r.dateKey)]||[]).push(r);}
   if(viewTab==='recon'){renderRecon(notes);return;}
   for(const n of notes){
-    if(n.kind==='rec'||n.kind==='bank')continue;
+    if(n.kind==='rec'){if(n.ext&&n.ext.nf&&qMatchNote(n))(fgroups[monthOf(n.dateKey)]=fgroups[monthOf(n.dateKey)]||[]).push(n);continue;}
+    if(n.kind==='bank')continue;
     if(n.kind==='km'){if(qMatchNote(n))(kgroups[monthOf(n.dateKey)]=kgroups[monthOf(n.dateKey)]||[]).push(n);}
     else if(isMemoKind(n.kind)){
       if(notesUnlocked&&!qMatchNote(n))continue;
       (mgroups[monthOf(n.dateKey)]=mgroups[monthOf(n.dateKey)]||[]).push(n);
     }
   }
-  const months=[...new Set([...Object.keys(groups),...Object.keys(kgroups),...Object.keys(mgroups)])].sort().reverse();
+  const months=[...new Set([...Object.keys(groups),...Object.keys(kgroups),...Object.keys(mgroups),...Object.keys(fgroups)])].sort().reverse();
 
   for(const mk of months){
     const rList=(viewTab==='all'||viewTab==='recu')?(groups[mk]||[]):[];
     const kList=(viewTab==='all'||viewTab==='km')?(kgroups[mk]||[]):[];
     const mList=((viewTab==='all'&&memoOpen)||viewTab==='memo')?(mgroups[mk]||[]):[];
-    if(!rList.length&&!kList.length&&!mList.length)continue;
+    const fList=(viewTab==='all'||viewTab==='recu')?(fgroups[mk]||[]):[];
+    if(!rList.length&&!kList.length&&!mList.length&&!fList.length)continue;
     const [y,m]=mk.split('-');
     const sec=document.createElement('div');sec.className='month';
     sec.innerHTML=
@@ -1331,6 +1390,17 @@ async function render(){
       '<small>'+t('unit',rList.length,kList.length+mList.length)+'</small></div>'+
       '<button class="month-zip" data-mk="'+mk+'">ZIP ⬇</button></div>'+
       '<div class="month-tear"></div>';
+    if(fList.length){
+      const nl=document.createElement('div');nl.className='nlist';
+      for(const n of fList){
+        const row=document.createElement('div');row.className='nline nf';row.dataset.nf=n.id;
+        row.innerHTML='<span class="nd">'+n.dateKey.slice(5)+'</span><span class="nk">🧾</span>'+
+          '<span class="nt"></span><span class="na">'+n.amt.toFixed(2)+'</span><span class="ns">⚠ '+t('nfTag')+'</span>';
+        row.querySelector('.nt').textContent=n.text||'';
+        nl.appendChild(row);
+      }
+      sec.appendChild(nl);
+    }
     if(kList.length){
       const nl=document.createElement('div');nl.className='nlist';
       for(const n of kList){
@@ -1550,21 +1620,41 @@ async function exportZip(monthKey){
     .sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.capturedAt-b.capturedAt);
   const kms=(await noteAll()).filter(n=>n.kind==='km'&&(!monthKey||monthOf(n.dateKey)===monthKey))
     .sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.capturedAt-b.capturedAt);
-  if(!all.length&&!kms.length){toast(t('tNothing'));return;}
+  const recs=(await noteAll()).filter(n=>n.kind==='rec'&&(!monthKey||monthOf(n.dateKey)===monthKey))
+    .sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.capturedAt-b.capturedAt);
+  if(!all.length&&!kms.length&&!recs.length){toast(t('tNothing'));return;}
   toast(t('tPacking'),60000);
   const zip=new JSZip();
-  const seq={};
+  const seq={},recById=new Map(recs.map(n=>[n.id,n])),fname=new Map();
   const clean=s=>String(s||'').replace(/[\\\/:*?"<>|\s]+/g,'').slice(0,24);
+  const esc=s=>'"'+String(s||'').replace(/"/g,'""')+'"';
   for(const r of all){
-    seq[r.dateKey]=(seq[r.dateKey]||0)+1;
-    const lbl=r.label?'_'+clean(r.label):'';
-    zip.file(r.dateKey+'_'+pad(seq[r.dateKey])+lbl+(r.type==='pdf'?'.pdf':'.jpg'),r.blob);
+    const n=r.nid?recById.get(r.nid):null;
+    let name;
+    if(n){
+      const k='L'+n.id;seq[k]=(seq[k]||0)+1;
+      const multi=(n.fid||[]).length>1?'_p'+seq[k]:'';
+      name=r.dateKey+'_'+clean(n.text)+'_'+n.amt.toFixed(2)+(n.ref?'_'+clean(n.ref):'')+multi+(r.type==='pdf'?'.pdf':'.jpg');
+    }else{
+      seq[r.dateKey]=(seq[r.dateKey]||0)+1;
+      const lbl=r.label?'_'+clean(r.label):'';
+      name=r.dateKey+'_'+pad(seq[r.dateKey])+lbl+(r.type==='pdf'?'.pdf':'.jpg');
+    }
+    fname.set(r.id,name);
+    zip.file(name,r.blob);
   }
   if(kms.length){
-    const esc=s=>'"'+String(s||'').replace(/"/g,'""')+'"';
     let csv='\uFEFFdate,trajet,km\n';
     for(const n of kms)csv+=n.dateKey+','+esc(n.text)+','+(n.km||'')+'\n';
     zip.file('journal_km_'+(monthKey||'TOUT')+'.csv',csv);
+  }
+  if(recs.length){
+    let csv='\uFEFFdate,commercant,ttc,tva,ref,fichiers\n';
+    for(const n of recs){
+      const fs=(n.fid||[]).map(f=>fname.get(f)).filter(Boolean).join(' ; ');
+      csv+=n.dateKey+','+esc(n.text)+','+n.amt.toFixed(2)+','+(n.tva!=null?n.tva.toFixed(2):'')+','+esc(n.ref||'')+','+esc(fs)+'\n';
+    }
+    zip.file('recus_'+(monthKey||'TOUT')+'.csv',csv);
   }
   const blob=await zip.generateAsync({type:'blob'});
   dlBlob('justificatifs_'+(monthKey||'TOUT')+'_'+dateKeyOf(Date.now())+'.zip',blob);
@@ -1665,7 +1755,7 @@ async function buildBackupPayload(){
   const outR=[];
   for(const r of recs){
     outR.push({id:r.id,capturedAt:r.capturedAt,dateKey:r.dateKey,type:r.type,name:r.name,
-      label:r.label||'',size:r.size,
+      label:r.label||'',size:r.size,nid:r.nid||null,
       mime:r.blob.type||(r.type==='pdf'?'application/pdf':'image/jpeg'),
       blob:await blobToB64(r.blob),
       thumb:r.thumb?await blobToB64(r.thumb):null});
@@ -1779,7 +1869,8 @@ document.getElementById('undoBtn').onclick=async()=>{
   if(!undoBatch)return;
   const b=undoBatch;hideUndo();
   const all=await noteAll();let n=0;
-  for(const x of all){if(x.ext&&x.ext.batch===b){await noteDel(x.id);n++;}}
+  for(const x of all){if(x.ext&&x.ext.batch===b){for(const f of (x.fid||[]))await dbDel(f);await noteDel(x.id);n++;}}
+  if(lkCur){closeSheet('lkSheet');lkCur=null;lkQueue=[];}
   toast(t('tUndone',n));render();
 };
 async function importNotesList(list){
@@ -1801,7 +1892,7 @@ async function importNotesList(list){
   if(!plan.length){toast(t('pasteNone'),3000);return 0;}
   const det=Object.keys(cnt).map(k=>t(k==='rec'?'kRec':k==='km'?'kKm':k==='bank'?'kBank':'kMemo')+' '+cnt[k]).join(' · ');
   if(!confirm(t('pasteConf',plan.length,det,dup)))return 0;
-  const batchId=uid('b');
+  const batchId=uid('b');const newRecs=[];
   for(const e of list){
     const d=String(e.d||e.date||'').trim();
     const k=e.k||e.kind||'memo';
@@ -1820,14 +1911,119 @@ async function importNotesList(list){
       events:[{k:'create',t:Date.now(),dur:null}]};
     if(k==='km')rec.km=km>0?fmtKm(km):null;
     if(k==='rec'||k==='bank'){rec.amt=Math.round(amt*100)/100;if(e.ref)rec.ref=String(e.ref);if(e.tva)rec.tva=parseFloat(e.tva)||null;}
+    if(k==='rec'){rec.ext.nf=1;rec.fid=[];newRecs.push(id);}
     if(k==='list'&&items)rec.items=items.map(x=>({id:uid('i'),text:x,done:false,doneAt:null}));
     await notePut(rec);have.add(id);added++;
   }
   toast(t('tPasted',added,skipped),3200);
   if(added)showUndo(batchId,added);
   render();
+  if(newRecs.length)openLink(newRecs[0],newRecs);
   return added;
 }
+
+/* ============ 记录↔文件挂钩(文件只经记录进仓) ============ */
+if(!localStorage.getItem('linkSince'))localStorage.setItem('linkSince',String(Date.now()));
+let lkQueue=[],lkCur=null,lkURLs=[];
+const recLabel=n=>n.dateKey.slice(5)+' · '+(n.text||'')+' · '+(n.amt!=null?n.amt.toFixed(2)+' €':'');
+async function openLink(id,queue){
+  lkQueue=queue||[id];lkCur=id;
+  await renderLink();
+  openSheet('lkSheet');
+}
+async function renderLink(){
+  const notes=await noteAll();const n=notes.find(x=>x.id===lkCur);
+  if(!n){closeSheet('lkSheet');return;}
+  const idx=lkQueue.indexOf(lkCur);
+  document.getElementById('lkHead').textContent=recLabel(n);
+  document.getElementById('lkProg').textContent=lkQueue.length>1?t('lkProg',idx+1,lkQueue.length):'';
+  const files=(await dbAll()).filter(r=>r.nid===lkCur).sort((a,b)=>a.capturedAt-b.capturedAt);
+  const box=document.getElementById('lkThumbs');box.innerHTML='';
+  lkURLs.forEach(u=>URL.revokeObjectURL(u));lkURLs=[];
+  for(const r of files){
+    const d=document.createElement('div');d.dataset.id=r.id;
+    if(r.type==='pdf'){d.className='thumb pdf';d.innerHTML='<div class="tag">PDF</div><div class="fn"></div>';d.querySelector('.fn').textContent=r.name||'document.pdf';}
+    else{const u=URL.createObjectURL(r.thumb||r.blob);lkURLs.push(u);d.className='thumb';d.innerHTML='<img src="'+u+'">';}
+    d.insertAdjacentHTML('beforeend','<div class="lx" data-del="'+r.id+'">✕</div>');
+    box.appendChild(d);
+  }
+  const last=idx>=lkQueue.length-1;
+  document.getElementById('lkNext').textContent=files.length?(last?t('lkDone'):t('lkNext')):(last?t('lkClose'):t('lkSkip'));
+  document.getElementById('lkClose').style.display=lkQueue.length>1?'block':'none';
+}
+async function ingestLinked(files){
+  if(!files.length||!lkCur)return;
+  const notes=await noteAll();const n=notes.find(x=>x.id===lkCur);if(!n)return;
+  toast(t('tCompress'),60000);
+  let k=0;
+  for(const f of files){
+    try{
+      const isPdf=f.type==='application/pdf'||/\.pdf$/i.test(f.name||'');
+      let blob,thumb=null;
+      if(isPdf){blob=f;}else{const r=await compress(f);blob=r.blob;thumb=r.thumb;}
+      const rid=Date.now()+'-'+Math.random().toString(36).slice(2,7);
+      await dbPut({id:rid,capturedAt:Date.now(),dateKey:n.dateKey,type:isPdf?'pdf':'img',
+        name:f.name||'',label:n.text||'',blob,thumb,size:blob.size,nid:n.id});
+      (n.fid=n.fid||[]).push(rid);k++;
+    }catch(e){console.error(e);}
+  }
+  if(k){if(n.ext)delete n.ext.nf;else n.ext={};await notePut(n);}
+  toast(t('tLinkedN',k));
+  await renderLink();render();
+}
+document.getElementById('lkCamBtn').onclick=()=>document.getElementById('lkCam').click();
+document.getElementById('lkGalBtn').onclick=()=>document.getElementById('lkGal').click();
+document.getElementById('lkCam').onchange=e=>{ingestLinked([...e.target.files]);e.target.value='';};
+document.getElementById('lkGal').onchange=e=>{ingestLinked([...e.target.files]);e.target.value='';};
+document.getElementById('lkNext').onclick=()=>{
+  const idx=lkQueue.indexOf(lkCur);
+  if(idx>=lkQueue.length-1){closeSheet('lkSheet');lkCur=null;lkQueue=[];return;}
+  lkCur=lkQueue[idx+1];renderLink();
+};
+document.getElementById('lkClose').onclick=()=>{closeSheet('lkSheet');lkCur=null;lkQueue=[];};
+document.getElementById('lkThumbs').onclick=async e=>{
+  const x=e.target.closest('.lx');if(!x)return;
+  if(!confirm(t('confDelLinked')))return;
+  await unlinkReceipt(x.dataset.del,true);
+  renderLink();render();
+};
+/* 删文件 → 从记录上摘掉;记录一张都不剩就重新标缺文件 */
+async function unlinkReceipt(rid,alsoDelete){
+  const all=await dbAll();const r=all.find(x=>x.id===rid);
+  if(r&&r.nid){
+    const notes=await noteAll();const n=notes.find(x=>x.id===r.nid);
+    if(n){n.fid=(n.fid||[]).filter(f=>f!==rid);if(!n.fid.length){n.ext=n.ext||{};n.ext.nf=1;}await notePut(n);}
+  }
+  if(alsoDelete&&r)await dbDel(rid);
+}
+/* #检查 [YYYY-MM] → 缺文件的记录 + 无记录的文件(本版本后进的) */
+async function runCheck(arg){
+  let mk=(arg||'').trim();
+  if(!mk)mk=monthOf(dateKeyOf(Date.now()));
+  if(!/^\d{4}-\d{2}$/.test(mk)){toast(t('chkMonthBad'),3000);return;}
+  const notes=await noteAll(),all=await dbAll();
+  const recs=notes.filter(n=>n.kind==='rec'&&monthOf(n.dateKey)===mk).sort((a,b)=>a.dateKey.localeCompare(b.dateKey));
+  const since=Number(localStorage.getItem('linkSince')||0);
+  const miss=recs.filter(n=>n.ext&&n.ext.nf);
+  const withF=recs.filter(n=>n.fid&&n.fid.length).length;
+  const orph=all.filter(r=>!r.nid&&r.capturedAt>=since&&monthOf(r.dateKey)===mk).sort((a,b)=>a.dateKey.localeCompare(b.dateKey));
+  let out='#检查 '+mk+'\n'+t('chkRep',recs.length,withF,miss.length)+'\n';
+  if(miss.length){out+='\n'+t('chkMissH')+'\n';for(const n of miss)out+=n.dateKey.slice(5)+' '+(n.text||'')+' '+n.amt.toFixed(2)+(n.ref?' #'+n.ref:'')+'\n';}
+  if(orph.length){out+='\n'+t('chkOrphH',orph.length)+'\n';for(const r of orph)out+=r.dateKey.slice(5)+' '+(r.label||r.name||r.type)+'\n';}
+  if(!miss.length&&!orph.length)out+='\n'+t('chkNone')+'\n';
+  document.getElementById('chkTitle').textContent=t('chkTitle',mk);
+  document.getElementById('chkPre').textContent=out;
+  document.getElementById('chkPre').dataset.txt=out;
+  openSheet('chkSheet');
+}
+const CHK_RE=/^#(检查|check|vérif|verif)\s*(\d{4}-\d{2})?\s*$/i;
+document.getElementById('chkCopy').onclick=async()=>{
+  try{await navigator.clipboard.writeText(document.getElementById('chkPre').dataset.txt||'');toast(t('tCopied',1));}
+  catch(e){toast(t('tCopyFail'));}
+};
+document.getElementById('chkClose').onclick=()=>closeSheet('chkSheet');
+document.getElementById('lkSheet').onclick=e=>{if(e.target.id==='lkSheet'){closeSheet('lkSheet');lkCur=null;lkQueue=[];}};
+document.getElementById('chkSheet').onclick=e=>{if(e.target.id==='chkSheet')closeSheet('chkSheet');};
 function tryParseFeed(raw){
   if(!raw||!/"kouunn"|"notes"\s*:|"km"\s*:|"items"\s*:/.test(raw))return null;
   try{
@@ -1848,6 +2044,8 @@ document.getElementById('inText').addEventListener('paste',async e=>{
 document.getElementById('pasteGo').onclick=async()=>{
   const raw=document.getElementById('pasteTx').value.trim();
   if(!raw){toast(t('tSay'));return;}
+  const cm=raw.match(CHK_RE);
+  if(cm){document.getElementById('pasteTx').value='';closeSheet('pasteSheet');await runCheck(cm[2]);return;}
   const list=tryParseFeed(raw);
   if(!list){toast(t('badPaste'));return;}
   const n=await importNotesList(list);
@@ -1871,7 +2069,7 @@ document.getElementById('bkFile').onchange=async e=>{
       for(const r of (data.receipts||[])){
         if(!r.id||haveR.has(r.id)){skipped++;continue;}
         await dbPut({id:r.id,capturedAt:r.capturedAt,dateKey:r.dateKey,type:r.type,name:r.name,
-          label:r.label||'',size:r.size,
+          label:r.label||'',size:r.size,nid:r.nid||null,
           blob:b64ToBlob(r.blob,r.mime),
           thumb:r.thumb?b64ToBlob(r.thumb,'image/jpeg'):null});
         added++;
@@ -1952,7 +2150,7 @@ document.getElementById('viewer').onclick=e=>{if(e.target.id==='vImgWrap')closeV
 document.getElementById('vDel').onclick=async()=>{
   if(!curId)return;
   if(!confirm(t('confDelRec')))return;
-  await dbDel(curId);closeViewer();toast(t('tDeleted'));render();
+  await unlinkReceipt(curId,true);closeViewer();toast(t('tDeleted'));render();
 };
 
 /* ============ 记录编辑卡 ============ */
@@ -2088,6 +2286,7 @@ document.getElementById('ledger').onclick=async e=>{
     return;
   }
   const nl=e.target.closest('.nline');
+  if(nl&&nl.dataset.nf){openLink(nl.dataset.nf);return;}
   if(nl&&nl.dataset.nid){openNoteEdit(nl.dataset.nid);return;}
   const th=e.target.closest('.thumb');
   if(th)openViewer(th.dataset.id);

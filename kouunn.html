@@ -1781,8 +1781,23 @@ document.getElementById('bkExport').onclick=()=>{
 /* ============ Drive 自动存档(照成神之路接法) ============ */
 const DRIVE_CLIENT_ID='783857816433-953oblm2al9098nf76fdbavqneb3otuc.apps.googleusercontent.com';
 const DRIVE_FILE='kouunn_backup.json';
-let driveToken=null,driveTokenClient=null,driveBusy=false;
+let driveToken=null,driveTokenClient=null,driveBusy=false,driveAuthAt=0;
 const drEnabled=()=>localStorage.getItem('driveEnabled')==='1';
+/* token缓存(1小时有效,提前60秒作废) + 单飞锁(20秒内不重复授权) */
+function driveLoadTok(){
+  try{const o=JSON.parse(localStorage.getItem('driveTok')||'null');
+    if(o&&o.t&&o.exp>Date.now()){driveToken=o.t;return true;}
+  }catch(e){}
+  localStorage.removeItem('driveTok');return false;
+}
+function driveClearTok(){driveToken=null;localStorage.removeItem('driveTok');}
+const driveAuthLocked=()=>Date.now()-driveAuthAt<20000;
+async function driveFetchHint(){
+  try{
+    const r=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+driveToken}});
+    if(r.ok){const j=await r.json();if(j.email)localStorage.setItem('driveHint',j.email);}
+  }catch(e){}
+}
 function driveStatus(txt,bad){
   const b=document.getElementById('btnDrive');if(b){b.textContent=t('drLbl',txt);b.style.color=bad?'#F0977F':'';}
   const d=document.getElementById('driveDot');if(d)d.style.color=bad?'var(--tampon)':(drEnabled()&&driveToken?'#7FA8E0':'#3A404B');
@@ -1795,19 +1810,29 @@ function loadGIS(cb){
   document.head.appendChild(sc);
 }
 function driveInit(interactive){
+  if(!interactive&&driveLoadTok()){driveUpload();return;}
+  if(!interactive&&driveAuthLocked())return;
+  driveAuthAt=Date.now();
   loadGIS(()=>{try{
     if(!driveTokenClient)driveTokenClient=google.accounts.oauth2.initTokenClient({
       client_id:DRIVE_CLIENT_ID,
-      scope:'https://www.googleapis.com/auth/drive.file',
-      callback:function(resp){
+      scope:'https://www.googleapis.com/auth/drive.file email',
+      callback:async function(resp){
+        driveAuthAt=0;
         if(resp&&resp.access_token){
           driveToken=resp.access_token;
+          const ttl=(Number(resp.expires_in)||3600)-60;
+          localStorage.setItem('driveTok',JSON.stringify({t:driveToken,exp:Date.now()+ttl*1000}));
           localStorage.setItem('driveEnabled','1');
+          if(!localStorage.getItem('driveHint'))await driveFetchHint();
           driveStatus(t('drConn'));driveUpload();
         }else driveStatus(t('drNoAuth'),1);
       }});
-    driveTokenClient.requestAccessToken({prompt:interactive?'consent':''});
-  }catch(e){driveStatus(t('drNoAuth'),1);}});
+    const hint=localStorage.getItem('driveHint')||'';
+    const opt={prompt:interactive?'consent':''};
+    if(hint)opt.hint=hint;
+    driveTokenClient.requestAccessToken(opt);
+  }catch(e){driveAuthAt=0;driveStatus(t('drNoAuth'),1);}});
 }
 async function driveUpload(){
   if(!drEnabled()||!driveToken||driveBusy)return;
@@ -1819,7 +1844,7 @@ async function driveUpload(){
     if(!fid){
       const q=await fetch("https://www.googleapis.com/drive/v3/files?q=name%3D'"+DRIVE_FILE+"'%20and%20trashed%3Dfalse&fields=files(id)",
         {headers:{Authorization:'Bearer '+driveToken}});
-      if(q.status===401){driveToken=null;driveBusy=false;driveInit(false);return;}
+      if(q.status===401){driveClearTok();driveBusy=false;driveInit(false);return;}
       const qj=await q.json();
       if(qj.files&&qj.files[0]){fid=qj.files[0].id;localStorage.setItem('driveFileId',fid);}
     }
@@ -1832,7 +1857,7 @@ async function driveUpload(){
                  :'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
     const r=await fetch(url,{method:fid?'PATCH':'POST',
       headers:{Authorization:'Bearer '+driveToken,'Content-Type':'multipart/related; boundary='+boundary},body:body});
-    if(r.status===401){driveToken=null;driveInit(false);}
+    if(r.status===401){driveClearTok();driveInit(false);}
     else if(r.ok){
       const j=await r.json();if(j.id)localStorage.setItem('driveFileId',j.id);
       localStorage.setItem('driveLast',String(Date.now()));
@@ -1845,11 +1870,12 @@ async function driveUpload(){
 document.getElementById('btnDrive').onclick=()=>{
   closeSheet('syncSheet');
   if(!drEnabled()||!driveToken)driveInit(true);
-  else if(confirm(t('drConfOff'))){localStorage.setItem('driveEnabled','0');driveToken=null;driveStatus(t('drClosed'));}
+  else if(confirm(t('drConfOff'))){localStorage.setItem('driveEnabled','0');driveClearTok();driveStatus(t('drClosed'));}
 };
 document.addEventListener('visibilitychange',()=>{
   if(!drEnabled())return;
-  if(document.visibilityState==='visible'){if(driveToken)driveUpload();else driveInit(false);}
+  if(driveAuthLocked())return;
+  if(document.visibilityState==='visible'){if(driveToken||driveLoadTok())driveUpload();else driveInit(false);}
   else if(driveToken)driveUpload();
 });
 function pHash(x){let h=5381;for(let i=0;i<x.length;i++){h=((h<<5)+h+x.charCodeAt(i))|0;}return 'p'+(h>>>0).toString(36);}

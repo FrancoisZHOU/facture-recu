@@ -505,6 +505,7 @@ body.kmMode #recBtn,body.kmMode #imgBtn,body.kmMode #vidBtn,body.kmMode #fileBtn
 <div class="sheet" id="syncSheet">
   <div class="sheetCard">
     <button class="sBtn sec" id="btnDrive" style="border-color:#4A6FA5;"></button>
+    <button class="sBtn ghost" id="btnDriveSwitch" style="margin-top:-4px;"></button>
     <button class="sBtn pri" id="bkExport"></button>
     <button class="sBtn sec" id="bkImport"></button>
     <button class="sBtn sec" id="pasteBtn"></button>
@@ -574,7 +575,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 <script>
 /* ============ i18n ============ */
 const I18N={
-zh:{drLbl:s=>"☁ Drive自动存档:"+s,drOff:"未开启",drConn:"连接中…",drOk:x=>"已连接 · 最近 "+x,drFail:c=>"上传失败 "+c,drNoAuth:"未授权",drClosed:"已关闭",drNet:"网络波动·稍后自动重试",drScript:"脚本加载失败·看网络",drConfOff:"关闭Drive自动存档?(本地数据不受影响)",tabRecon:"💳 对账",reconSum:(n,ok,sus,miss)=>n+" 笔 · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · 缺 "+miss:""),stMiss:"缺票",stSus:"疑似",stOk:"有票",stNa:"无需",stRecWait:"待流水",stRecLate:"流水已到·无扣款",noBank:"流水未导入 — 月结时把对账单发Claude",confSus:(a,b)=>"确认配对?\n流水: "+a+"\n票据: "+b,pickLink:"输入编号手动配对,0=标记无需票据,留空取消:",tLinked:"已配对 ✓",tNa:"已标记无需票据",tReset:"已重置为自动",reconEmpty:"还没有流水。每月把对账单发Claude,粘贴流水块进来。",pasteBtn:"📋 粘贴导入(万能吃口)",pasteTitle:"📋 粘贴导入",pastePh:"粘贴Claude给你的JSON代码块,里程/备忘/清单通吃,重复自动跳过",pasteGo:"导入",badPaste:"解析失败,检查粘贴内容",tPasted:(a,s)=>"新增"+a+" · 跳过"+s,basePrompt:"本次出发点(只对这一条生效,存后自动回到KOUUNN)",appTitle:"KOUUNN仓",snap:"拍 票 据",snapSub:"自动压缩 · 自动记时 · 存入本机",importB:"📁 导入照片 / PDF发票(按文件时间归月)",
+zh:{drLbl:s=>"☁ Drive自动存档:"+s,drOff:"未开启",drConn:"连接中…",drOk:x=>"已连接 · 最近 "+x+(localStorage.getItem('kouunn_driveAcct')?" · "+localStorage.getItem('kouunn_driveAcct'):""),drAcctSwitch:(a,b)=>"Drive账号从 "+a+" 换成了 "+b+",照片将重新传到新账号",drSwitchBtn:"🔁 换Drive账号",drSwitchConf:"换一个Google账号?选完后所有照片会重新传到新账号(旧账号里的不删)。",drFail:c=>"上传失败 "+c,drNoAuth:"未授权",drClosed:"已关闭",drNet:"网络波动·稍后自动重试",drScript:"脚本加载失败·看网络",drConfOff:"关闭Drive自动存档?(本地数据不受影响)",tabRecon:"💳 对账",reconSum:(n,ok,sus,miss)=>n+" 笔 · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · 缺 "+miss:""),stMiss:"缺票",stSus:"疑似",stOk:"有票",stNa:"无需",stRecWait:"待流水",stRecLate:"流水已到·无扣款",noBank:"流水未导入 — 月结时把对账单发Claude",confSus:(a,b)=>"确认配对?\n流水: "+a+"\n票据: "+b,pickLink:"输入编号手动配对,0=标记无需票据,留空取消:",tLinked:"已配对 ✓",tNa:"已标记无需票据",tReset:"已重置为自动",reconEmpty:"还没有流水。每月把对账单发Claude,粘贴流水块进来。",pasteBtn:"📋 粘贴导入(万能吃口)",pasteTitle:"📋 粘贴导入",pastePh:"粘贴Claude给你的JSON代码块,里程/备忘/清单通吃,重复自动跳过",pasteGo:"导入",badPaste:"解析失败,检查粘贴内容",tPasted:(a,s)=>"新增"+a+" · 跳过"+s,basePrompt:"本次出发点(只对这一条生效,存后自动回到KOUUNN)",appTitle:"KOUUNN仓",snap:"拍 票 据",snapSub:"自动压缩 · 自动记时 · 存入本机",importB:"📁 导入照片 / PDF发票(按文件时间归月)",
 chipMemo:"📝 记录",chipList:"☑ 清单",chipKm:"🚗 里程",chipPaste:"📋 粘贴",phPaste:"粘贴Claude给你的代码块(票据/里程/流水通吃),重复自动跳过",logPaste:"导入",memoOpenBtn:"📝 记事",ossLic:"开源许可 (JSZip)",pasteConf:(n,det,s)=>"识别到 "+n+" 条("+det+")"+(s?",另有 "+s+" 条已存在将跳过":"")+"\n导入?",pasteNone:"全部已存在,无新内容",undoTx:n=>"已导入 "+n+" 条",undoBtn:"撤销",tUndone:n=>"已撤销 "+n+" 条",kRec:"票据",kKm:"里程",kBank:"流水",kMemo:"记事",
 phMemo:"想到什么倒什么,语音、粘贴都行",phList:"一行一项,粘贴多行自动拆条",phKm:"点下方地点,或输入地点名(多段用逗号分隔)",
 log:"记",rtOn:"⇄ 往返",rtOff:"→ 单程",clear:"清空",yearBtn:"📄 年度里程表",otherPlace:"＋其他…",asTitle:"🚗 顺路记里程?",
@@ -614,7 +615,7 @@ nfTag:"缺文件",tLinkedN:n=>"已挂 "+n+" 张 ✓",confDelLinked:"删掉这个
 chkTitle:m=>"#检查 "+m,chkNone:"本月记录都有文件 ✓",chkCopy:"📋 复制",
 chkRep:(n,ok,miss)=>"记录 "+n+" · 有文件 "+ok+" · 缺文件 "+miss,chkMissH:"⚠ 缺文件的记录:",chkOrphH:n=>"无记录的文件("+n+"):",chkMonthBad:"月份格式:#检查 2026-09",
 drPhotos:(i,n)=>"传照片 "+i+"/"+n+"…",drJson:"传台账…",drRestore:(i,n)=>"从Drive恢复照片 "+i+"/"+n+"…",drRestored:n=>"已恢复 "+n+" 张 ✓",drRecon:(m,o)=>"Drive核对:补传 "+m+" · Drive多余 "+o,drPending:n=>n+" 张原图在Drive未拉回",thumbCloud:"☁",drErr:m=>"Drive出错: "+m,drSkipped:(n,m)=>n+" 张传不上("+m+"),其余已传"},
-en:{drLbl:s=>"☁ Drive auto-backup: "+s,drOff:"off",drConn:"connecting…",drOk:x=>"on · last "+x,drFail:c=>"upload failed "+c,drNoAuth:"not authorized",drClosed:"off",drNet:"network hiccup · will retry",drScript:"script failed · check network",drConfOff:"Turn off Drive auto-backup? (local data untouched)",tabRecon:"💳 Recon",reconSum:(n,ok,sus,miss)=>n+" lines · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · missing "+miss:""),stMiss:"missing",stSus:"likely",stOk:"matched",stNa:"n/a",stRecWait:"awaiting statement",stRecLate:"statement in · no debit",noBank:"No statement yet — send it to Claude at month close",confSus:(a,b)=>"Confirm match?\nBank: "+a+"\nReceipt: "+b,pickLink:"Enter number to link manually, 0 = no receipt needed, blank = cancel:",tLinked:"Linked ✓",tNa:"Marked as no receipt needed",tReset:"Reset to auto",reconEmpty:"No bank lines yet. Send the monthly statement to Claude and paste the block.",pasteBtn:"📋 Paste import",pasteTitle:"📋 Paste import",pastePh:"Paste the JSON block from Claude — trips/notes/lists, dupes auto-skipped",pasteGo:"Import",badPaste:"Cannot parse, check the paste",tPasted:(a,s)=>"Added "+a+" · skipped "+s,basePrompt:"Start point for this entry only (reverts to KOUUNN after saving)",appTitle:"KOUUNN Vault",snap:"SNAP RECEIPT",snapSub:"auto-compress · timestamp · stored locally",importB:"📁 Import photos / PDF invoices (by file date)",
+en:{drLbl:s=>"☁ Drive auto-backup: "+s,drOff:"off",drConn:"connecting…",drOk:x=>"on · last "+x+(localStorage.getItem('kouunn_driveAcct')?" · "+localStorage.getItem('kouunn_driveAcct'):""),drAcctSwitch:(a,b)=>"Drive account changed "+a+" → "+b+", photos will re-upload",drSwitchBtn:"🔁 Switch Drive account",drSwitchConf:"Switch Google account? All photos will re-upload to the new account (old one untouched).",drFail:c=>"upload failed "+c,drNoAuth:"not authorized",drClosed:"off",drNet:"network hiccup · will retry",drScript:"script failed · check network",drConfOff:"Turn off Drive auto-backup? (local data untouched)",tabRecon:"💳 Recon",reconSum:(n,ok,sus,miss)=>n+" lines · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · missing "+miss:""),stMiss:"missing",stSus:"likely",stOk:"matched",stNa:"n/a",stRecWait:"awaiting statement",stRecLate:"statement in · no debit",noBank:"No statement yet — send it to Claude at month close",confSus:(a,b)=>"Confirm match?\nBank: "+a+"\nReceipt: "+b,pickLink:"Enter number to link manually, 0 = no receipt needed, blank = cancel:",tLinked:"Linked ✓",tNa:"Marked as no receipt needed",tReset:"Reset to auto",reconEmpty:"No bank lines yet. Send the monthly statement to Claude and paste the block.",pasteBtn:"📋 Paste import",pasteTitle:"📋 Paste import",pastePh:"Paste the JSON block from Claude — trips/notes/lists, dupes auto-skipped",pasteGo:"Import",badPaste:"Cannot parse, check the paste",tPasted:(a,s)=>"Added "+a+" · skipped "+s,basePrompt:"Start point for this entry only (reverts to KOUUNN after saving)",appTitle:"KOUUNN Vault",snap:"SNAP RECEIPT",snapSub:"auto-compress · timestamp · stored locally",importB:"📁 Import photos / PDF invoices (by file date)",
 chipMemo:"📝 Note",chipList:"☑ List",chipKm:"🚗 Trip",chipPaste:"📋 Paste",phPaste:"Paste the code block from Claude (receipts/trips/bank), dupes skipped",logPaste:"Import",memoOpenBtn:"📝 Notes",ossLic:"Open-source licenses (JSZip)",pasteConf:(n,det,s)=>"Found "+n+" entries ("+det+")"+(s?", "+s+" already exist and will be skipped":"")+"\nImport?",pasteNone:"All already exist, nothing new",undoTx:n=>"Imported "+n,undoBtn:"Undo",tUndone:n=>"Undone "+n,kRec:"receipts",kKm:"trips",kBank:"bank",kMemo:"notes",
 phMemo:"Dump anything. Voice or paste works",phList:"One item per line. Paste splits rows",phKm:"Tap a place below, or type (comma = legs)",
 log:"Log",rtOn:"⇄ round",rtOff:"→ one-way",clear:"Clear",yearBtn:"📄 Yearly mileage",otherPlace:"＋ Other…",asTitle:"🚗 Log the trip too?",
@@ -655,7 +656,7 @@ nfTag:"no file",tLinkedN:n=>"Attached "+n+" ✓",confDelLinked:"Delete this file
 chkTitle:m=>"#check "+m,chkNone:"Every record this month has a file ✓",chkCopy:"📋 Copy",
 chkRep:(n,ok,miss)=>"records "+n+" · with file "+ok+" · missing "+miss,chkMissH:"⚠ Records without file:",chkOrphH:n=>"Files without record ("+n+"):",chkMonthBad:"Month format: #检查 2026-09",
 drPhotos:(i,n)=>"photos "+i+"/"+n+"…",drJson:"ledger…",drRestore:(i,n)=>"restoring photos "+i+"/"+n+"…",drRestored:n=>"restored "+n+" ✓",drRecon:(m,o)=>"Drive check: re-upload "+m+" · extra on Drive "+o,drPending:n=>n+" originals still on Drive",thumbCloud:"☁",drErr:m=>"Drive error: "+m,drSkipped:(n,m)=>n+" failed ("+m+"), rest uploaded"},
-fr:{drLbl:s=>"☁ Sauvegarde Drive : "+s,drOff:"désactivée",drConn:"connexion…",drOk:x=>"active · dernière "+x,drFail:c=>"échec envoi "+c,drNoAuth:"non autorisé",drClosed:"désactivée",drNet:"réseau instable · nouvel essai",drScript:"script non chargé · réseau",drConfOff:"Désactiver la sauvegarde Drive ? (données locales intactes)",tabRecon:"💳 Rappro",reconSum:(n,ok,sus,miss)=>n+" lignes · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · manque "+miss:""),stMiss:"manque",stSus:"probable",stOk:"OK",stNa:"s/o",stRecWait:"en attente du relevé",stRecLate:"relevé reçu · non débité",noBank:"Relevé non importé — envoyez-le à Claude",confSus:(a,b)=>"Confirmer ?\nBanque : "+a+"\nReçu : "+b,pickLink:"Numéro pour lier, 0 = sans reçu, vide = annuler :",tLinked:"Lié ✓",tNa:"Marqué sans reçu",tReset:"Auto rétabli",reconEmpty:"Aucune ligne bancaire. Envoyez le relevé à Claude et collez le bloc.",pasteBtn:"📋 Import par collage",pasteTitle:"📋 Import par collage",pastePh:"Collez le bloc JSON de Claude — trajets/notes/listes, doublons ignorés",pasteGo:"Importer",badPaste:"Illisible, vérifiez le collage",tPasted:(a,s)=>"Ajouté "+a+" · ignoré "+s,basePrompt:"Départ pour cette entrée seule (retour à KOUUNN après)",appTitle:"KOUUNN Vault",snap:"PHOTO REÇU",snapSub:"compression auto · horodaté · stocké local",importB:"📁 Importer photos / factures PDF (date du fichier)",
+fr:{drLbl:s=>"☁ Sauvegarde Drive : "+s,drOff:"désactivée",drConn:"connexion…",drOk:x=>"active · dernière "+x+(localStorage.getItem('kouunn_driveAcct')?" · "+localStorage.getItem('kouunn_driveAcct'):""),drAcctSwitch:(a,b)=>"Compte Drive changé "+a+" → "+b+", photos renvoyées",drSwitchBtn:"🔁 Changer de compte Drive",drSwitchConf:"Changer de compte Google ? Toutes les photos seront renvoyées vers le nouveau compte (l'ancien reste intact).",drFail:c=>"échec envoi "+c,drNoAuth:"non autorisé",drClosed:"désactivée",drNet:"réseau instable · nouvel essai",drScript:"script non chargé · réseau",drConfOff:"Désactiver la sauvegarde Drive ? (données locales intactes)",tabRecon:"💳 Rappro",reconSum:(n,ok,sus,miss)=>n+" lignes · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · manque "+miss:""),stMiss:"manque",stSus:"probable",stOk:"OK",stNa:"s/o",stRecWait:"en attente du relevé",stRecLate:"relevé reçu · non débité",noBank:"Relevé non importé — envoyez-le à Claude",confSus:(a,b)=>"Confirmer ?\nBanque : "+a+"\nReçu : "+b,pickLink:"Numéro pour lier, 0 = sans reçu, vide = annuler :",tLinked:"Lié ✓",tNa:"Marqué sans reçu",tReset:"Auto rétabli",reconEmpty:"Aucune ligne bancaire. Envoyez le relevé à Claude et collez le bloc.",pasteBtn:"📋 Import par collage",pasteTitle:"📋 Import par collage",pastePh:"Collez le bloc JSON de Claude — trajets/notes/listes, doublons ignorés",pasteGo:"Importer",badPaste:"Illisible, vérifiez le collage",tPasted:(a,s)=>"Ajouté "+a+" · ignoré "+s,basePrompt:"Départ pour cette entrée seule (retour à KOUUNN après)",appTitle:"KOUUNN Vault",snap:"PHOTO REÇU",snapSub:"compression auto · horodaté · stocké local",importB:"📁 Importer photos / factures PDF (date du fichier)",
 chipMemo:"📝 Note",chipList:"☑ Liste",chipKm:"🚗 Trajet",chipPaste:"📋 Coller",phPaste:"Collez le bloc de Claude (reçus/trajets/banque), doublons ignorés",logPaste:"Importer",memoOpenBtn:"📝 Notes",ossLic:"Licences open source (JSZip)",pasteConf:(n,det,s)=>n+" entrées détectées ("+det+")"+(s?", "+s+" déjà présentes seront ignorées":"")+"\nImporter ?",pasteNone:"Tout existe déjà, rien de nouveau",undoTx:n=>"Importé "+n,undoBtn:"Annuler",tUndone:n=>"Annulé "+n,kRec:"reçus",kKm:"trajets",kBank:"banque",kMemo:"notes",
 phMemo:"Déversez tout. Voix ou collage OK",phList:"Un élément par ligne. Coller découpe",phKm:"Touchez un lieu, ou tapez (virgule = étapes)",
 log:"Noter",rtOn:"⇄ A/R",rtOff:"→ aller",clear:"Effacer",yearBtn:"📄 Kilométrage annuel",otherPlace:"＋ Autre…",asTitle:"🚗 Noter le trajet aussi ?",
@@ -713,7 +714,7 @@ function applyLang(){
    'rmTitle:rmTitle','rmQ1:rmQ1','rmQ2:rmQ2','rmQ3:rmQ3','rmOffLbl:rmOffLbl',
    'rmAlarm:rmAlarm','rmIcs:rmIcs','rmCancel:cancel',
    'pasteBtn:pasteBtn','pasteTitle:pasteTitle','pasteGo:pasteGo','pasteCancel:cancel',
-   'lkTip:lkTip','lkCamBtn:lkCam','lkGalBtn:lkGal','lkClose:lkClose','chkCopy:chkCopy','chkClose:close'
+   'lkTip:lkTip','lkCamBtn:lkCam','lkGalBtn:lkGal','lkClose:lkClose','chkCopy:chkCopy','chkClose:close','btnDriveSwitch:drSwitchBtn'
   ].forEach(p=>{const[i,k]=p.split(':');setTx(i,k);});
   document.getElementById('tEmpty').innerHTML=t('empty');
   document.getElementById('vLabel').placeholder=t('labelPh');
@@ -1796,7 +1797,7 @@ const DRIVE_CLIENT_ID='783857816433-953oblm2al9098nf76fdbavqneb3otuc.apps.google
 const DRIVE_FILE='kouunn_backup.json';
 let driveToken=null,driveTokenClient=null,driveBusy=false,driveAuthAt=0;
 /* 所有Drive键带前缀:同域三个app共享localStorage,裸键会串台(尤其fileId) */
-const DK={on:'kouunn_driveEnabled',fid:'kouunn_driveFileId',last:'kouunn_driveLast',tok:'kouunn_driveTok',hint:'kouunn_driveHint',folder:'kouunn_driveFolder'};
+const DK={on:'kouunn_driveEnabled',fid:'kouunn_driveFileId',last:'kouunn_driveLast',tok:'kouunn_driveTok',hint:'kouunn_driveHint',folder:'kouunn_driveFolder',acct:'kouunn_driveAcct'};
 const DRIVE_FOLDER='KOUUNN仓';
 (function(){ /* 只迁开关;fileId/token不迁,按文件名重查、重新拿 */
   if(localStorage.getItem(DK.on)===null&&localStorage.getItem('driveEnabled')==='1')localStorage.setItem(DK.on,'1');
@@ -1811,10 +1812,20 @@ function driveLoadTok(){
 }
 function driveClearTok(){driveToken=null;localStorage.removeItem(DK.tok);}
 const driveAuthLocked=()=>Date.now()-driveAuthAt<20000;
-async function driveFetchHint(){
+/* 每次拿到token都问一下是谁的账号:换了账号就把旧账号下的引用全清掉(文件夹/台账/每张照片的dfid),重新传 */
+async function driveCheckAcct(){
   try{
     const r=await fetch('https://www.googleapis.com/drive/v3/about?fields=user',{headers:{Authorization:'Bearer '+driveToken}});
-    if(r.ok){const j=await r.json();const e=j.user&&j.user.emailAddress;if(e)localStorage.setItem(DK.hint,e);}
+    if(!r.ok)return;
+    const j=await r.json();const e=j.user&&j.user.emailAddress;if(!e)return;
+    const old=localStorage.getItem(DK.acct)||'';
+    localStorage.setItem(DK.hint,e);
+    if(old&&old!==e){
+      localStorage.removeItem(DK.folder);localStorage.removeItem(DK.fid);
+      const all=await dbAll();for(const x of all){if(x.dfid){x.dfid=null;await dbPut(x);}}
+      toast(t('drAcctSwitch',old,e),5000);
+    }
+    localStorage.setItem(DK.acct,e);
   }catch(e){}
 }
 function driveStatus(txt,bad){
@@ -1828,8 +1839,12 @@ function loadGIS(cb){
   sc.onload=cb;sc.onerror=()=>driveStatus(t('drScript'),1);
   document.head.appendChild(sc);
 }
+let driveAcctChecked=false;
 function driveInit(interactive){
-  if(!interactive&&driveLoadTok()){driveUpload();return;}
+  if(!interactive&&driveLoadTok()){
+    if(driveAcctChecked)driveUpload();else{driveAcctChecked=true;driveCheckAcct().then(driveUpload);}
+    return;
+  }
   if(!interactive&&driveAuthLocked())return;
   driveAuthAt=Date.now();
   loadGIS(()=>{try{
@@ -1843,13 +1858,13 @@ function driveInit(interactive){
           const ttl=(Number(resp.expires_in)||3600)-60;
           localStorage.setItem(DK.tok,JSON.stringify({t:driveToken,exp:Date.now()+ttl*1000}));
           localStorage.setItem(DK.on,'1');
-          if(!localStorage.getItem(DK.hint))await driveFetchHint();
+          await driveCheckAcct();
           driveStatus(t('drConn'));driveUpload();
         }else driveStatus(t('drNoAuth'),1);
       }});
     const hint=localStorage.getItem(DK.hint)||'';
-    const opt={prompt:interactive?'consent':''};
-    if(hint)opt.hint=hint;
+    const opt={prompt:interactive==='switch'?'select_account':(interactive?'consent':'')};
+    if(hint&&interactive!=='switch')opt.hint=hint;
     driveTokenClient.requestAccessToken(opt);
   }catch(e){driveAuthAt=0;driveStatus(t('drNoAuth'),1);}});
 }
@@ -1914,7 +1929,7 @@ const photoName=r=>'kouunn_r_'+r.id+(r.type==='pdf'?'.pdf':'.jpg');
 async function driveUploadPhotos(){
   const todo=(await dbAll()).filter(r=>r.blob&&!r.dfid).sort((a,b)=>a.capturedAt-b.capturedAt);
   if(!todo.length)return 0;
-  const folder=await driveFolderId();
+  let folder=await driveFolderId();
   let done=0,fail=0,lastErr='';
   for(const r of todo){
     if(!drEnabled())break;
@@ -1922,7 +1937,15 @@ async function driveUploadPhotos(){
     try{
       const name=photoName(r);
       let id=await driveFindByName(name,folder);
-      if(!id)id=await driveMultipart({name:name,parents:[folder]},r.blob,r.blob.type||(r.type==='pdf'?'application/pdf':'image/jpeg'));
+      const mime=r.blob.type||(r.type==='pdf'?'application/pdf':'image/jpeg');
+      if(!id){
+        try{id=await driveMultipart({name:name,parents:[folder]},r.blob,mime);}
+        catch(e){
+          if(!/not found/i.test(e.message))throw e;
+          localStorage.removeItem(DK.folder);folder=await driveFolderId();
+          id=await driveMultipart({name:name,parents:[folder]},r.blob,mime);
+        }
+      }
       const cur=(await dbAll()).find(x=>x.id===r.id);
       if(cur){cur.dfid=id;await dbPut(cur);}
       done++;
@@ -1946,7 +1969,13 @@ async function driveUpload(){
     const json=JSON.stringify(payload);
     let fid=localStorage.getItem(DK.fid)||'';
     if(!fid){fid=await driveFindByName(DRIVE_FILE)||'';if(fid)localStorage.setItem(DK.fid,fid);}
-    const newId=await driveMultipart({name:DRIVE_FILE,mimeType:'application/json'},new Blob([json],{type:'application/json'}),'application/json',fid);
+    let newId;
+    try{newId=await driveMultipart({name:DRIVE_FILE,mimeType:'application/json'},new Blob([json],{type:'application/json'}),'application/json',fid);}
+    catch(e){
+      if(!fid||!/not found/i.test(e.message))throw e;
+      localStorage.removeItem(DK.fid);
+      newId=await driveMultipart({name:DRIVE_FILE,mimeType:'application/json'},new Blob([json],{type:'application/json'}),'application/json','');
+    }
     if(newId)localStorage.setItem(DK.fid,newId);
     localStorage.setItem(DK.last,String(Date.now()));
     localStorage.setItem('lastExportAt',String(Date.now()));
@@ -1998,6 +2027,13 @@ async function driveReconcile(){
     if(miss)driveUpload();
   }catch(e){driveBusy=false;if(e instanceof DriveAuthErr){driveClearTok();driveInit(false);}}
 }
+document.getElementById('btnDriveSwitch').onclick=()=>{
+  closeSheet('syncSheet');
+  if(!confirm(t('drSwitchConf')))return;
+  driveClearTok();localStorage.removeItem(DK.hint);
+  localStorage.setItem(DK.on,'1');driveAcctChecked=false;
+  driveInit('switch');
+};
 document.getElementById('btnDrive').onclick=()=>{
   closeSheet('syncSheet');
   if(!drEnabled()||!driveToken)driveInit(true);

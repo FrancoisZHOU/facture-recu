@@ -613,7 +613,7 @@ lkTip:"把这张票的文件挂上(可多张)",lkProg:(i,n)=>i+"/"+n,lkCam:"📷
 nfTag:"缺文件",tLinkedN:n=>"已挂 "+n+" 张 ✓",confDelLinked:"删掉这个文件?(记录保留,会重新标缺文件)",
 chkTitle:m=>"#检查 "+m,chkNone:"本月记录都有文件 ✓",chkCopy:"📋 复制",
 chkRep:(n,ok,miss)=>"记录 "+n+" · 有文件 "+ok+" · 缺文件 "+miss,chkMissH:"⚠ 缺文件的记录:",chkOrphH:n=>"无记录的文件("+n+"):",chkMonthBad:"月份格式:#检查 2026-09",
-drPhotos:(i,n)=>"传照片 "+i+"/"+n+"…",drJson:"传台账…",drRestore:(i,n)=>"从Drive恢复照片 "+i+"/"+n+"…",drRestored:n=>"已恢复 "+n+" 张 ✓",drRecon:(m,o)=>"Drive核对:补传 "+m+" · Drive多余 "+o,drPending:n=>n+" 张原图在Drive未拉回",thumbCloud:"☁"},
+drPhotos:(i,n)=>"传照片 "+i+"/"+n+"…",drJson:"传台账…",drRestore:(i,n)=>"从Drive恢复照片 "+i+"/"+n+"…",drRestored:n=>"已恢复 "+n+" 张 ✓",drRecon:(m,o)=>"Drive核对:补传 "+m+" · Drive多余 "+o,drPending:n=>n+" 张原图在Drive未拉回",thumbCloud:"☁",drErr:m=>"Drive出错: "+m,drSkipped:(n,m)=>n+" 张传不上("+m+"),其余已传"},
 en:{drLbl:s=>"☁ Drive auto-backup: "+s,drOff:"off",drConn:"connecting…",drOk:x=>"on · last "+x,drFail:c=>"upload failed "+c,drNoAuth:"not authorized",drClosed:"off",drNet:"network hiccup · will retry",drScript:"script failed · check network",drConfOff:"Turn off Drive auto-backup? (local data untouched)",tabRecon:"💳 Recon",reconSum:(n,ok,sus,miss)=>n+" lines · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · missing "+miss:""),stMiss:"missing",stSus:"likely",stOk:"matched",stNa:"n/a",stRecWait:"awaiting statement",stRecLate:"statement in · no debit",noBank:"No statement yet — send it to Claude at month close",confSus:(a,b)=>"Confirm match?\nBank: "+a+"\nReceipt: "+b,pickLink:"Enter number to link manually, 0 = no receipt needed, blank = cancel:",tLinked:"Linked ✓",tNa:"Marked as no receipt needed",tReset:"Reset to auto",reconEmpty:"No bank lines yet. Send the monthly statement to Claude and paste the block.",pasteBtn:"📋 Paste import",pasteTitle:"📋 Paste import",pastePh:"Paste the JSON block from Claude — trips/notes/lists, dupes auto-skipped",pasteGo:"Import",badPaste:"Cannot parse, check the paste",tPasted:(a,s)=>"Added "+a+" · skipped "+s,basePrompt:"Start point for this entry only (reverts to KOUUNN after saving)",appTitle:"KOUUNN Vault",snap:"SNAP RECEIPT",snapSub:"auto-compress · timestamp · stored locally",importB:"📁 Import photos / PDF invoices (by file date)",
 chipMemo:"📝 Note",chipList:"☑ List",chipKm:"🚗 Trip",chipPaste:"📋 Paste",phPaste:"Paste the code block from Claude (receipts/trips/bank), dupes skipped",logPaste:"Import",memoOpenBtn:"📝 Notes",ossLic:"Open-source licenses (JSZip)",pasteConf:(n,det,s)=>"Found "+n+" entries ("+det+")"+(s?", "+s+" already exist and will be skipped":"")+"\nImport?",pasteNone:"All already exist, nothing new",undoTx:n=>"Imported "+n,undoBtn:"Undo",tUndone:n=>"Undone "+n,kRec:"receipts",kKm:"trips",kBank:"bank",kMemo:"notes",
 phMemo:"Dump anything. Voice or paste works",phList:"One item per line. Paste splits rows",phKm:"Tap a place below, or type (comma = legs)",
@@ -654,7 +654,7 @@ lkTip:"Attach this receipt's file(s)",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 Camera",
 nfTag:"no file",tLinkedN:n=>"Attached "+n+" ✓",confDelLinked:"Delete this file? (record stays, flagged again)",
 chkTitle:m=>"#check "+m,chkNone:"Every record this month has a file ✓",chkCopy:"📋 Copy",
 chkRep:(n,ok,miss)=>"records "+n+" · with file "+ok+" · missing "+miss,chkMissH:"⚠ Records without file:",chkOrphH:n=>"Files without record ("+n+"):",chkMonthBad:"Month format: #检查 2026-09",
-drPhotos:(i,n)=>"photos "+i+"/"+n+"…",drJson:"ledger…",drRestore:(i,n)=>"restoring photos "+i+"/"+n+"…",drRestored:n=>"restored "+n+" ✓",drRecon:(m,o)=>"Drive check: re-upload "+m+" · extra on Drive "+o,drPending:n=>n+" originals still on Drive",thumbCloud:"☁"},
+drPhotos:(i,n)=>"photos "+i+"/"+n+"…",drJson:"ledger…",drRestore:(i,n)=>"restoring photos "+i+"/"+n+"…",drRestored:n=>"restored "+n+" ✓",drRecon:(m,o)=>"Drive check: re-upload "+m+" · extra on Drive "+o,drPending:n=>n+" originals still on Drive",thumbCloud:"☁",drErr:m=>"Drive error: "+m,drSkipped:(n,m)=>n+" failed ("+m+"), rest uploaded"},
 fr:{drLbl:s=>"☁ Sauvegarde Drive : "+s,drOff:"désactivée",drConn:"connexion…",drOk:x=>"active · dernière "+x,drFail:c=>"échec envoi "+c,drNoAuth:"non autorisé",drClosed:"désactivée",drNet:"réseau instable · nouvel essai",drScript:"script non chargé · réseau",drConfOff:"Désactiver la sauvegarde Drive ? (données locales intactes)",tabRecon:"💳 Rappro",reconSum:(n,ok,sus,miss)=>n+" lignes · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · manque "+miss:""),stMiss:"manque",stSus:"probable",stOk:"OK",stNa:"s/o",stRecWait:"en attente du relevé",stRecLate:"relevé reçu · non débité",noBank:"Relevé non importé — envoyez-le à Claude",confSus:(a,b)=>"Confirmer ?\nBanque : "+a+"\nReçu : "+b,pickLink:"Numéro pour lier, 0 = sans reçu, vide = annuler :",tLinked:"Lié ✓",tNa:"Marqué sans reçu",tReset:"Auto rétabli",reconEmpty:"Aucune ligne bancaire. Envoyez le relevé à Claude et collez le bloc.",pasteBtn:"📋 Import par collage",pasteTitle:"📋 Import par collage",pastePh:"Collez le bloc JSON de Claude — trajets/notes/listes, doublons ignorés",pasteGo:"Importer",badPaste:"Illisible, vérifiez le collage",tPasted:(a,s)=>"Ajouté "+a+" · ignoré "+s,basePrompt:"Départ pour cette entrée seule (retour à KOUUNN après)",appTitle:"KOUUNN Vault",snap:"PHOTO REÇU",snapSub:"compression auto · horodaté · stocké local",importB:"📁 Importer photos / factures PDF (date du fichier)",
 chipMemo:"📝 Note",chipList:"☑ Liste",chipKm:"🚗 Trajet",chipPaste:"📋 Coller",phPaste:"Collez le bloc de Claude (reçus/trajets/banque), doublons ignorés",logPaste:"Importer",memoOpenBtn:"📝 Notes",ossLic:"Licences open source (JSZip)",pasteConf:(n,det,s)=>n+" entrées détectées ("+det+")"+(s?", "+s+" déjà présentes seront ignorées":"")+"\nImporter ?",pasteNone:"Tout existe déjà, rien de nouveau",undoTx:n=>"Importé "+n,undoBtn:"Annuler",tUndone:n=>"Annulé "+n,kRec:"reçus",kKm:"trajets",kBank:"banque",kMemo:"notes",
 phMemo:"Déversez tout. Voix ou collage OK",phList:"Un élément par ligne. Coller découpe",phKm:"Touchez un lieu, ou tapez (virgule = étapes)",
@@ -695,7 +695,7 @@ lkTip:"Joindre le(s) fichier(s) de ce reçu",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 P
 nfTag:"sans fichier",tLinkedN:n=>n+" joint(s) ✓",confDelLinked:"Supprimer ce fichier ? (l'entrée reste, re-signalée)",
 chkTitle:m=>"#vérif "+m,chkNone:"Toutes les entrées du mois ont un fichier ✓",chkCopy:"📋 Copier",
 chkRep:(n,ok,miss)=>"entrées "+n+" · avec fichier "+ok+" · sans "+miss,chkMissH:"⚠ Entrées sans fichier :",chkOrphH:n=>"Fichiers sans entrée ("+n+") :",chkMonthBad:"Format : #检查 2026-09",
-drPhotos:(i,n)=>"photos "+i+"/"+n+"…",drJson:"registre…",drRestore:(i,n)=>"restauration photos "+i+"/"+n+"…",drRestored:n=>n+" restaurées ✓",drRecon:(m,o)=>"Vérif Drive : à renvoyer "+m+" · en trop "+o,drPending:n=>n+" originaux encore sur Drive",thumbCloud:"☁"}
+drPhotos:(i,n)=>"photos "+i+"/"+n+"…",drJson:"registre…",drRestore:(i,n)=>"restauration photos "+i+"/"+n+"…",drRestored:n=>n+" restaurées ✓",drRecon:(m,o)=>"Vérif Drive : à renvoyer "+m+" · en trop "+o,drPending:n=>n+" originaux encore sur Drive",thumbCloud:"☁",drErr:m=>"Erreur Drive : "+m,drSkipped:(n,m)=>n+" échec(s) ("+m+"), reste envoyé"}
 };
 let LANG=localStorage.getItem('lang')||'zh';
 const t=(k,...a)=>{const v=(I18N[LANG]||I18N.zh)[k];return typeof v==='function'?v(...a):v;};
@@ -1855,12 +1855,18 @@ function driveInit(interactive){
 }
 /* ---- Drive 底层:统一带token的fetch,401抛特定错 ---- */
 class DriveAuthErr extends Error{}
-async function dfetch(url,opt){
+async function dfetch(url,opt,ms){
   opt=opt||{};opt.headers=Object.assign({Authorization:'Bearer '+driveToken},opt.headers||{});
-  const r=await fetch(url,opt);
+  const ac=new AbortController();opt.signal=ac.signal;
+  const tm=setTimeout(()=>ac.abort(),ms||25000);
+  let r;
+  try{r=await fetch(url,opt);}
+  catch(e){throw new Error(e.name==='AbortError'?'timeout':'network');}
+  finally{clearTimeout(tm);}
   if(r.status===401)throw new DriveAuthErr('401');
   return r;
 }
+async function errText(r){try{const j=await r.json();return (j.error&&j.error.message)||String(r.status);}catch(e){return String(r.status);}}
 const dq=q=>'https://www.googleapis.com/drive/v3/files?q='+encodeURIComponent(q)+'&fields=files(id,name)&pageSize=1000';
 async function driveFindByName(name,parent){
   let q="name='"+name.replace(/'/g,"\\'")+"' and trashed=false";
@@ -1868,14 +1874,27 @@ async function driveFindByName(name,parent){
   const r=await dfetch(dq(q));if(!r.ok)return null;
   const j=await r.json();return (j.files&&j.files[0])?j.files[0].id:null;
 }
+const MP_LIMIT=4.5*1048576;
+/* 大文件走分块(resumable)上传:先要一个会话地址,再PUT整个文件 */
+async function driveResumable(meta,blob,mime,fid){
+  const url=fid?'https://www.googleapis.com/upload/drive/v3/files/'+fid+'?uploadType=resumable'
+               :'https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable';
+  const init=await dfetch(url,{method:fid?'PATCH':'POST',headers:{'Content-Type':'application/json; charset=UTF-8','X-Upload-Content-Type':mime,'X-Upload-Content-Length':String(blob.size)},body:JSON.stringify(meta)});
+  if(!init.ok)throw new Error('init '+await errText(init));
+  const loc=init.headers.get('Location');if(!loc)throw new Error('no session');
+  const r=await dfetch(loc,{method:'PUT',headers:{'Content-Type':mime},body:blob},180000);
+  if(!r.ok)throw new Error('put '+await errText(r));
+  return (await r.json()).id;
+}
 async function driveMultipart(meta,blob,mime,fid){
+  if(blob.size>MP_LIMIT)return driveResumable(meta,blob,mime,fid);
   const boundary='kouunnB'+Date.now();
   const body=new Blob(['--'+boundary+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify(meta)+
     '\r\n--'+boundary+'\r\nContent-Type: '+mime+'\r\n\r\n',blob,'\r\n--'+boundary+'--']);
   const url=fid?'https://www.googleapis.com/upload/drive/v3/files/'+fid+'?uploadType=multipart'
                :'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
-  const r=await dfetch(url,{method:fid?'PATCH':'POST',headers:{'Content-Type':'multipart/related; boundary='+boundary},body});
-  if(!r.ok)throw new Error('upload '+r.status);
+  const r=await dfetch(url,{method:fid?'PATCH':'POST',headers:{'Content-Type':'multipart/related; boundary='+boundary},body},90000);
+  if(!r.ok)throw new Error('upload '+await errText(r));
   return (await r.json()).id;
 }
 async function driveFolderId(){
@@ -1885,7 +1904,7 @@ async function driveFolderId(){
   if(!id){
     const r=await dfetch('https://www.googleapis.com/drive/v3/files',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({name:DRIVE_FOLDER,mimeType:'application/vnd.google-apps.folder'})});
-    if(!r.ok)throw new Error('folder '+r.status);
+    if(!r.ok)throw new Error('folder '+await errText(r));
     id=(await r.json()).id;
   }
   localStorage.setItem(DK.folder,id);return id;
@@ -1896,22 +1915,30 @@ async function driveUploadPhotos(){
   const todo=(await dbAll()).filter(r=>r.blob&&!r.dfid).sort((a,b)=>a.capturedAt-b.capturedAt);
   if(!todo.length)return 0;
   const folder=await driveFolderId();
-  let done=0;
+  let done=0,fail=0,lastErr='';
   for(const r of todo){
     if(!drEnabled())break;
-    driveStatus(t('drPhotos',done+1,todo.length));
-    const name=photoName(r);
-    let id=await driveFindByName(name,folder);
-    if(!id)id=await driveMultipart({name:name,parents:[folder]},r.blob,r.blob.type||(r.type==='pdf'?'application/pdf':'image/jpeg'));
-    const cur=(await dbAll()).find(x=>x.id===r.id);
-    if(cur){cur.dfid=id;await dbPut(cur);}
-    done++;
+    driveStatus(t('drPhotos',done+fail+1,todo.length));
+    try{
+      const name=photoName(r);
+      let id=await driveFindByName(name,folder);
+      if(!id)id=await driveMultipart({name:name,parents:[folder]},r.blob,r.blob.type||(r.type==='pdf'?'application/pdf':'image/jpeg'));
+      const cur=(await dbAll()).find(x=>x.id===r.id);
+      if(cur){cur.dfid=id;await dbPut(cur);}
+      done++;
+    }catch(e){
+      if(e instanceof DriveAuthErr)throw e;
+      fail++;lastErr=e.message;console.error('photo',r.id,e);
+    }
   }
+  if(fail)toast(t('drSkipped',fail,lastErr),4000);
   return done;
 }
+let driveBusyAt=0;
 async function driveUpload(){
-  if(!drEnabled()||!driveToken||driveBusy)return;
-  driveBusy=true;
+  if(!drEnabled()||!driveToken)return;
+  if(driveBusy&&Date.now()-driveBusyAt<4*60000)return;
+  driveBusy=true;driveBusyAt=Date.now();
   try{
     await driveUploadPhotos();
     driveStatus(t('drJson'));
@@ -1926,7 +1953,7 @@ async function driveUpload(){
     driveStatus(t('drOk',hm(Date.now())));
   }catch(e){
     if(e instanceof DriveAuthErr){driveClearTok();driveBusy=false;driveInit(false);return;}
-    console.error(e);driveStatus(t('drNet'),1);
+    console.error(e);driveStatus(t('drErr',e.message||'?'),1);
   }
   driveBusy=false;
   setTimeout(driveRestorePending,0);
@@ -1936,12 +1963,12 @@ async function driveRestorePending(){
   const pend=(await dbAll()).filter(r=>!r.blob&&r.dfid);
   if(!pend.length)return;
   if(!driveToken&&!driveLoadTok()){toast(t('drPending',pend.length),3500);driveInit(true);return;}
-  if(driveBusy)return;driveBusy=true;
+  if(driveBusy)return;driveBusy=true;driveBusyAt=Date.now();
   let n=0;
   try{
     for(const r of pend){
       driveStatus(t('drRestore',n+1,pend.length));
-      const resp=await dfetch('https://www.googleapis.com/drive/v3/files/'+r.dfid+'?alt=media');
+      const resp=await dfetch('https://www.googleapis.com/drive/v3/files/'+r.dfid+'?alt=media',null,120000);
       if(!resp.ok)continue;
       const blob=await resp.blob();
       const cur=(await dbAll()).find(x=>x.id===r.id);if(!cur)continue;
@@ -1956,7 +1983,7 @@ async function driveRestorePending(){
 /* 月结时核对:本地有dfid但Drive上没了→清dfid下次补传;Drive上多出来的只报数不删 */
 async function driveReconcile(){
   if(!drEnabled()||!(driveToken||driveLoadTok())||driveBusy)return;
-  driveBusy=true;
+  driveBusy=true;driveBusyAt=Date.now();
   try{
     const folder=await driveFolderId();
     const r=await dfetch(dq("'"+folder+"' in parents and trashed=false"));if(!r.ok)throw new Error('list');

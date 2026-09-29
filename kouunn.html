@@ -619,7 +619,7 @@ off0:"准点",off10:"提前10分",off30:"提前30分",off60:"提前1小时",off1
 rmAlarm:"⏰ 设系统闹钟",rmIcs:"📅 日历提醒",pickTime:"先选时间",icsDone:"已生成,点开进日历 ✓",
 lkTip:"把这张票的文件挂上(可多张)",lkPdf:"📄 PDF / 文件",lkPick:"📂 仓里已有",lkPickEmpty:"仓里没有未挂钩的文件",neLink:"📎 挂文件",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 拍照",lkGal:"🖼 相册",lkSkip:"跳过 ›",lkNext:"下一条 ›",lkDone:"✓ 完成",lkClose:"关闭",
 nfTag:"缺文件",tLinkedN:n=>"已挂 "+n+" 张 ✓",confDelLinked:"删掉这个文件?(记录保留,会重新标缺文件)",
-chkTitle:m=>"#检查 "+m,chkNone:"本月记录都有文件 ✓",chkCopy:"📋 复制",
+chkTitle:m=>"#检查 "+m,chkOld:"(旧)",chkTip:"未挂的:对账页点记录→📎;或把ZIP发给Claude要一个挂钩块贴进来",lkBlockT:"挂钩块",lkBlockRep:(n,a,b,c)=>"挂上 "+n+" · 找不到文件 "+a+" · 找不到记录 "+b+" · 已挂过 "+c,lkBlockConf:(n,x)=>"挂钩 "+n+" 个文件"+(x?"("+x+" 个对不上,会列出来)":"")+"?",lkBlockDoneH:"✓ 已挂:",lkBlockNoFile:"✗ 仓里找不到这个文件(名字对不上或已挂别的记录):",lkBlockNoRec:"✗ 找不到对应记录(日期/商家/金额要一致):",lkBlockAlready:"= 之前就挂好了:",chkNone:"本月记录都有文件 ✓",chkCopy:"📋 复制",
 chkRep:(n,ok,miss)=>"记录 "+n+" · 有文件 "+ok+" · 缺文件 "+miss,chkMissH:"⚠ 缺文件的记录:",chkOrphH:n=>"无记录的文件("+n+"):",chkMonthBad:"月份格式:#检查 2026-09",
 drPhotos:(i,n)=>"传照片 "+i+"/"+n+"…",drJson:"传台账…",drRestore:(i,n)=>"从Drive恢复照片 "+i+"/"+n+"…",drRestored:n=>"已恢复 "+n+" 张 ✓",drRecon:(m,o)=>"Drive核对:补传 "+m+" · Drive多余 "+o,drPending:n=>n+" 张原图在Drive未拉回",thumbCloud:"☁",drErr:m=>"Drive出错: "+m,drSkipped:(n,m)=>n+" 张传不上("+m+"),其余已传"},
 en:{drLbl:s=>"☁ Drive auto-backup: "+s,drOff:"off",drConn:"connecting…",drOk:x=>"on · last "+x+(localStorage.getItem('kouunn_driveAcct')?" · "+localStorage.getItem('kouunn_driveAcct'):""),drAcctSwitch:(a,b)=>"Drive account changed "+a+" → "+b+", photos will re-upload",drSwitchBtn:"🔁 Switch Drive account",drSwitchConf:"Switch Google account? All photos will re-upload to the new account (old one untouched).",drFail:c=>"upload failed "+c,drNoAuth:"not authorized",drClosed:"off",drNet:"network hiccup · will retry",drScript:"script failed · check network",drConfOff:"Turn off Drive auto-backup? (local data untouched)",tabRecon:"💳 Recon",reconSum:(n,ok,sus,miss)=>n+" lines · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · missing "+miss:""),stMiss:"missing",stSus:"likely",stOk:"matched",stNa:"n/a",stRecWait:"awaiting statement",stRecLate:"statement in · no debit",noBank:"No statement yet — send it to Claude at month close",confSus:(a,b)=>"Confirm match?\nBank: "+a+"\nReceipt: "+b,pickLink:"Enter number to link manually, 0 = no receipt needed, blank = cancel:",tLinked:"Linked ✓",tNa:"Marked as no receipt needed",tReset:"Reset to auto",reconEmpty:"No bank lines yet. Send the monthly statement to Claude and paste the block.",pasteBtn:"📋 Paste import",pasteTitle:"📋 Paste import",pastePh:"Paste the JSON block from Claude — trips/notes/lists, dupes auto-skipped",pasteGo:"Import",badPaste:"Cannot parse, check the paste",tPasted:(a,s)=>"Added "+a+" · skipped "+s,basePrompt:"Start point for this entry only (reverts to KOUUNN after saving)",appTitle:"KOUUNN Vault",snap:"SNAP RECEIPT",snapSub:"auto-compress · timestamp · stored locally",importB:"📁 Import photos / PDF invoices (by file date)",
@@ -660,7 +660,7 @@ off0:"On time",off10:"10 min before",off30:"30 min before",off60:"1 h before",of
 rmAlarm:"⏰ System alarm",rmIcs:"📅 Calendar",pickTime:"Pick a time first",icsDone:"Created — open it into calendar ✓",
 lkTip:"Attach this receipt's file(s)",lkPdf:"📄 PDF / files",lkPick:"📂 Already in vault",lkPickEmpty:"No unlinked files in the vault",neLink:"📎 Attach file",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 Camera",lkGal:"🖼 Gallery",lkSkip:"Skip ›",lkNext:"Next ›",lkDone:"✓ Done",lkClose:"Close",
 nfTag:"no file",tLinkedN:n=>"Attached "+n+" ✓",confDelLinked:"Delete this file? (record stays, flagged again)",
-chkTitle:m=>"#check "+m,chkNone:"Every record this month has a file ✓",chkCopy:"📋 Copy",
+chkTitle:m=>"#check "+m,chkOld:"(old)",chkTip:"Unlinked: tap the record in recon → 📎; or send the ZIP to Claude for a link block",lkBlockT:"Link block",lkBlockRep:(n,a,b,c)=>"linked "+n+" · file not found "+a+" · record not found "+b+" · already "+c,lkBlockConf:(n,x)=>"Link "+n+" files"+(x?" ("+x+" unmatched, listed after)":"")+"?",lkBlockDoneH:"✓ Linked:",lkBlockNoFile:"✗ File not in store (name mismatch or linked elsewhere):",lkBlockNoRec:"✗ No matching record (date/merchant/amount must match):",lkBlockAlready:"= Already linked:",chkNone:"Every record this month has a file ✓",chkCopy:"📋 Copy",
 chkRep:(n,ok,miss)=>"records "+n+" · with file "+ok+" · missing "+miss,chkMissH:"⚠ Records without file:",chkOrphH:n=>"Files without record ("+n+"):",chkMonthBad:"Month format: #检查 2026-09",
 drPhotos:(i,n)=>"photos "+i+"/"+n+"…",drJson:"ledger…",drRestore:(i,n)=>"restoring photos "+i+"/"+n+"…",drRestored:n=>"restored "+n+" ✓",drRecon:(m,o)=>"Drive check: re-upload "+m+" · extra on Drive "+o,drPending:n=>n+" originals still on Drive",thumbCloud:"☁",drErr:m=>"Drive error: "+m,drSkipped:(n,m)=>n+" failed ("+m+"), rest uploaded"},
 fr:{drLbl:s=>"☁ Sauvegarde Drive : "+s,drOff:"désactivée",drConn:"connexion…",drOk:x=>"active · dernière "+x+(localStorage.getItem('kouunn_driveAcct')?" · "+localStorage.getItem('kouunn_driveAcct'):""),drAcctSwitch:(a,b)=>"Compte Drive changé "+a+" → "+b+", photos renvoyées",drSwitchBtn:"🔁 Changer de compte Drive",drSwitchConf:"Changer de compte Google ? Toutes les photos seront renvoyées vers le nouveau compte (l'ancien reste intact).",drFail:c=>"échec envoi "+c,drNoAuth:"non autorisé",drClosed:"désactivée",drNet:"réseau instable · nouvel essai",drScript:"script non chargé · réseau",drConfOff:"Désactiver la sauvegarde Drive ? (données locales intactes)",tabRecon:"💳 Rappro",reconSum:(n,ok,sus,miss)=>n+" lignes · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · manque "+miss:""),stMiss:"manque",stSus:"probable",stOk:"OK",stNa:"s/o",stRecWait:"en attente du relevé",stRecLate:"relevé reçu · non débité",noBank:"Relevé non importé — envoyez-le à Claude",confSus:(a,b)=>"Confirmer ?\nBanque : "+a+"\nReçu : "+b,pickLink:"Numéro pour lier, 0 = sans reçu, vide = annuler :",tLinked:"Lié ✓",tNa:"Marqué sans reçu",tReset:"Auto rétabli",reconEmpty:"Aucune ligne bancaire. Envoyez le relevé à Claude et collez le bloc.",pasteBtn:"📋 Import par collage",pasteTitle:"📋 Import par collage",pastePh:"Collez le bloc JSON de Claude — trajets/notes/listes, doublons ignorés",pasteGo:"Importer",badPaste:"Illisible, vérifiez le collage",tPasted:(a,s)=>"Ajouté "+a+" · ignoré "+s,basePrompt:"Départ pour cette entrée seule (retour à KOUUNN après)",appTitle:"KOUUNN Vault",snap:"PHOTO REÇU",snapSub:"compression auto · horodaté · stocké local",importB:"📁 Importer photos / factures PDF (date du fichier)",
@@ -701,7 +701,7 @@ off0:"À l'heure",off10:"10 min avant",off30:"30 min avant",off60:"1 h avant",of
 rmAlarm:"⏰ Alarme système",rmIcs:"📅 Calendrier",pickTime:"Choisissez l'heure",icsDone:"Créé — ouvrez-le dans le calendrier ✓",
 lkTip:"Joindre le(s) fichier(s) de ce reçu",lkPdf:"📄 PDF / fichiers",lkPick:"📂 Déjà dans le coffre",lkPickEmpty:"Aucun fichier non lié",neLink:"📎 Joindre",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 Photo",lkGal:"🖼 Galerie",lkSkip:"Passer ›",lkNext:"Suivant ›",lkDone:"✓ Terminé",lkClose:"Fermer",
 nfTag:"sans fichier",tLinkedN:n=>n+" joint(s) ✓",confDelLinked:"Supprimer ce fichier ? (l'entrée reste, re-signalée)",
-chkTitle:m=>"#vérif "+m,chkNone:"Toutes les entrées du mois ont un fichier ✓",chkCopy:"📋 Copier",
+chkTitle:m=>"#vérif "+m,chkOld:"(ancien)",chkTip:"Non liés : dans le rapprochement, touchez l'entrée → 📎 ; ou envoyez le ZIP à Claude pour un bloc de liaison",lkBlockT:"Bloc de liaison",lkBlockRep:(n,a,b,c)=>"liés "+n+" · fichier introuvable "+a+" · entrée introuvable "+b+" · déjà "+c,lkBlockConf:(n,x)=>"Lier "+n+" fichiers"+(x?" ("+x+" sans correspondance, listés)":"")+"?",lkBlockDoneH:"✓ Liés :",lkBlockNoFile:"✗ Fichier absent (nom différent ou déjà lié ailleurs) :",lkBlockNoRec:"✗ Entrée introuvable (date/commerçant/montant) :",lkBlockAlready:"= Déjà liés :",chkNone:"Toutes les entrées du mois ont un fichier ✓",chkCopy:"📋 Copier",
 chkRep:(n,ok,miss)=>"entrées "+n+" · avec fichier "+ok+" · sans "+miss,chkMissH:"⚠ Entrées sans fichier :",chkOrphH:n=>"Fichiers sans entrée ("+n+") :",chkMonthBad:"Format : #检查 2026-09",
 drPhotos:(i,n)=>"photos "+i+"/"+n+"…",drJson:"registre…",drRestore:(i,n)=>"restauration photos "+i+"/"+n+"…",drRestored:n=>n+" restaurées ✓",drRecon:(m,o)=>"Vérif Drive : à renvoyer "+m+" · en trop "+o,drPending:n=>n+" originaux encore sur Drive",thumbCloud:"☁",drErr:m=>"Erreur Drive : "+m,drSkipped:(n,m)=>n+" échec(s) ("+m+"), reste envoyé"}
 };
@@ -1629,23 +1629,13 @@ function updateBackupBanner(count,oldestTs){
   }
 }
 
-/* ============ ZIP导出(会计域:票据+里程journal) ============ */
-async function exportZip(monthKey){
-  const all=(await dbAll()).filter(r=>!monthKey||monthOf(r.dateKey)===monthKey)
-    .sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.capturedAt-b.capturedAt);
-  const kms=(await noteAll()).filter(n=>n.kind==='km'&&(!monthKey||monthOf(n.dateKey)===monthKey))
-    .sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.capturedAt-b.capturedAt);
-  const recs=(await noteAll()).filter(n=>n.kind==='rec'&&(!monthKey||monthOf(n.dateKey)===monthKey))
-    .sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.capturedAt-b.capturedAt);
-  if(!all.length&&!kms.length&&!recs.length){toast(t('tNothing'));return;}
-  toast(t('tPacking'),60000);
-  const zip=new JSZip();
+/* ============ 导出文件名(ZIP、#检查、挂钩块共用同一套算法) ============ */
+function exportNames(all,recs){
   const seq={},recById=new Map(recs.map(n=>[n.id,n])),fname=new Map();
   const clean=s=>String(s||'').replace(/[\\\/:*?"<>|\s]+/g,'').slice(0,24);
-  const esc=s=>'"'+String(s||'').replace(/"/g,'""')+'"';
-  let pend=0;
-  for(const r of all){
-    if(!r.blob){pend++;continue;}
+  const list=[...all].sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.capturedAt-b.capturedAt);
+  for(const r of list){
+    if(!r.blob)continue;
     const n=r.nid?recById.get(r.nid):null;
     let name;
     if(n){
@@ -1658,8 +1648,32 @@ async function exportZip(monthKey){
       name=r.dateKey+'_'+pad(seq[r.dateKey])+lbl+(r.type==='pdf'?'.pdf':'.jpg');
     }
     fname.set(r.id,name);
-    zip.file(name,r.blob);
   }
+  return fname;
+}
+
+/* ============ ZIP导出(会计域:票据+里程journal) ============ */
+async function exportZip(monthKey){
+  const all=(await dbAll()).filter(r=>!monthKey||monthOf(r.dateKey)===monthKey)
+    .sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.capturedAt-b.capturedAt);
+  const kms=(await noteAll()).filter(n=>n.kind==='km'&&(!monthKey||monthOf(n.dateKey)===monthKey))
+    .sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.capturedAt-b.capturedAt);
+  const recs=(await noteAll()).filter(n=>n.kind==='rec'&&(!monthKey||monthOf(n.dateKey)===monthKey))
+    .sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.capturedAt-b.capturedAt);
+  if(!all.length&&!kms.length&&!recs.length){toast(t('tNothing'));return;}
+  toast(t('tPacking'),60000);
+  const zip=new JSZip();
+  const fname=exportNames(all,recs);
+  const esc=s=>'"'+String(s||'').replace(/"/g,'""')+'"';
+  let pend=0;
+  let fcsv='﻿fichier,id,date,type,taille,record\n';
+  for(const r of all){
+    if(!r.blob){pend++;continue;}
+    const name=fname.get(r.id);
+    zip.file(name,r.blob);
+    fcsv+=esc(name)+','+r.id+','+r.dateKey+','+(r.type==='pdf'?'pdf':'jpg')+','+(r.size||r.blob.size||'')+','+(r.nid?'1':'0')+'\n';
+  }
+  if(all.length-pend)zip.file('fichiers_'+(monthKey||'TOUT')+'.csv',fcsv);
   if(kms.length){
     let csv='\uFEFFdate,trajet,km\n';
     for(const n of kms)csv+=n.dateKey+','+esc(n.text)+','+(n.km||'')+'\n';
@@ -2074,6 +2088,7 @@ document.getElementById('undoBtn').onclick=async()=>{
   toast(t('tUndone',n));render();
 };
 async function importNotesList(list){
+  if(list&&list.__link)return importLinks(list.__link);
   const have=new Set((await noteAll()).map(n=>n.id));
   let added=0,skipped=0;
   /* 预检:先算清楚要进多少条,再问 */
@@ -2224,25 +2239,72 @@ async function unlinkReceipt(rid,alsoDelete){
   }
   if(alsoDelete&&r)await dbDel(rid);
 }
-/* #检查 [YYYY-MM] → 缺文件的记录 + 无记录的文件(本版本后进的) */
+/* #检查 [YYYY-MM] → 本月全部记录:已挂/未挂(含旧记录) + 本月全部无记录文件(按导出名列出) */
 async function runCheck(arg){
   let mk=(arg||'').trim();
   if(!mk)mk=monthOf(dateKeyOf(Date.now()));
   if(!/^\d{4}-\d{2}$/.test(mk)){toast(t('chkMonthBad'),3000);return;}
   const notes=await noteAll(),all=await dbAll();
-  const recs=notes.filter(n=>n.kind==='rec'&&monthOf(n.dateKey)===mk).sort((a,b)=>a.dateKey.localeCompare(b.dateKey));
-  const since=Number(localStorage.getItem('linkSince')||0);
-  const miss=recs.filter(n=>n.ext&&n.ext.nf);
-  const withF=recs.filter(n=>n.fid&&n.fid.length).length;
-  const orph=all.filter(r=>!r.nid&&r.capturedAt>=since&&monthOf(r.dateKey)===mk).sort((a,b)=>a.dateKey.localeCompare(b.dateKey));
+  const allRecs=notes.filter(n=>n.kind==='rec');
+  const recs=allRecs.filter(n=>monthOf(n.dateKey)===mk).sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.capturedAt-b.capturedAt);
+  const names=exportNames(all,allRecs);
+  const miss=recs.filter(n=>!(n.fid&&n.fid.length));
+  const withF=recs.length-miss.length;
+  const orph=all.filter(r=>!r.nid&&monthOf(r.dateKey)===mk).sort((a,b)=>a.dateKey.localeCompare(b.dateKey)||a.capturedAt-b.capturedAt);
   let out='#检查 '+mk+'\n'+t('chkRep',recs.length,withF,miss.length)+'\n';
-  if(miss.length){out+='\n'+t('chkMissH')+'\n';for(const n of miss)out+=n.dateKey.slice(5)+' '+(n.text||'')+' '+n.amt.toFixed(2)+(n.ref?' #'+n.ref:'')+'\n';}
-  if(orph.length){out+='\n'+t('chkOrphH',orph.length)+'\n';for(const r of orph)out+=r.dateKey.slice(5)+' '+(r.label||r.name||r.type)+'\n';}
+  if(miss.length){out+='\n'+t('chkMissH')+'\n';for(const n of miss)out+=n.dateKey.slice(5)+' '+(n.text||'')+' '+n.amt.toFixed(2)+(n.ref?' #'+n.ref:'')+(n.ext&&n.ext.nf?'':' '+t('chkOld'))+'\n';}
+  if(orph.length){out+='\n'+t('chkOrphH',orph.length)+'\n';for(const r of orph)out+=(names.get(r.id)||(r.dateKey.slice(5)+' '+(r.label||r.name||r.type)+(r.blob?'':' ☁')))+'\n';}
   if(!miss.length&&!orph.length)out+='\n'+t('chkNone')+'\n';
-  document.getElementById('chkTitle').textContent=t('chkTitle',mk);
+  else out+='\n'+t('chkTip')+'\n';
+  showCheck(t('chkTitle',mk),out);
+}
+function showCheck(title,out){
+  document.getElementById('chkTitle').textContent=title;
   document.getElementById('chkPre').textContent=out;
   document.getElementById('chkPre').dataset.txt=out;
   openSheet('chkSheet');
+}
+/* 挂钩块:{"kouunn":1,"link":[{"f":"2026-09-01_01.jpg","d":"2026-09-01","t":"Weldom Montceau","amt":44.2}]}
+   f=ZIP里的导出文件名(或 id=fichiers.csv里的id);d/t/amt 定位记录。文件挂上记录后改名改日期。 */
+async function importLinks(list){
+  const all=await dbAll(),notes=await noteAll();
+  const allRecs=notes.filter(n=>n.kind==='rec');
+  const names=exportNames(all,allRecs);
+  const byName=new Map(),byId=new Map(all.map(r=>[r.id,r]));
+  for(const [id,nm] of names)byName.set(nm,id);
+  const plan=[],noFile=[],noRec=[],already=[];
+  const tag=e=>String(e.f||e.id||'?')+' → '+String(e.d||'')+' '+String(e.t||'')+' '+(parseFloat(e.amt)||0).toFixed(2);
+  for(const e of list){
+    if(!e||typeof e!=='object')continue;
+    const r=e.id?byId.get(String(e.id)):byId.get(byName.get(String(e.f||'')));
+    if(!r){noFile.push(tag(e));continue;}
+    const amt=parseFloat(e.amt),d=String(e.d||'').trim(),txt=String(e.t||'').trim();
+    const n=allRecs.find(x=>x.dateKey===d&&(x.text||'')===txt&&Math.abs((x.amt||0)-amt)<0.005&&(!e.ref||!x.ref||String(x.ref)===String(e.ref)));
+    if(!n){noRec.push(tag(e));continue;}
+    if(r.nid){if(r.nid===n.id)already.push(tag(e));else noFile.push(tag(e)+' (déjà lié)');continue;}
+    if(plan.some(p=>p.r===r))continue;
+    plan.push({r,n});
+  }
+  if(!plan.length){showCheck(t('lkBlockT'),t('lkBlockRep',0,noFile.length,noRec.length,already.length)+fmtLists(noFile,noRec,already));return 0;}
+  if(!confirm(t('lkBlockConf',plan.length,noFile.length+noRec.length)))return 0;
+  const touched=new Map();
+  for(const {r,n} of plan){
+    r.nid=n.id;r.label=n.text||'';r.dateKey=n.dateKey;await dbPut(r);
+    (n.fid=n.fid||[]).push(r.id);if(n.ext)delete n.ext.nf;else n.ext={};touched.set(n.id,n);
+  }
+  for(const n of touched.values())await notePut(n);
+  render();
+  const done=plan.map(p=>(names.get(p.r.id)||p.r.id)+' → '+recLabel(p.n));
+  showCheck(t('lkBlockT'),t('lkBlockRep',plan.length,noFile.length,noRec.length,already.length)+'\n\n'+t('lkBlockDoneH')+'\n'+done.join('\n')+fmtLists(noFile,noRec,already));
+  toast(t('tLinkedN',plan.length));
+  return plan.length;
+  function fmtLists(a,b,c){
+    let s='';
+    if(a.length)s+='\n\n'+t('lkBlockNoFile')+'\n'+a.join('\n');
+    if(b.length)s+='\n\n'+t('lkBlockNoRec')+'\n'+b.join('\n');
+    if(c.length)s+='\n\n'+t('lkBlockAlready')+'\n'+c.join('\n');
+    return s;
+  }
 }
 const CHK_RE=/^#(检查|check|vérif|verif)\s*(\d{4}-\d{2})?\s*$/i;
 document.getElementById('chkCopy').onclick=async()=>{
@@ -2253,10 +2315,11 @@ document.getElementById('chkClose').onclick=()=>closeSheet('chkSheet');
 document.getElementById('lkSheet').onclick=e=>{if(e.target.id==='lkSheet'){closeSheet('lkSheet');lkCur=null;lkQueue=[];}};
 document.getElementById('chkSheet').onclick=e=>{if(e.target.id==='chkSheet')closeSheet('chkSheet');};
 function tryParseFeed(raw){
-  if(!raw||!/"kouunn"|"notes"\s*:|"km"\s*:|"items"\s*:/.test(raw))return null;
+  if(!raw||!/"kouunn"|"notes"\s*:|"link"\s*:|"km"\s*:|"items"\s*:/.test(raw))return null;
   try{
     const m=raw.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
     const data=JSON.parse(m?m[0]:raw);
+    if(data&&!Array.isArray(data)&&Array.isArray(data.link)&&data.link.length){const l=[];l.__link=data.link;return l;}
     const list=Array.isArray(data)?data:(data&&data.notes);
     return (Array.isArray(list)&&list.length)?list:null;
   }catch(e){return null;}

@@ -192,6 +192,8 @@ body.kmMode #recBtn,body.kmMode #imgBtn,body.kmMode #vidBtn,body.kmMode #fileBtn
 #lkThumbs .thumb .lx{position:absolute;top:2px;right:2px;background:rgba(10,11,14,.75);color:#F0977F;
   border-radius:99px;width:20px;height:20px;font-size:12px;display:flex;align-items:center;justify-content:center;}
 #lkBtns{display:flex;gap:8px;}
+#lkPick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-height:40vh;overflow:auto;}
+#lkPick .thumb{cursor:pointer;}
 #lkBtns .sBtn{flex:1;}
 #chkPre{white-space:pre-wrap;font-family:var(--mono);font-size:12px;line-height:1.6;color:var(--text);
   background:var(--ink);border:1px solid #3A404B;border-radius:9px;padding:10px 12px;max-height:50vh;overflow:auto;}
@@ -465,7 +467,8 @@ body.kmMode #recBtn,body.kmMode #imgBtn,body.kmMode #vidBtn,body.kmMode #fileBtn
   <div id="nCard">
     <h3 id="neTitle"></h3>
     <div id="neMeta"></div>
-    <div class="row"><input type="date" id="neDate"><input type="number" inputmode="decimal" id="neKm" placeholder="km"><button id="neRemind">⏰</button></div>
+    <div class="row"><input type="date" id="neDate"><input type="number" inputmode="decimal" id="neKm" placeholder="km"><input type="number" inputmode="decimal" step="0.01" id="neAmt" placeholder="€" style="display:none;width:96px;font-family:var(--mono);"><button id="neRemind">⏰</button></div>
+    <button id="neLink" style="display:none;margin-bottom:10px;background:var(--panel-2);border:1px solid #3A404B;color:var(--paper);border-radius:9px;padding:10px;font-size:13px;cursor:pointer;width:100%;"></button>
     <textarea id="neText"></textarea>
     <div id="neAtts"></div>
     <div id="nBtns">
@@ -540,7 +543,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <div id="lkBtns">
       <button class="sBtn pri" id="lkCamBtn"></button>
       <button class="sBtn sec" id="lkGalBtn"></button>
+      <button class="sBtn sec" id="lkPdfBtn"></button>
     </div>
+    <button class="sBtn ghost" id="lkPickBtn"></button>
+    <div id="lkPick" style="display:none;"></div>
     <div id="lkBtns2" style="display:flex;gap:8px;">
       <button class="sBtn sec" id="lkNext" style="flex:1;"></button>
       <button class="sBtn ghost" id="lkClose"></button>
@@ -548,7 +554,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   </div>
 </div>
 <input type="file" id="lkCam" accept="image/*" capture="environment" multiple hidden>
-<input type="file" id="lkGal" accept="image/*,application/pdf" multiple hidden>
+<input type="file" id="lkGal" accept="image/*" multiple hidden>
+<input type="file" id="lkPdf" accept="application/pdf" multiple hidden>
 
 <div class="sheet" id="chkSheet">
   <div class="sheetCard">
@@ -610,7 +617,7 @@ lockAsk:"输入PIN查看记事",lockAgain:"再输一遍确认",lockDiff:"两次�
 rmTitle:"⏰ 提醒",rmQ1:"1小时后",rmQ2:"今晚20:00",rmQ3:"明早9:00",rmOffLbl:"日历提醒偏移(可多选)",
 off0:"准点",off10:"提前10分",off30:"提前30分",off60:"提前1小时",off1d:"提前1天",
 rmAlarm:"⏰ 设系统闹钟",rmIcs:"📅 日历提醒",pickTime:"先选时间",icsDone:"已生成,点开进日历 ✓",
-lkTip:"把这张票的文件挂上(可多张)",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 拍照",lkGal:"🖼 相册 / 文件",lkSkip:"跳过 ›",lkNext:"下一条 ›",lkDone:"✓ 完成",lkClose:"关闭",
+lkTip:"把这张票的文件挂上(可多张)",lkPdf:"📄 PDF / 文件",lkPick:"📂 仓里已有",lkPickEmpty:"仓里没有未挂钩的文件",neLink:"📎 挂文件",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 拍照",lkGal:"🖼 相册",lkSkip:"跳过 ›",lkNext:"下一条 ›",lkDone:"✓ 完成",lkClose:"关闭",
 nfTag:"缺文件",tLinkedN:n=>"已挂 "+n+" 张 ✓",confDelLinked:"删掉这个文件?(记录保留,会重新标缺文件)",
 chkTitle:m=>"#检查 "+m,chkNone:"本月记录都有文件 ✓",chkCopy:"📋 复制",
 chkRep:(n,ok,miss)=>"记录 "+n+" · 有文件 "+ok+" · 缺文件 "+miss,chkMissH:"⚠ 缺文件的记录:",chkOrphH:n=>"无记录的文件("+n+"):",chkMonthBad:"月份格式:#检查 2026-09",
@@ -651,7 +658,7 @@ lockAsk:"Enter PIN to view notes",lockAgain:"Type it again to confirm",lockDiff:
 rmTitle:"⏰ Reminder",rmQ1:"In 1 hour",rmQ2:"Tonight 20:00",rmQ3:"Tomorrow 9:00",rmOffLbl:"Calendar alert offsets (multi)",
 off0:"On time",off10:"10 min before",off30:"30 min before",off60:"1 h before",off1d:"1 day before",
 rmAlarm:"⏰ System alarm",rmIcs:"📅 Calendar",pickTime:"Pick a time first",icsDone:"Created — open it into calendar ✓",
-lkTip:"Attach this receipt's file(s)",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 Camera",lkGal:"🖼 Gallery / files",lkSkip:"Skip ›",lkNext:"Next ›",lkDone:"✓ Done",lkClose:"Close",
+lkTip:"Attach this receipt's file(s)",lkPdf:"📄 PDF / files",lkPick:"📂 Already in vault",lkPickEmpty:"No unlinked files in the vault",neLink:"📎 Attach file",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 Camera",lkGal:"🖼 Gallery",lkSkip:"Skip ›",lkNext:"Next ›",lkDone:"✓ Done",lkClose:"Close",
 nfTag:"no file",tLinkedN:n=>"Attached "+n+" ✓",confDelLinked:"Delete this file? (record stays, flagged again)",
 chkTitle:m=>"#check "+m,chkNone:"Every record this month has a file ✓",chkCopy:"📋 Copy",
 chkRep:(n,ok,miss)=>"records "+n+" · with file "+ok+" · missing "+miss,chkMissH:"⚠ Records without file:",chkOrphH:n=>"Files without record ("+n+"):",chkMonthBad:"Month format: #检查 2026-09",
@@ -692,7 +699,7 @@ lockAsk:"PIN pour voir les notes",lockAgain:"Retapez pour confirmer",lockDiff:"D
 rmTitle:"⏰ Rappel",rmQ1:"Dans 1 h",rmQ2:"Ce soir 20h",rmQ3:"Demain 9h",rmOffLbl:"Décalages d'alerte (multi)",
 off0:"À l'heure",off10:"10 min avant",off30:"30 min avant",off60:"1 h avant",off1d:"1 jour avant",
 rmAlarm:"⏰ Alarme système",rmIcs:"📅 Calendrier",pickTime:"Choisissez l'heure",icsDone:"Créé — ouvrez-le dans le calendrier ✓",
-lkTip:"Joindre le(s) fichier(s) de ce reçu",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 Photo",lkGal:"🖼 Galerie / fichiers",lkSkip:"Passer ›",lkNext:"Suivant ›",lkDone:"✓ Terminé",lkClose:"Fermer",
+lkTip:"Joindre le(s) fichier(s) de ce reçu",lkPdf:"📄 PDF / fichiers",lkPick:"📂 Déjà dans le coffre",lkPickEmpty:"Aucun fichier non lié",neLink:"📎 Joindre",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 Photo",lkGal:"🖼 Galerie",lkSkip:"Passer ›",lkNext:"Suivant ›",lkDone:"✓ Terminé",lkClose:"Fermer",
 nfTag:"sans fichier",tLinkedN:n=>n+" joint(s) ✓",confDelLinked:"Supprimer ce fichier ? (l'entrée reste, re-signalée)",
 chkTitle:m=>"#vérif "+m,chkNone:"Toutes les entrées du mois ont un fichier ✓",chkCopy:"📋 Copier",
 chkRep:(n,ok,miss)=>"entrées "+n+" · avec fichier "+ok+" · sans "+miss,chkMissH:"⚠ Entrées sans fichier :",chkOrphH:n=>"Fichiers sans entrée ("+n+") :",chkMonthBad:"Format : #检查 2026-09",
@@ -714,7 +721,7 @@ function applyLang(){
    'rmTitle:rmTitle','rmQ1:rmQ1','rmQ2:rmQ2','rmQ3:rmQ3','rmOffLbl:rmOffLbl',
    'rmAlarm:rmAlarm','rmIcs:rmIcs','rmCancel:cancel',
    'pasteBtn:pasteBtn','pasteTitle:pasteTitle','pasteGo:pasteGo','pasteCancel:cancel',
-   'lkTip:lkTip','lkCamBtn:lkCam','lkGalBtn:lkGal','lkClose:lkClose','chkCopy:chkCopy','chkClose:close','btnDriveSwitch:drSwitchBtn'
+   'lkTip:lkTip','lkCamBtn:lkCam','lkGalBtn:lkGal','lkPdfBtn:lkPdf','lkPickBtn:lkPick','lkClose:lkClose','chkCopy:chkCopy','chkClose:close','btnDriveSwitch:drSwitchBtn','neLink:neLink'
   ].forEach(p=>{const[i,k]=p.split(':');setTx(i,k);});
   document.getElementById('tEmpty').innerHTML=t('empty');
   document.getElementById('vLabel').placeholder=t('labelPh');
@@ -1571,7 +1578,7 @@ function renderRecon(notes){
     }
     for(const rc of rl){
       const st=recSt.get(rc.id);
-      const row=document.createElement('div');row.className='rrow rec'+(st==='late'?' late':'');
+      const row=document.createElement('div');row.className='rrow rec'+(st==='late'?' late':'');row.dataset.nid=rc.id;
       row.innerHTML='<span class="rd">'+rc.dateKey.slice(5)+'</span><span class="rt"></span>'+
         '<span class="ra">'+rc.amt.toFixed(2)+'</span><span class="rs">'+(st==='late'?t('stRecLate'):t('stRecWait'))+'</span>';
       row.querySelector('.rt').textContent='🧾 '+(rc.text||'');
@@ -2121,6 +2128,7 @@ let lkQueue=[],lkCur=null,lkURLs=[];
 const recLabel=n=>n.dateKey.slice(5)+' · '+(n.text||'')+' · '+(n.amt!=null?n.amt.toFixed(2)+' €':'');
 async function openLink(id,queue){
   lkQueue=queue||[id];lkCur=id;
+  document.getElementById('lkPick').style.display='none';
   await renderLink();
   openSheet('lkSheet');
 }
@@ -2167,6 +2175,33 @@ async function ingestLinked(files){
 document.getElementById('lkCamBtn').onclick=()=>document.getElementById('lkCam').click();
 document.getElementById('lkGalBtn').onclick=()=>document.getElementById('lkGal').click();
 document.getElementById('lkCam').onchange=e=>{ingestLinked([...e.target.files]);e.target.value='';};
+document.getElementById('lkPdfBtn').onclick=()=>document.getElementById('lkPdf').click();
+document.getElementById('lkPdf').onchange=e=>{ingestLinked([...e.target.files]);e.target.value='';};
+/* 仓里已有:把没挂钩的文件挂到当前记录上,顺带改名改日期 */
+document.getElementById('lkPickBtn').onclick=async()=>{
+  const box=document.getElementById('lkPick');
+  if(box.style.display!=='none'){box.style.display='none';return;}
+  const list=(await dbAll()).filter(r=>!r.nid).sort((a,b)=>b.capturedAt-a.capturedAt).slice(0,40);
+  box.innerHTML='';
+  if(!list.length){toast(t('lkPickEmpty'));return;}
+  for(const r of list){
+    const d=document.createElement('div');d.dataset.pick=r.id;
+    if(r.type==='pdf'||(!r.thumb&&!r.blob)){d.className='thumb pdf';d.innerHTML='<div class="tag">'+(r.type==='pdf'?'PDF':t('thumbCloud'))+'</div><div class="fn"></div><div class="d">'+r.dateKey.slice(5)+'</div>';d.querySelector('.fn').textContent=r.label||r.name||'';}
+    else{const u=URL.createObjectURL(r.thumb||r.blob);lkURLs.push(u);d.className='thumb';d.innerHTML='<img src="'+u+'"><div class="d">'+r.dateKey.slice(5)+'</div>';}
+    box.appendChild(d);
+  }
+  box.style.display='grid';
+};
+document.getElementById('lkPick').onclick=async e=>{
+  const el=e.target.closest('[data-pick]');if(!el||!lkCur)return;
+  const all=await dbAll();const r=all.find(x=>x.id===el.dataset.pick);
+  const notes=await noteAll();const n=notes.find(x=>x.id===lkCur);
+  if(!r||!n)return;
+  r.nid=n.id;r.label=n.text||'';r.dateKey=n.dateKey;await dbPut(r);
+  (n.fid=n.fid||[]).push(r.id);if(n.ext)delete n.ext.nf;else n.ext={};await notePut(n);
+  document.getElementById('lkPick').style.display='none';
+  toast(t('tLinkedN',1));await renderLink();render();
+};
 document.getElementById('lkGal').onchange=e=>{ingestLinked([...e.target.files]);e.target.value='';};
 document.getElementById('lkNext').onclick=()=>{
   const idx=lkQueue.indexOf(lkCur);
@@ -2361,6 +2396,12 @@ async function openNoteEdit(id){
   const kEl=document.getElementById('neKm');
   kEl.style.display=n.kind==='km'?'block':'none';
   kEl.value=n.km||'';
+  const aEl=document.getElementById('neAmt');
+  aEl.style.display=(n.kind==='rec'||n.kind==='bank')?'block':'none';
+  aEl.value=n.amt!=null?n.amt:'';
+  const lb=document.getElementById('neLink');
+  lb.style.display=n.kind==='rec'?'block':'none';
+  lb.textContent=t('neLink')+((n.fid||[]).length?' · '+(n.fid||[]).length:'');
   const cr=n.events.find(e=>e.k==='create');
   const edits=n.events.filter(e=>e.k==='edit').length;
   const views=n.events.filter(e=>e.k==='view').length;
@@ -2404,6 +2445,11 @@ document.getElementById('neSave').onclick=async()=>{
   }else{
     curNote.text=txt.trim();
   }
+  if(curNote.kind==='rec'||curNote.kind==='bank'){
+    const a=parseFloat(document.getElementById('neAmt').value);
+    if(a>0)curNote.amt=Math.round(a*100)/100;
+    if(curNote.kind==='rec'){const all=await dbAll();for(const f of (curNote.fid||[])){const r=all.find(x=>x.id===f);if(r&&(r.label!==curNote.text||r.dateKey!==curNote.dateKey)){r.label=curNote.text||'';r.dateKey=curNote.dateKey;await dbPut(r);}}}
+  }
   if(curNote.kind==='km'){
     const oldKm=curNote.km;
     curNote.km=km>0?fmtKm(km):null;
@@ -2417,9 +2463,11 @@ document.getElementById('neSave').onclick=async()=>{
   await notePut(curNote);
   closeNoteEdit();toast(t('tLogged'));render();
 };
+document.getElementById('neLink').onclick=()=>{if(!curNote)return;const id=curNote.id;closeNoteEdit();openLink(id);};
 document.getElementById('neDel').onclick=async()=>{
   if(!curNote)return;
   if(!confirm(t('confDelNote')))return;
+  if(curNote.kind==='rec'){const all=await dbAll();for(const f of (curNote.fid||[])){const r=all.find(x=>x.id===f);if(r){r.nid=null;await dbPut(r);}}}
   await noteDel(curNote.id);
   closeNoteEdit();toast(t('tDeleted'));render();
 };
@@ -2431,7 +2479,7 @@ document.getElementById('ledger').onclick=async e=>{
   const lk=e.target.closest('[data-lock]');
   if(lk){askUnlock();return;}
   const rr=e.target.closest('.rrow');
-  if(rr){if(rr.dataset.bid)onReconTap(rr.dataset.bid);return;}
+  if(rr){if(rr.dataset.bid)onReconTap(rr.dataset.bid);else if(rr.dataset.nid)openNoteEdit(rr.dataset.nid);return;}
   const attEl=e.target.closest('.att,.attChip');
   const itemEl=e.target.closest('.item');
   const card=e.target.closest('.card');

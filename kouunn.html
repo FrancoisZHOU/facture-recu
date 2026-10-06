@@ -1710,7 +1710,7 @@ const MOTIF_RULES=[
   ['Approvisionnement',/metro|grand ?frais|promocash|tang|jfc|paris ?store|leclerc|e\.?lerc|elerc|e\.lerer|foodex|xiong ?hai|雄海|comptoirs|carrefour|lidl|auchan|intermarch|super ?u|asia|asie|orient|march[ée]|frères|freres|kiosque/i],
   ['Approvisionnement emballages',/kedypack|lx ?france|emballage|packaging/i],
   ['Achat matériel professionnel',/weldom|brico|ikea|leroy|castorama|coutel|thiers|bureau|boulanger|darty|amazon|gifi|but\b|conforama/i],
-  ['Étude de marché restauration',/restaurant|resto|sushi|wok|buffet|darcy|mcdo|mcdonald|burger|pizza|izakaya|ramen|bistro|brasserie|café|cafe|kebab|traiteur/i],
+  ['Étude de marché restauration',/restaurant|resto|sushi|wok|buffet|darcy|mcdo|mcdonald|burger|pizza|izakaya|ramen|bistro|brasserie|café|cafe|kebab|traiteur|dayu|pacifi|gourmet|grill/i],
   ['Déplacement aéroport',/cdg|a[ée]roport|terminal|orly|gare /i],
   ['Déplacement professionnel (hébergement)',/ibis|mercure|h[ôo]tel|novotel|kyriad|b&b|campanile|premi[èe]re classe/i]];
 function kmMotif(text,why){
@@ -1776,6 +1776,7 @@ async function exportZip(monthKey){
   const esc=s=>'"'+String(s||'').replace(/"/g,'""')+'"';
   const years=[...new Set([...recs,...all].map(x=>x.dateKey.slice(0,4)))];
   const zipPrefix=monthKey||(years.length===1?years[0]+' 全年':'全部');
+  const DATA_DIR='数据(软件和Claude用,可忽略)/';
   let pend=0;
   let fcsv='﻿fichier,id,date,type,taille,record\n';
   for(const r of all){
@@ -1784,14 +1785,14 @@ async function exportZip(monthKey){
     zip.file(zipPrefix+' 发票库/'+name,r.blob);
     fcsv+=esc(name)+','+r.id+','+r.dateKey+','+(r.type==='pdf'?'pdf':'jpg')+','+(r.size||r.blob.size||'')+','+(r.nid?'1':'0')+'\n';
   }
-  if(all.length-pend)zip.file('fichiers_'+(monthKey||'TOUT')+'.csv',fcsv);
+  if(all.length-pend)zip.file(DATA_DIR+'fichiers_'+(monthKey||'TOUT')+'.csv',fcsv);
   if(recs.length){
     let csv='\uFEFFdate,commercant,ttc,tva,ref,paiement,fichiers\n';
     for(const n of recs){
       const fs=(n.fid||[]).map(f=>fname.get(f)).filter(Boolean).join(' ; ');
       csv+=n.dateKey+','+esc(n.text)+','+n.amt.toFixed(2)+','+(n.tva!=null?n.tva.toFixed(2):'')+','+esc(n.ref||'')+','+esc(n.pay||'')+','+esc(fs)+'\n';
     }
-    zip.file('recus_'+(monthKey||'TOUT')+'.csv',csv);
+    zip.file(DATA_DIR+'recus_'+(monthKey||'TOUT')+'.csv',csv);
   }
   if(recs.length){
     zip.file(zipPrefix+' 对账单·点我打开.html',buildIndexHtml(recs,kms,fname,zipPrefix,zipPrefix+' 发票库/'));

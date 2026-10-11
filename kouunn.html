@@ -2184,7 +2184,7 @@ document.getElementById('pasteQuick').onclick=()=>{openSheet('pasteSheet');setTi
 document.getElementById('pasteCancel').onclick=()=>closeSheet('pasteSheet');
 document.getElementById('pasteSheet').onclick=e=>{if(e.target.id==='pasteSheet')closeSheet('pasteSheet');};
 let undoBatch=null,undoTimer=null,undoFn=null;
-function showUndoFn(fn,n){undoFn=fn;undoBatch='fn';document.getElementById('undoTx').textContent=t('undoTx',n);document.getElementById('undoBar').classList.add('show');clearTimeout(undoTimer);undoTimer=setTimeout(hideUndo,120000);}
+function showUndoFn(fn,n){undoFn=fn;undoBatch='fn';document.getElementById('undoTx').textContent=t('undoTx',n)+' ✕';document.getElementById('undoBar').classList.add('show');clearTimeout(undoTimer);undoTimer=setTimeout(hideUndo,120000);}
 function showUndo(batchId,n){
   undoFn=null;undoBatch=batchId;
   document.getElementById('undoTx').textContent=t('undoTx',n);
@@ -2192,6 +2192,7 @@ function showUndo(batchId,n){
   clearTimeout(undoTimer);undoTimer=setTimeout(hideUndo,60000);
 }
 function hideUndo(){undoBatch=null;undoFn=null;document.getElementById('undoBar').classList.remove('show');}
+document.getElementById('undoTx').onclick=hideUndo;
 document.getElementById('undoBtn').onclick=async()=>{
   if(!undoBatch)return;
   if(undoFn){const f=undoFn;hideUndo();const n=await f();toast(t('tUndone',n));render();return;}

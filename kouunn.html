@@ -381,7 +381,7 @@ body.kmMode #recBtn,body.kmMode #imgBtn,body.kmMode #vidBtn,body.kmMode #fileBtn
 </div>
 
 <input type="file" id="camInput" accept="image/*" capture="environment" hidden>
-<input type="file" id="galInput" accept="image/*,application/pdf" multiple hidden>
+<input type="file" id="galInput" accept="image/*,application/pdf,.zip,application/zip" multiple hidden>
 
 <div id="noteBar">
   <div id="noteChips">
@@ -1061,9 +1061,27 @@ async function isDupFile(f,keys){
   if(!isPdf&&f.name&&keys.nk.has(f.name+'|'+f.size))return {dup:true,h};
   keys.hs.add(h);return {dup:false,h};
 }
+/* ZIP 整包导入:解开后按里面的 PDF/图片逐个处理(文件时间取 zip 内记录的时间) */
+async function expandZips(files){
+  const out=[];
+  for(const f of files){
+    if(!/\.zip$/i.test(f.name||'')&&f.type!=='application/zip'&&f.type!=='application/x-zip-compressed'){out.push(f);continue;}
+    try{
+      const z=await JSZip.loadAsync(f);
+      for(const [nm,ent] of Object.entries(z.files)){
+        if(ent.dir||/(^|\/)\./.test(nm)||!/\.(pdf|jpe?g|png|webp)$/i.test(nm))continue;
+        const b=await ent.async('blob');const base=nm.split('/').pop();
+        const type=/\.pdf$/i.test(base)?'application/pdf':(/\.png$/i.test(base)?'image/png':'image/jpeg');
+        out.push(new File([b],base,{type,lastModified:ent.date?ent.date.getTime():f.lastModified}));
+      }
+    }catch(e){console.error(e);toast(t('tBadFile'));}
+  }
+  return out;
+}
 async function ingest(files,useFileTime,fromCamera){
   if(!files.length)return;
   toast(t('tCompress'),60000);
+  files=await expandZips(files);
   let n=0,dup=0;const keys=await knownFileKeys();
   if(fromCamera)lastShotIds=[];
   for(const f of files){

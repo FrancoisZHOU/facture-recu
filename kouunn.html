@@ -609,7 +609,7 @@ del:"删除",close:"✓ 确认",openPdf:"打开PDF",save:"保存",cancel:"取消
 labelPh:"备注:商家/用途,如 Metro冻品(可空)",tLabel:"已存 ✓",
 confDelRec:"确定删除这张票据?不可恢复。",confDelNote:"确定删除这条记录?不可恢复。",
 confDelPlace:n=>"删除地点「"+n+"」?(不影响已有记录)",confDelAtt:"删除这个附件?不可恢复。",
-tSaved:n=>n>1?"已存入 "+n+" 张":"已存入 ✓",tLogged:"已记 ✓",tKmLogged:"里程已记 ✓",tDeleted:"已删除",
+tSaved:n=>n>1?"已存入 "+n+" 张":"已存入 ✓",tDupSkip:n=>"跳过重复文件 "+n,tLogged:"已记 ✓",tKmLogged:"里程已记 ✓",tDeleted:"已删除",
 tDateSet:d=>"日期已改为 "+d,tPacking:"处理中…",tExported:(a,b)=>"已导出 "+a+" 张 + "+b+" 条 ✓",
 tNothing:"无内容",tSay:"先说点什么",tCompress:"压缩中…",
 kmNone:y=>y+"年无里程记录",kmDone:(y,t,n)=>y+"年合计 "+t+" km · "+n+" 次",promptYear:"年份",
@@ -650,7 +650,7 @@ del:"Delete",close:"✓ OK",openPdf:"Open PDF",save:"Save",cancel:"Cancel",editN
 labelPh:"Label: merchant/purpose (optional)",tLabel:"Saved ✓",
 confDelRec:"Delete this receipt? Cannot be undone.",confDelNote:"Delete this entry? Cannot be undone.",
 confDelPlace:n=>"Delete place \""+n+"\"? (entries kept)",confDelAtt:"Delete this attachment? Cannot be undone.",
-tSaved:n=>n>1?"Saved "+n+" items":"Saved ✓",tLogged:"Logged ✓",tKmLogged:"Trip logged ✓",tDeleted:"Deleted",
+tSaved:n=>n>1?"Saved "+n+" items":"Saved ✓",tDupSkip:n=>"skipped "+n+" duplicate file(s)",tLogged:"Logged ✓",tKmLogged:"Trip logged ✓",tDeleted:"Deleted",
 tDateSet:d=>"Date set to "+d,tPacking:"Working…",tExported:(a,b)=>"Exported "+a+" files + "+b+" notes ✓",
 tNothing:"Nothing here",tSay:"Type something first",tCompress:"Compressing…",
 kmNone:y=>"No trips in "+y,kmDone:(y,t,n)=>y+" total: "+t+" km · "+n+" trips",promptYear:"Year",
@@ -691,7 +691,7 @@ del:"Supprimer",close:"✓ Valider",openPdf:"Ouvrir PDF",save:"Enregistrer",canc
 labelPh:"Note : commerçant/usage (optionnel)",tLabel:"Enregistré ✓",
 confDelRec:"Supprimer ce reçu ? Irréversible.",confDelNote:"Supprimer cette entrée ? Irréversible.",
 confDelPlace:n=>"Supprimer le lieu «"+n+"» ? (entrées conservées)",confDelAtt:"Supprimer cette pièce jointe ? Irréversible.",
-tSaved:n=>n>1?n+" éléments enregistrés":"Enregistré ✓",tLogged:"Noté ✓",tKmLogged:"Trajet noté ✓",tDeleted:"Supprimé",
+tSaved:n=>n>1?n+" éléments enregistrés":"Enregistré ✓",tDupSkip:n=>n+" doublon(s) ignoré(s)",tLogged:"Noté ✓",tKmLogged:"Trajet noté ✓",tDeleted:"Supprimé",
 tDateSet:d=>"Date : "+d,tPacking:"En cours…",tExported:(a,b)=>a+" fichiers + "+b+" notes exportés ✓",
 tNothing:"Rien ici",tSay:"Écrivez d'abord",tCompress:"Compression…",
 kmNone:y=>"Aucun trajet en "+y,kmDone:(y,t,n)=>y+" : "+t+" km · "+n+" trajets",promptYear:"Année",
@@ -1043,26 +1043,45 @@ function attDesc(a){
 
 /* ============ 票据入库+拍后横条 ============ */
 let lastShotIds=[];
+/* 文件去重:导入前算原文件SHA-256;仓里已有同哈希(或PDF内容相同/同名同大小的照片)就跳过 */
+async function fileHash(f){const b=await f.arrayBuffer();const h=await crypto.subtle.digest('SHA-256',b);return [...new Uint8Array(h)].map(x=>x.toString(16).padStart(2,'0')).join('');}
+async function knownFileKeys(){
+  const all=await dbAll();const hs=new Set(),nk=new Set();
+  for(const r of all){
+    if(!r.h&&r.type==='pdf'&&r.blob){try{r.h=await fileHash(r.blob);await dbPut(r);}catch(_){}}
+    if(r.h)hs.add(r.h);
+    if(r.name&&r.size)nk.add(r.name+'|'+r.size);
+  }
+  return {hs,nk};
+}
+async function isDupFile(f,keys){
+  const h=await fileHash(f);
+  if(keys.hs.has(h))return {dup:true,h};
+  const isPdf=f.type==='application/pdf'||/\.pdf$/i.test(f.name||'');
+  if(!isPdf&&f.name&&keys.nk.has(f.name+'|'+f.size))return {dup:true,h};
+  keys.hs.add(h);return {dup:false,h};
+}
 async function ingest(files,useFileTime,fromCamera){
   if(!files.length)return;
   toast(t('tCompress'),60000);
-  let n=0;
+  let n=0,dup=0;const keys=await knownFileKeys();
   if(fromCamera)lastShotIds=[];
   for(const f of files){
     try{
       const isPdf=f.type==='application/pdf'||/\.pdf$/i.test(f.name||'');
+      const dk=await isDupFile(f,keys);if(dk.dup){dup++;continue;}
       let blob,thumb=null;
       if(isPdf){blob=f;}
       else{const r=await compress(f);blob=r.blob;thumb=r.thumb;}
       const ts=useFileTime&&f.lastModified?f.lastModified:Date.now();
       const rid=Date.now()+'-'+Math.random().toString(36).slice(2,7);
       await dbPut({id:rid,capturedAt:Date.now(),dateKey:dateKeyOf(ts),
-        type:isPdf?'pdf':'img',name:f.name||'',blob,thumb,size:blob.size});
+        type:isPdf?'pdf':'img',name:f.name||'',blob,thumb,size:f.size,h:dk.h});
       if(fromCamera)lastShotIds.push(rid);
       n++;
     }catch(e){console.error(e);}
   }
-  toast(t('tSaved',n));
+  toast(t('tSaved',n)+(dup?' · '+t('tDupSkip',dup):''),dup?4000:2000);
   render();
   if(fromCamera&&n>0)showAfterShot();
 }
@@ -1930,7 +1949,7 @@ async function buildBackupPayload(full){
   for(const r of recs){
     const mime=(r.blob&&r.blob.type)||(r.type==='pdf'?'application/pdf':'image/jpeg');
     const base={id:r.id,capturedAt:r.capturedAt,dateKey:r.dateKey,type:r.type,name:r.name,
-      label:r.label||'',size:r.size,nid:r.nid||null,dfid:r.dfid||null,mime:mime};
+      label:r.label||'',size:r.size,nid:r.nid||null,dfid:r.dfid||null,h:r.h||null,mime:mime};
     if(!r.blob){outR.push({...base,blob:null,thumb:null});continue;}
     if(!full&&r.dfid){outR.push({...base,blob:null,thumb:null});continue;}
     outR.push({...base,blob:await blobToB64(r.blob),thumb:r.thumb?await blobToB64(r.thumb):null});
@@ -2243,9 +2262,9 @@ async function importNotesList(list){
     if(!/^\d{4}-\d{2}-\d{2}$/.test(d)||!['km','memo','list','rec','bank'].includes(k))continue;
     const text=String(e.t||e.text||'').trim();const km=parseFloat(e.km);const amt=parseFloat(e.amt);
     const items=Array.isArray(e.items)?e.items.map(x=>String(x).trim()).filter(Boolean):null;
-    if((k==='rec'||k==='bank')&&!(amt>0))continue;
-    if(!text&&!(km>0)&&!(items&&items.length)&&!(amt>0))continue;
-    const id=pHash(d+'|'+k+'|'+text+'|'+(km>0?km:'')+'|'+(amt>0?amt:'')+'|'+(items?items.join(';'):''));
+    if((k==='rec'||k==='bank')&&!(Math.abs(amt)>0))continue;
+    if(!text&&!(km>0)&&!(items&&items.length)&&!(Math.abs(amt)>0))continue;
+    const id=pHash(d+'|'+k+'|'+text+'|'+(km>0?km:'')+'|'+(Math.abs(amt)>0?amt:'')+'|'+(items?items.join(';'):''));
     if(have.has(id)){dup++;continue;}
     plan.push(e);cnt[k]=(cnt[k]||0)+1;
   }
@@ -2262,9 +2281,9 @@ async function importNotesList(list){
     const km=parseFloat(e.km);
     const amt=parseFloat(e.amt);
     const items=Array.isArray(e.items)?e.items.map(x=>String(x).trim()).filter(Boolean):null;
-    if((k==='rec'||k==='bank')&&!(amt>0)){skipped++;continue;}
-    if(!text&&!(km>0)&&!(items&&items.length)&&!(amt>0)){skipped++;continue;}
-    const id=pHash(d+'|'+k+'|'+text+'|'+(km>0?km:'')+'|'+(amt>0?amt:'')+'|'+(items?items.join(';'):''));
+    if((k==='rec'||k==='bank')&&!(Math.abs(amt)>0)){skipped++;continue;}
+    if(!text&&!(km>0)&&!(items&&items.length)&&!(Math.abs(amt)>0)){skipped++;continue;}
+    const id=pHash(d+'|'+k+'|'+text+'|'+(km>0?km:'')+'|'+(Math.abs(amt)>0?amt:'')+'|'+(items?items.join(';'):''));
     if(have.has(id)){skipped++;continue;}
     const rec={id:id,capturedAt:Date.now(),dateKey:d,kind:k,text:text,
       atts:[],geo:null,ext:{src:'paste',batch:batchId},
@@ -2338,20 +2357,21 @@ async function ingestLinked(files){
   }
   if(mism.length&&!confirm(t('lkRefMismatch',recLabel(cur),mism.join('\n'))))return;
   toast(t('tCompress'),60000);
-  let k=0;const touched=new Map();
+  let k=0,dup=0;const touched=new Map();const keys=await knownFileKeys();
   for(const {f,n,isPdf} of plan){
     try{
+      const dk=await isDupFile(f,keys);if(dk.dup){dup++;continue;}
       let blob,thumb=null;
       if(isPdf){blob=f;}else{const r=await compress(f);blob=r.blob;thumb=r.thumb;}
       const rid=Date.now()+'-'+Math.random().toString(36).slice(2,7);
       await dbPut({id:rid,capturedAt:Date.now(),dateKey:n.dateKey,type:isPdf?'pdf':'img',
-        name:f.name||'',label:n.text||'',blob,thumb,size:blob.size,nid:n.id});
+        name:f.name||'',label:n.text||'',blob,thumb,size:f.size,nid:n.id,h:dk.h});
       (n.fid=n.fid||[]).push(rid);k++;
       if(n.ext)delete n.ext.nf;else n.ext={};touched.set(n.id,n);
     }catch(e){console.error(e);}
   }
   for(const n of touched.values())await notePut(n);
-  toast(t('tLinkedN',k)+(routed?' · '+t('lkRouted',routed):''),routed?4000:2000);
+  toast(t('tLinkedN',k)+(routed?' · '+t('lkRouted',routed):'')+(dup?' · '+t('tDupSkip',dup):''),(routed||dup)?4000:2000);
   await renderLink();render();
 }
 document.getElementById('lkCamBtn').onclick=()=>document.getElementById('lkCam').click();
@@ -2461,7 +2481,7 @@ async function importSet(list){
     if(e.pay!=null){const pv=normPay(e.pay);if(pv!==(n.pay||'')){ch.push('pay:'+(n.pay||'—')+'→'+(pv||'—'));n.pay=pv||undefined;if(!pv)delete n.pay;}}
     if(e.ref!=null&&String(e.ref)!==(n.ref||'')){ch.push('ref:'+(n.ref||'—')+'→'+e.ref);n.ref=String(e.ref);}
     if(e.tva!=null){const tv=parseFloat(e.tva);if(!isNaN(tv)&&tv!==n.tva){ch.push('tva:'+(n.tva!=null?n.tva:'—')+'→'+tv);n.tva=tv;}}
-    if(e.na!=null){const av=parseFloat(e.na);if(av>0&&Math.abs(av-(n.amt||0))>0.004){ch.push('montant:'+n.amt+'→'+av.toFixed(2));n.amt=Math.round(av*100)/100;}}
+    if(e.na!=null){const av=parseFloat(e.na);if(Math.abs(av)>0&&Math.abs(av-(n.amt||0))>0.004){ch.push('montant:'+n.amt+'→'+av.toFixed(2));n.amt=Math.round(av*100)/100;}}
     if(e.nt&&String(e.nt).trim()&&String(e.nt).trim()!==n.text){ch.push('nom:'+n.text+'→'+String(e.nt).trim());n.text=String(e.nt).trim();n.__rename=1;}
     if(!ch.length){same.push(tag(e));continue;}
     plan.push({n,ch,lbl:tag(e),before});
@@ -2610,7 +2630,7 @@ document.getElementById('bkFile').onchange=async e=>{
       for(const r of (data.receipts||[])){
         if(!r.id||haveR.has(r.id)){skipped++;continue;}
         await dbPut({id:r.id,capturedAt:r.capturedAt,dateKey:r.dateKey,type:r.type,name:r.name,
-          label:r.label||'',size:r.size,nid:r.nid||null,dfid:r.dfid||null,
+          label:r.label||'',size:r.size,nid:r.nid||null,dfid:r.dfid||null,h:r.h||null,
           blob:r.blob?b64ToBlob(r.blob,r.mime):null,
           thumb:r.thumb?b64ToBlob(r.thumb,'image/jpeg'):null});
         added++;

@@ -630,7 +630,7 @@ off0:"准点",off10:"提前10分",off30:"提前30分",off60:"提前1小时",off1
 rmAlarm:"⏰ 设系统闹钟",rmIcs:"📅 日历提醒",pickTime:"先选时间",icsDone:"已生成,点开进日历 ✓",
 lkTip:"把这张票的文件挂上(可多张)",lkPdf:"📄 PDF / 文件",lkPick:"📂 仓里已有",lkPickEmpty:"仓里没有未挂钩的文件",neLink:"📎 挂文件",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 拍照",lkGal:"🖼 相册",lkSkip:"跳过 ›",lkNext:"下一条 ›",lkDone:"✓ 完成",lkClose:"关闭",
 nfTag:"缺文件",tLinkedN:n=>"已挂 "+n+" 张 ✓",confDelLinked:"删掉这个文件?(记录保留,会重新标缺文件)",
-chkTitle:m=>"#检查 "+m,lkSkipAll:n=>"剩下 "+n+" 条稍后挂",lkSkippedAll:"没挂的记录带 ⚠,以后在对账页点记录 → 📎,或用 #检查",neWhy:"事由(空=按目的地自动)",kmExportBtn:"⬇ 里程总表(选年份)",kmYearAsk:y=>"导出哪一年?("+y+")",kmYearBad:"没有这一年的里程",kmExported:(n,k)=>"里程表已导出:"+n+" 趟 · "+k+" km",delBlockT:"删除块",delBlockRep:(n,a,b)=>"删了 "+n+" 条 · 找不到记录 "+a+" · 带文件跳过 "+b,delBlockConf:(n,x)=>"删 "+n+" 条记录"+(x?"("+x+" 条不动,会列出来)":"")+"?",delBlockDoneH:"✓ 已删:",delBlockHasFile:"带文件,没删(要删先把文件摘掉):",setBlockT:"补字段块",setBlockRep:(n,a,b)=>"改了 "+n+" 条 · 找不到记录 "+a+" · 无变化 "+b,setBlockConf:(n,x)=>"改 "+n+" 条记录"+(x?"("+x+" 条对不上,会列出来)":"")+"?",setBlockDoneH:"✓ 已改:",lkRouted:n=>"按编号自动挂到其他记录 "+n+" 张",lkRefMismatch:(r,f)=>"这些文件名里带着别的记录的编号:\n"+f+"\n\n还是挂到当前这条("+r+")?",chkOld:"(旧)",chkTip:"未挂的:对账页点记录→📎;或把ZIP发给Claude要一个挂钩块贴进来",lkBlockT:"挂钩块",lkBlockRep:(n,a,b,c)=>"挂上 "+n+" · 找不到文件 "+a+" · 找不到记录 "+b+" · 已挂过 "+c,lkBlockConf:(n,x)=>"挂钩 "+n+" 个文件"+(x?"("+x+" 个对不上,会列出来)":"")+"?",lkBlockDoneH:"✓ 已挂:",lkBlockNoFile:"✗ 仓里找不到这个文件(名字对不上或已挂别的记录):",lkBlockNoRec:"✗ 找不到对应记录(日期/商家/金额要一致):",lkBlockAlready:"= 之前就挂好了:",chkNone:"本月记录都有文件 ✓",chkCopy:"📋 复制",
+chkTitle:m=>"#检查 "+m,lkSkipAll:n=>"剩下 "+n+" 条稍后挂",lkSkippedAll:"没挂的记录带 ⚠,以后在对账页点记录 → 📎,或用 #检查",neWhy:"事由(空=按目的地自动)",kmExportBtn:"⬇ 里程总表(选年份)",kmYearAsk:y=>"导出哪一年?("+y+")",kmYearBad:"没有这一年的里程",kmExported:(n,k)=>"里程表已导出:"+n+" 趟 · "+k+" km",stBlockT:"站点表",stBlockRep:(a,u,b)=>"新增站点 "+a+" · 更新 "+u+" · 无效 "+b,dstBlockT:"距离表",dstBlockRep:(a,u,b)=>"新增站对 "+a+" · 更新 "+u+" · 无效 "+b,kmTableNow:(s,d)=>"表里现有 "+s+" 站 · "+d+" 对距离",kmRecalc:n=>"重算了 "+n+" 趟行程",kmRecalcBad:"✗ 这些行程现在算不出(缺站或缺段):",kmNoStation:"✗ 站点不在表里,先导站点块:",kmBlockT:"里程块",kmBlockErr:"✗ 这些行程没进(缺站或缺段,表里补了再贴):",delBlockT:"删除块",delBlockRep:(n,a,b)=>"删了 "+n+" 条 · 找不到记录 "+a+" · 带文件跳过 "+b,delBlockConf:(n,x)=>"删 "+n+" 条记录"+(x?"("+x+" 条不动,会列出来)":"")+"?",delBlockDoneH:"✓ 已删:",delBlockHasFile:"带文件,没删(要删先把文件摘掉):",setBlockT:"补字段块",setBlockRep:(n,a,b)=>"改了 "+n+" 条 · 找不到记录 "+a+" · 无变化 "+b,setBlockConf:(n,x)=>"改 "+n+" 条记录"+(x?"("+x+" 条对不上,会列出来)":"")+"?",setBlockDoneH:"✓ 已改:",lkRouted:n=>"按编号自动挂到其他记录 "+n+" 张",lkRefMismatch:(r,f)=>"这些文件名里带着别的记录的编号:\n"+f+"\n\n还是挂到当前这条("+r+")?",chkOld:"(旧)",chkTip:"未挂的:对账页点记录→📎;或把ZIP发给Claude要一个挂钩块贴进来",lkBlockT:"挂钩块",lkBlockRep:(n,a,b,c)=>"挂上 "+n+" · 找不到文件 "+a+" · 找不到记录 "+b+" · 已挂过 "+c,lkBlockConf:(n,x)=>"挂钩 "+n+" 个文件"+(x?"("+x+" 个对不上,会列出来)":"")+"?",lkBlockDoneH:"✓ 已挂:",lkBlockNoFile:"✗ 仓里找不到这个文件(名字对不上或已挂别的记录):",lkBlockNoRec:"✗ 找不到对应记录(日期/商家/金额要一致):",lkBlockAlready:"= 之前就挂好了:",chkNone:"本月记录都有文件 ✓",chkCopy:"📋 复制",
 chkRep:(n,ok,miss)=>"记录 "+n+" · 有文件 "+ok+" · 缺文件 "+miss,chkMissH:"⚠ 缺文件的记录:",chkOrphH:n=>"无记录的文件("+n+"):",chkMonthBad:"月份格式:#检查 2026-09",
 drPhotos:(i,n)=>"传照片 "+i+"/"+n+"…",drJson:"传台账…",drRestore:(i,n)=>"从Drive恢复照片 "+i+"/"+n+"…",drRestored:n=>"已恢复 "+n+" 张 ✓",drRecon:(m,o)=>"Drive核对:补传 "+m+" · Drive多余 "+o,drPending:n=>n+" 张原图在Drive未拉回",thumbCloud:"☁",drErr:m=>"Drive出错: "+m,drSkipped:(n,m)=>n+" 张传不上("+m+"),其余已传"},
 en:{drLbl:s=>"☁ Drive auto-backup: "+s,drOff:"off",drConn:"connecting…",drOk:x=>"on · last "+x+(localStorage.getItem('kouunn_driveAcct')?" · "+localStorage.getItem('kouunn_driveAcct'):""),drAcctSwitch:(a,b)=>"Drive account changed "+a+" → "+b+", photos will re-upload",drSwitchBtn:"🔁 Switch Drive account",drSwitchConf:"Switch Google account? All photos will re-upload to the new account (old one untouched).",drFail:c=>"upload failed "+c,drNoAuth:"not authorized",drClosed:"off",drNet:"network hiccup · will retry",drScript:"script failed · check network",drConfOff:"Turn off Drive auto-backup? (local data untouched)",tabRecon:"💳 Recon",reconSum:(n,ok,sus,miss)=>n+" lines · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · missing "+miss:""),stMiss:"missing",stSus:"likely",stOk:"matched",stNa:"n/a",stRecWait:"awaiting statement",stRecLate:"statement in · no debit",noBank:"No statement yet — send it to Claude at month close",confSus:(a,b)=>"Confirm match?\nBank: "+a+"\nReceipt: "+b,pickLink:"Enter number to link manually, 0 = no receipt needed, blank = cancel:",tLinked:"Linked ✓",tNa:"Marked as no receipt needed",tReset:"Reset to auto",reconEmpty:"No bank lines yet. Send the monthly statement to Claude and paste the block.",pasteBtn:"📋 Paste import",pasteTitle:"📋 Paste import",pastePh:"Paste the JSON block from Claude — trips/notes/lists, dupes auto-skipped",pasteGo:"Import",badPaste:"Cannot parse, check the paste",tPasted:(a,s)=>"Added "+a+" · skipped "+s,basePrompt:"Start point for this entry only (reverts to KOUUNN after saving)",appTitle:"KOUUNN Vault",snap:"SNAP RECEIPT",snapSub:"auto-compress · timestamp · stored locally",importB:"📁 Import photos / PDF invoices (by file date)",
@@ -671,7 +671,7 @@ off0:"On time",off10:"10 min before",off30:"30 min before",off60:"1 h before",of
 rmAlarm:"⏰ System alarm",rmIcs:"📅 Calendar",pickTime:"Pick a time first",icsDone:"Created — open it into calendar ✓",
 lkTip:"Attach this receipt's file(s)",lkPdf:"📄 PDF / files",lkPick:"📂 Already in vault",lkPickEmpty:"No unlinked files in the vault",neLink:"📎 Attach file",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 Camera",lkGal:"🖼 Gallery",lkSkip:"Skip ›",lkNext:"Next ›",lkDone:"✓ Done",lkClose:"Close",
 nfTag:"no file",tLinkedN:n=>"Attached "+n+" ✓",confDelLinked:"Delete this file? (record stays, flagged again)",
-chkTitle:m=>"#check "+m,lkSkipAll:n=>"Skip remaining "+n+", attach later",lkSkippedAll:"Unattached records show ⚠ — tap them in recon → 📎, or use #check",neWhy:"Purpose (blank = auto from destination)",kmExportBtn:"⬇ Mileage log (pick a year)",kmYearAsk:y=>"Which year? ("+y+")",kmYearBad:"No mileage for that year",kmExported:(n,k)=>"Mileage log exported: "+n+" trips · "+k+" km",delBlockT:"Delete block",delBlockRep:(n,a,b)=>"deleted "+n+" · record not found "+a+" · has files, skipped "+b,delBlockConf:(n,x)=>"Delete "+n+" records"+(x?" ("+x+" untouched, listed after)":"")+"?",delBlockDoneH:"✓ Deleted:",delBlockHasFile:"Has files, not deleted (unlink files first):",setBlockT:"Field block",setBlockRep:(n,a,b)=>"changed "+n+" · record not found "+a+" · unchanged "+b,setBlockConf:(n,x)=>"Update "+n+" records"+(x?" ("+x+" unmatched, listed after)":"")+"?",setBlockDoneH:"✓ Changed:",lkRouted:n=>n+" auto-linked to other records by ref",lkRefMismatch:(r,f)=>"These file names carry other records' refs:\n"+f+"\n\nLink to the current record ("+r+") anyway?",chkOld:"(old)",chkTip:"Unlinked: tap the record in recon → 📎; or send the ZIP to Claude for a link block",lkBlockT:"Link block",lkBlockRep:(n,a,b,c)=>"linked "+n+" · file not found "+a+" · record not found "+b+" · already "+c,lkBlockConf:(n,x)=>"Link "+n+" files"+(x?" ("+x+" unmatched, listed after)":"")+"?",lkBlockDoneH:"✓ Linked:",lkBlockNoFile:"✗ File not in store (name mismatch or linked elsewhere):",lkBlockNoRec:"✗ No matching record (date/merchant/amount must match):",lkBlockAlready:"= Already linked:",chkNone:"Every record this month has a file ✓",chkCopy:"📋 Copy",
+chkTitle:m=>"#check "+m,lkSkipAll:n=>"Skip remaining "+n+", attach later",lkSkippedAll:"Unattached records show ⚠ — tap them in recon → 📎, or use #check",neWhy:"Purpose (blank = auto from destination)",kmExportBtn:"⬇ Mileage log (pick a year)",kmYearAsk:y=>"Which year? ("+y+")",kmYearBad:"No mileage for that year",kmExported:(n,k)=>"Mileage log exported: "+n+" trips · "+k+" km",stBlockT:"Stations",stBlockRep:(a,u,b)=>"added "+a+" · updated "+u+" · invalid "+b,dstBlockT:"Distances",dstBlockRep:(a,u,b)=>"added "+a+" pairs · updated "+u+" · invalid "+b,kmTableNow:(s,d)=>"table now: "+s+" stations · "+d+" pairs",kmRecalc:n=>"recomputed "+n+" trips",kmRecalcBad:"✗ Trips that can no longer be computed (missing station/leg):",kmNoStation:"✗ Unknown station, import the stations block first:",kmBlockT:"Mileage block",kmBlockErr:"✗ Trips not added (missing station/leg — add to table, then paste again):",delBlockT:"Delete block",delBlockRep:(n,a,b)=>"deleted "+n+" · record not found "+a+" · has files, skipped "+b,delBlockConf:(n,x)=>"Delete "+n+" records"+(x?" ("+x+" untouched, listed after)":"")+"?",delBlockDoneH:"✓ Deleted:",delBlockHasFile:"Has files, not deleted (unlink files first):",setBlockT:"Field block",setBlockRep:(n,a,b)=>"changed "+n+" · record not found "+a+" · unchanged "+b,setBlockConf:(n,x)=>"Update "+n+" records"+(x?" ("+x+" unmatched, listed after)":"")+"?",setBlockDoneH:"✓ Changed:",lkRouted:n=>n+" auto-linked to other records by ref",lkRefMismatch:(r,f)=>"These file names carry other records' refs:\n"+f+"\n\nLink to the current record ("+r+") anyway?",chkOld:"(old)",chkTip:"Unlinked: tap the record in recon → 📎; or send the ZIP to Claude for a link block",lkBlockT:"Link block",lkBlockRep:(n,a,b,c)=>"linked "+n+" · file not found "+a+" · record not found "+b+" · already "+c,lkBlockConf:(n,x)=>"Link "+n+" files"+(x?" ("+x+" unmatched, listed after)":"")+"?",lkBlockDoneH:"✓ Linked:",lkBlockNoFile:"✗ File not in store (name mismatch or linked elsewhere):",lkBlockNoRec:"✗ No matching record (date/merchant/amount must match):",lkBlockAlready:"= Already linked:",chkNone:"Every record this month has a file ✓",chkCopy:"📋 Copy",
 chkRep:(n,ok,miss)=>"records "+n+" · with file "+ok+" · missing "+miss,chkMissH:"⚠ Records without file:",chkOrphH:n=>"Files without record ("+n+"):",chkMonthBad:"Month format: #检查 2026-09",
 drPhotos:(i,n)=>"photos "+i+"/"+n+"…",drJson:"ledger…",drRestore:(i,n)=>"restoring photos "+i+"/"+n+"…",drRestored:n=>"restored "+n+" ✓",drRecon:(m,o)=>"Drive check: re-upload "+m+" · extra on Drive "+o,drPending:n=>n+" originals still on Drive",thumbCloud:"☁",drErr:m=>"Drive error: "+m,drSkipped:(n,m)=>n+" failed ("+m+"), rest uploaded"},
 fr:{drLbl:s=>"☁ Sauvegarde Drive : "+s,drOff:"désactivée",drConn:"connexion…",drOk:x=>"active · dernière "+x+(localStorage.getItem('kouunn_driveAcct')?" · "+localStorage.getItem('kouunn_driveAcct'):""),drAcctSwitch:(a,b)=>"Compte Drive changé "+a+" → "+b+", photos renvoyées",drSwitchBtn:"🔁 Changer de compte Drive",drSwitchConf:"Changer de compte Google ? Toutes les photos seront renvoyées vers le nouveau compte (l'ancien reste intact).",drFail:c=>"échec envoi "+c,drNoAuth:"non autorisé",drClosed:"désactivée",drNet:"réseau instable · nouvel essai",drScript:"script non chargé · réseau",drConfOff:"Désactiver la sauvegarde Drive ? (données locales intactes)",tabRecon:"💳 Rappro",reconSum:(n,ok,sus,miss)=>n+" lignes · "+ok+" ✓"+(sus?" · "+sus+" ⚠":"")+(miss?" · manque "+miss:""),stMiss:"manque",stSus:"probable",stOk:"OK",stNa:"s/o",stRecWait:"en attente du relevé",stRecLate:"relevé reçu · non débité",noBank:"Relevé non importé — envoyez-le à Claude",confSus:(a,b)=>"Confirmer ?\nBanque : "+a+"\nReçu : "+b,pickLink:"Numéro pour lier, 0 = sans reçu, vide = annuler :",tLinked:"Lié ✓",tNa:"Marqué sans reçu",tReset:"Auto rétabli",reconEmpty:"Aucune ligne bancaire. Envoyez le relevé à Claude et collez le bloc.",pasteBtn:"📋 Import par collage",pasteTitle:"📋 Import par collage",pastePh:"Collez le bloc JSON de Claude — trajets/notes/listes, doublons ignorés",pasteGo:"Importer",badPaste:"Illisible, vérifiez le collage",tPasted:(a,s)=>"Ajouté "+a+" · ignoré "+s,basePrompt:"Départ pour cette entrée seule (retour à KOUUNN après)",appTitle:"KOUUNN Vault",snap:"PHOTO REÇU",snapSub:"compression auto · horodaté · stocké local",importB:"📁 Importer photos / factures PDF (date du fichier)",
@@ -712,7 +712,7 @@ off0:"À l'heure",off10:"10 min avant",off30:"30 min avant",off60:"1 h avant",of
 rmAlarm:"⏰ Alarme système",rmIcs:"📅 Calendrier",pickTime:"Choisissez l'heure",icsDone:"Créé — ouvrez-le dans le calendrier ✓",
 lkTip:"Joindre le(s) fichier(s) de ce reçu",lkPdf:"📄 PDF / fichiers",lkPick:"📂 Déjà dans le coffre",lkPickEmpty:"Aucun fichier non lié",neLink:"📎 Joindre",lkProg:(i,n)=>i+"/"+n,lkCam:"📷 Photo",lkGal:"🖼 Galerie",lkSkip:"Passer ›",lkNext:"Suivant ›",lkDone:"✓ Terminé",lkClose:"Fermer",
 nfTag:"sans fichier",tLinkedN:n=>n+" joint(s) ✓",confDelLinked:"Supprimer ce fichier ? (l'entrée reste, re-signalée)",
-chkTitle:m=>"#vérif "+m,lkSkipAll:n=>"Passer les "+n+" restants",lkSkippedAll:"Les entrées sans fichier portent ⚠ — rapprochement → 📎, ou #vérif",neWhy:"Motif (vide = auto selon destination)",kmExportBtn:"⬇ Journal kilométrique (choisir l'année)",kmYearAsk:y=>"Quelle année ? ("+y+")",kmYearBad:"Pas de trajets cette année-là",kmExported:(n,k)=>"Journal exporté : "+n+" trajets · "+k+" km",delBlockT:"Bloc de suppression",delBlockRep:(n,a,b)=>"supprimés "+n+" · entrée introuvable "+a+" · avec fichiers, ignorés "+b,delBlockConf:(n,x)=>"Supprimer "+n+" entrées"+(x?" ("+x+" inchangées, listées)":"")+" ?",delBlockDoneH:"✓ Supprimés :",delBlockHasFile:"Avec fichiers, non supprimés (détacher d'abord) :",setBlockT:"Bloc de champs",setBlockRep:(n,a,b)=>"modifiés "+n+" · entrée introuvable "+a+" · inchangés "+b,setBlockConf:(n,x)=>"Modifier "+n+" entrées"+(x?" ("+x+" sans correspondance, listées)":"")+" ?",setBlockDoneH:"✓ Modifiés :",lkRouted:n=>n+" lié(s) automatiquement à d'autres entrées par n°",lkRefMismatch:(r,f)=>"Ces fichiers portent le n° d'autres entrées :\n"+f+"\n\nLier quand même à l'entrée actuelle ("+r+") ?",chkOld:"(ancien)",chkTip:"Non liés : dans le rapprochement, touchez l'entrée → 📎 ; ou envoyez le ZIP à Claude pour un bloc de liaison",lkBlockT:"Bloc de liaison",lkBlockRep:(n,a,b,c)=>"liés "+n+" · fichier introuvable "+a+" · entrée introuvable "+b+" · déjà "+c,lkBlockConf:(n,x)=>"Lier "+n+" fichiers"+(x?" ("+x+" sans correspondance, listés)":"")+"?",lkBlockDoneH:"✓ Liés :",lkBlockNoFile:"✗ Fichier absent (nom différent ou déjà lié ailleurs) :",lkBlockNoRec:"✗ Entrée introuvable (date/commerçant/montant) :",lkBlockAlready:"= Déjà liés :",chkNone:"Toutes les entrées du mois ont un fichier ✓",chkCopy:"📋 Copier",
+chkTitle:m=>"#vérif "+m,lkSkipAll:n=>"Passer les "+n+" restants",lkSkippedAll:"Les entrées sans fichier portent ⚠ — rapprochement → 📎, ou #vérif",neWhy:"Motif (vide = auto selon destination)",kmExportBtn:"⬇ Journal kilométrique (choisir l'année)",kmYearAsk:y=>"Quelle année ? ("+y+")",kmYearBad:"Pas de trajets cette année-là",kmExported:(n,k)=>"Journal exporté : "+n+" trajets · "+k+" km",stBlockT:"Stations",stBlockRep:(a,u,b)=>"ajoutées "+a+" · mises à jour "+u+" · invalides "+b,dstBlockT:"Distances",dstBlockRep:(a,u,b)=>"paires ajoutées "+a+" · mises à jour "+u+" · invalides "+b,kmTableNow:(s,d)=>"table : "+s+" stations · "+d+" paires",kmRecalc:n=>n+" trajets recalculés",kmRecalcBad:"✗ Trajets non calculables (station/étape manquante) :",kmNoStation:"✗ Station inconnue, importer d'abord le bloc stations :",kmBlockT:"Bloc trajets",kmBlockErr:"✗ Trajets non ajoutés (station/étape manquante) :",delBlockT:"Bloc de suppression",delBlockRep:(n,a,b)=>"supprimés "+n+" · entrée introuvable "+a+" · avec fichiers, ignorés "+b,delBlockConf:(n,x)=>"Supprimer "+n+" entrées"+(x?" ("+x+" inchangées, listées)":"")+" ?",delBlockDoneH:"✓ Supprimés :",delBlockHasFile:"Avec fichiers, non supprimés (détacher d'abord) :",setBlockT:"Bloc de champs",setBlockRep:(n,a,b)=>"modifiés "+n+" · entrée introuvable "+a+" · inchangés "+b,setBlockConf:(n,x)=>"Modifier "+n+" entrées"+(x?" ("+x+" sans correspondance, listées)":"")+" ?",setBlockDoneH:"✓ Modifiés :",lkRouted:n=>n+" lié(s) automatiquement à d'autres entrées par n°",lkRefMismatch:(r,f)=>"Ces fichiers portent le n° d'autres entrées :\n"+f+"\n\nLier quand même à l'entrée actuelle ("+r+") ?",chkOld:"(ancien)",chkTip:"Non liés : dans le rapprochement, touchez l'entrée → 📎 ; ou envoyez le ZIP à Claude pour un bloc de liaison",lkBlockT:"Bloc de liaison",lkBlockRep:(n,a,b,c)=>"liés "+n+" · fichier introuvable "+a+" · entrée introuvable "+b+" · déjà "+c,lkBlockConf:(n,x)=>"Lier "+n+" fichiers"+(x?" ("+x+" sans correspondance, listés)":"")+"?",lkBlockDoneH:"✓ Liés :",lkBlockNoFile:"✗ Fichier absent (nom différent ou déjà lié ailleurs) :",lkBlockNoRec:"✗ Entrée introuvable (date/commerçant/montant) :",lkBlockAlready:"= Déjà liés :",chkNone:"Toutes les entrées du mois ont un fichier ✓",chkCopy:"📋 Copier",
 chkRep:(n,ok,miss)=>"entrées "+n+" · avec fichier "+ok+" · sans "+miss,chkMissH:"⚠ Entrées sans fichier :",chkOrphH:n=>"Fichiers sans entrée ("+n+") :",chkMonthBad:"Format : #检查 2026-09",
 drPhotos:(i,n)=>"photos "+i+"/"+n+"…",drJson:"registre…",drRestore:(i,n)=>"restauration photos "+i+"/"+n+"…",drRestored:n=>n+" restaurées ✓",drRecon:(m,o)=>"Vérif Drive : à renvoyer "+m+" · en trop "+o,drPending:n=>n+" originaux encore sur Drive",thumbCloud:"☁",drErr:m=>"Erreur Drive : "+m,drSkipped:(n,m)=>n+" échec(s) ("+m+"), reste envoyé"}
 };
@@ -851,6 +851,81 @@ function pinResetViaGoogle(cb){
       }});
     c.requestAccessToken({prompt:'select_account',hint:acct});
   }catch(e){toast(t('lockResetBad'));}});
+}
+
+/* ============ 里程表:站点 + 站对距离(死数据,只做加法) ============ */
+function loadKmTable(){try{const t=JSON.parse(localStorage.getItem('kmTable')||'null');if(t&&t.st&&t.d)return t;}catch(_){}return {st:{},d:{}};}
+function saveKmTable(t){localStorage.setItem('kmTable',JSON.stringify(t));}
+const pairKey=(a,b)=>[String(a),String(b)].sort().join('|');
+/* 站点序列 → 分段 + 总公里;缺站/缺段 → 返回错误清单,不猜 */
+function kmFromStops(stops,T){
+  T=T||loadKmTable();const errs=[];const legs=[];
+  const ids=(stops||[]).map(x=>String(x).trim()).filter(Boolean);
+  if(ids.length<2)return {ok:false,errs:['stops<2']};
+  for(const id of ids)if(!T.st[id])errs.push('station? '+id);
+  if(errs.length)return {ok:false,errs};
+  let tot=0;
+  for(let i=0;i<ids.length-1;i++){
+    const a=ids[i],b=ids[i+1];if(a===b)continue;
+    const d=T.d[pairKey(a,b)];
+    if(!d){errs.push('dist? '+a+' ↔ '+b);continue;}
+    legs.push({a,b,km:d.km});tot+=d.km;
+  }
+  if(errs.length)return {ok:false,errs};
+  return {ok:true,legs,km:Math.round(tot*10)/10,text:ids.map(id=>T.st[id].n).join(' → ')};
+}
+/* 把一条有 stops 的里程记录按当前表重算 */
+function applyStops(n,T){
+  const r=kmFromStops(n.stops,T);if(!r.ok)return r;
+  n.legs=r.legs;n.km=r.km;n.text=r.text;return r;
+}
+/* 表改了 → 所有用到这些站对/站点的行程重算 */
+async function recomputeTrips(pairs,stations){
+  const T=loadKmTable();const notes=await noteAll();let k=0;const bad=[];
+  for(const n of notes){
+    if(n.kind!=='km'||!Array.isArray(n.stops))continue;
+    const hit=!pairs&&!stations?true:(n.stops.some(id=>stations&&stations.has(id))||n.stops.some((id,i)=>i>0&&pairs&&pairs.has(pairKey(n.stops[i-1],id))));
+    if(!hit)continue;
+    const before=n.km;const r=applyStops(n,T);
+    if(!r.ok){bad.push(n.dateKey+' '+(n.text||'')+' : '+r.errs.join(', '));continue;}
+    await notePut(n);if(before!==n.km)k++;
+  }
+  return {changed:k,bad};
+}
+/* 站点块:{"kouunn":1,"stations":[{"id":"metro-chalon","n":"METRO Chalon","a":"地址"}]} 按 id 新增/更新 */
+async function importStations(list){
+  const T=loadKmTable();let add=0,upd=0,bad=0;const ids=new Set();
+  for(const e of list){
+    if(!e||typeof e!=='object'||!e.id||!e.n){bad++;continue;}
+    const id=String(e.id).trim();const v={n:String(e.n).trim(),a:String(e.a||'').trim()};
+    if(T.st[id]){if(T.st[id].n!==v.n||T.st[id].a!==v.a){T.st[id]=v;upd++;ids.add(id);}}else{T.st[id]=v;add++;}
+  }
+  saveKmTable(T);
+  const rc=ids.size?await recomputeTrips(null,ids):{changed:0,bad:[]};
+  render();
+  showCheck(t('stBlockT'),t('stBlockRep',add,upd,bad)+'\n'+t('kmTableNow',Object.keys(T.st).length,Object.keys(T.d).length)+(rc.bad.length?'\n\n'+t('kmRecalcBad')+'\n'+rc.bad.join('\n'):''));
+  return add+upd;
+}
+/* 距离块:{"kouunn":1,"dist":[{"a":"kouunn","b":"metro-chalon","km":45.7,"via":"N70","src":"gmaps 2026-10-13"}]} 按站对新增/更新(不分方向),改了就重算所有相关行程 */
+async function importDist(list){
+  const T=loadKmTable();let add=0,upd=0,bad=0;const noSt=[];const pairs=new Set();
+  for(const e of list){
+    if(!e||typeof e!=='object'||!e.a||!e.b){bad++;continue;}
+    const km=parseFloat(e.km);if(!(km>=0)){bad++;continue;}
+    const a=String(e.a).trim(),b=String(e.b).trim();
+    if(!T.st[a])noSt.push(a);if(!T.st[b])noSt.push(b);
+    if(!T.st[a]||!T.st[b]){bad++;continue;}
+    const k=pairKey(a,b);const v={km:Math.round(km*10)/10,via:String(e.via||'').trim(),src:String(e.src||'').trim()};
+    if(T.d[k]){if(T.d[k].km!==v.km){upd++;pairs.add(k);}T.d[k]=v;}else{T.d[k]=v;add++;pairs.add(k);}
+  }
+  saveKmTable(T);
+  const rc=pairs.size?await recomputeTrips(pairs,null):{changed:0,bad:[]};
+  render();
+  let out=t('dstBlockRep',add,upd,bad)+'\n'+t('kmTableNow',Object.keys(T.st).length,Object.keys(T.d).length)+'\n'+t('kmRecalc',rc.changed);
+  if(noSt.length)out+='\n\n'+t('kmNoStation')+'\n'+[...new Set(noSt)].join('\n');
+  if(rc.bad.length)out+='\n\n'+t('kmRecalcBad')+'\n'+rc.bad.join('\n');
+  showCheck(t('dstBlockT'),out);
+  return add+upd;
 }
 
 /* ============ 地点库 ============ */
@@ -1791,14 +1866,22 @@ function kmMotif(text,why){
   return '';
 }
 
+/* 年表里的路线:有分段就把每段公里写进括号 */
+function kmTrajet(k){
+  if(Array.isArray(k.legs)&&k.legs.length&&Array.isArray(k.stops)){
+    const T=loadKmTable();const nm=id=>(T.st[id]&&T.st[id].n)||id;
+    let s=nm(k.stops[0]);for(const l of k.legs)s+=' → '+nm(l.b)+' ('+l.km+')';return s;
+  }
+  return k.text||'';
+}
 /* ============ 里程总表(单独文件,按年) ============ */
 function buildKmHtml(kms,year){
   const h=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const L={zh:{title:'里程总表 — TREFLE DE KOUUNN (KOUUNN SUSHI)',year:'年度',gen:'生成于',trips:'趟',date:'日期',trip:'路线(出发 → 目的地 → 返回)',kmu:'公里',motif:'事由',total:'年度合计',how:'说明',how1:'每一行是一趟公务出行:日期、路线、往返公里数、事由。',how2:'点表头可排序;浏览器"打印"可存成 PDF。',month:'月份',nomotif:'缺事由',nomotifN:'趟缺事由'},
-    fr:{title:'Journal kilométrique — TREFLE DE KOUUNN (KOUUNN SUSHI)',year:'Année',gen:'généré le',trips:'trajets',date:'Date',trip:'Trajet (départ → destination → retour)',kmu:'km',motif:'Motif',total:'Total annuel',how:'Note',how1:'Chaque ligne est un déplacement professionnel : date, trajet, kilomètres aller-retour, motif.',how2:'Cliquer sur un en-tête trie ; « Imprimer » du navigateur pour un PDF.',month:'Mois',nomotif:'MOTIF MANQUANT',nomotifN:'sans motif'},
-    en:{title:'Mileage log — TREFLE DE KOUUNN (KOUUNN SUSHI)',year:'Year',gen:'generated',trips:'trips',date:'Date',trip:'Route (start → destination → return)',kmu:'km',motif:'Purpose',total:'Annual total',how:'Note',how1:'Each row is one business trip: date, route, round-trip km, purpose.',how2:'Click a header to sort; use the browser Print for a PDF.',month:'Month',nomotif:'MISSING',nomotifN:'without purpose'}};
+  const L={zh:{title:'里程总表 — TREFLE DE KOUUNN (KOUUNN SUSHI)',year:'年度',gen:'生成于',trips:'趟',date:'日期',trip:'路线(出发 → 目的地 → 返回)',kmu:'公里',motif:'事由',total:'年度合计',how:'说明',how1:'每一行是一趟公务出行:日期、路线、往返公里数、事由。',how2:'点表头可排序;浏览器"打印"可存成 PDF。',how3:'公里数按 Google Maps 驾车路线逐段测得(站对站距离表,所有行程同一规则),括号内为每段公里。',month:'月份',nomotif:'缺事由',nomotifN:'趟缺事由'},
+    fr:{title:'Journal kilométrique — TREFLE DE KOUUNN (KOUUNN SUSHI)',year:'Année',gen:'généré le',trips:'trajets',date:'Date',trip:'Trajet (départ → destination → retour)',kmu:'km',motif:'Motif',total:'Total annuel',how:'Note',how1:'Chaque ligne est un déplacement professionnel : date, trajet, kilomètres aller-retour, motif.',how2:'Cliquer sur un en-tête trie ; « Imprimer » du navigateur pour un PDF.',how3:'Distances mesurées sur Google Maps (itinéraire routier, table des distances entre étapes, mêmes règles pour tous les trajets) ; entre parenthèses, les km de chaque étape.',month:'Mois',nomotif:'MOTIF MANQUANT',nomotifN:'sans motif'},
+    en:{title:'Mileage log — TREFLE DE KOUUNN (KOUUNN SUSHI)',year:'Year',gen:'generated',trips:'trips',date:'Date',trip:'Route (start → destination → return)',kmu:'km',motif:'Purpose',total:'Annual total',how:'Note',how1:'Each row is one business trip: date, route, round-trip km, purpose.',how2:'Click a header to sort; use the browser Print for a PDF.',how3:'Distances measured on Google Maps (driving route, stop-to-stop distance table, same rule for every trip); per-leg km in brackets.',month:'Month',nomotif:'MISSING',nomotifN:'without purpose'}};
   let rows='',tKm=0,noMotif=0;const byM={};
-  for(const k of kms){tKm+=k.km||0;const m=k.dateKey.slice(0,7);byM[m]=(byM[m]||0)+(k.km||0);const mo=kmMotif(k.text,k.why);if(!mo)noMotif++;rows+='<tr'+(mo?'':' class="nm"')+'><td data-v="'+k.dateKey+'">'+k.dateKey.split('-').reverse().join('/')+'</td><td>'+h(k.text)+'</td><td class="n" data-v="'+(k.km||0)+'">'+(k.km||'')+'</td><td>'+(mo?h(mo):'<span class="miss" data-k="nomotif"></span>')+'</td></tr>';}
+  for(const k of kms){tKm+=k.km||0;const m=k.dateKey.slice(0,7);byM[m]=(byM[m]||0)+(k.km||0);const mo=kmMotif(k.text,k.why);if(!mo)noMotif++;rows+='<tr'+(mo?'':' class="nm"')+'><td data-v="'+k.dateKey+'">'+k.dateKey.split('-').reverse().join('/')+'</td><td>'+h(kmTrajet(k))+'</td><td class="n" data-v="'+(k.km||0)+'">'+(k.km||'')+'</td><td>'+(mo?h(mo):'<span class="miss" data-k="nomotif"></span>')+'</td></tr>';}
   const mRows=Object.keys(byM).sort().map(m=>'<tr><td>'+m.slice(5)+'/'+m.slice(0,4)+'</td><td class="n">'+Math.round(byM[m]*10)/10+'</td></tr>').join('');
   const K=k=>'<span data-k="'+k+'"></span>';
   return '<!doctype html><html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+year+' 里程总表 — TREFLE DE KOUUNN</title><style>'+
@@ -1810,7 +1893,7 @@ function buildKmHtml(kms,year){
   '</style></head><body>'+
   '<div class="lang"><button data-l="zh">中文</button><button data-l="fr">Français</button><button data-l="en">English</button></div>'+
   '<h1 data-k="title"></h1><div class="sub">'+K('year')+' : <b>'+year+'</b> · '+K('gen')+' '+new Date().toLocaleDateString('fr-FR')+' · '+kms.length+' '+K('trips')+' · <b>'+Math.round(tKm*10)/10+' km</b>'+(noMotif?' · <span class="miss">'+noMotif+' '+K('nomotifN')+'</span>':'')+'</div>'+
-  '<div class="how"><b data-k="how"></b><div>1. '+K('how1')+'</div><div>2. '+K('how2')+'</div></div>'+
+  '<div class="how"><b data-k="how"></b><div>1. '+K('how1')+'</div><div>2. '+K('how2')+'</div><div>3. '+K('how3')+'</div></div>'+
   '<table id="t"><thead><tr><th data-k="date"></th><th data-k="trip"></th><th class="n" data-k="kmu"></th><th data-k="motif"></th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td colspan="2">'+K('total')+' · '+kms.length+' '+K('trips')+'</td><td class="n">'+Math.round(tKm*10)/10+'</td><td></td></tr></tfoot></table>'+
   '<h2 data-k="month"></h2><table id="m"><thead><tr><th data-k="month"></th><th class="n" data-k="kmu"></th></tr></thead><tbody>'+mRows+'</tbody></table>'+
   '<script>var L='+JSON.stringify(L)+';function setL(l){document.documentElement.lang=l;document.querySelectorAll("[data-k]").forEach(function(e){e.textContent=L[l][e.dataset.k]||""});document.querySelectorAll(".lang button").forEach(function(b){b.classList.toggle("on",b.dataset.l===l)})}'+
@@ -1974,7 +2057,7 @@ async function buildBackupPayload(full){
   }
   const outN=[];
   for(const n of notes)outN.push(await serializeNote(n));
-  return {app:'kouunn-vault',v:4,exported:Date.now(),receipts:outR,notes:outN,places:loadPlaces(),
+  return {app:'kouunn-vault',v:4,exported:Date.now(),receipts:outR,notes:outN,places:loadPlaces(),kmTable:loadKmTable(),
     count:recs.length+notes.length};
 }
 document.getElementById('bkExport').onclick=()=>{
@@ -2271,13 +2354,20 @@ async function importNotesList(list){
   if(list&&list.__link)return importLinks(list.__link);
   if(list&&list.__set)return importSet(list.__set);
   if(list&&list.__del)return importDel(list.__del);
+  if(list&&list.__stations)return importStations(list.__stations);
+  if(list&&list.__dist)return importDist(list.__dist);
   const have=new Set((await noteAll()).map(n=>n.id));
   let added=0,skipped=0;
   /* 预检:先算清楚要进多少条,再问 */
-  const plan=[];const cnt={};let dup=0;
+  const plan=[];const cnt={};let dup=0;const kmErr=[];const KT=loadKmTable();
   for(const e of list){
     const d=String(e.d||e.date||'').trim();const k=e.k||e.kind||'memo';
     if(!/^\d{4}-\d{2}-\d{2}$/.test(d)||!['km','memo','list','rec','bank'].includes(k))continue;
+    if(k==='km'&&Array.isArray(e.stops)){
+      const r=kmFromStops(e.stops,KT);
+      if(!r.ok){kmErr.push(d+' '+e.stops.join(' → ')+' : '+r.errs.join(', '));continue;}
+      e.t=r.text;e.km=r.km;e.__legs=r.legs;e.__stops=e.stops.map(x=>String(x).trim());
+    }
     const text=String(e.t||e.text||'').trim();const km=parseFloat(e.km);const amt=parseFloat(e.amt);
     const items=Array.isArray(e.items)?e.items.map(x=>String(x).trim()).filter(Boolean):null;
     if((k==='rec'||k==='bank')&&!(Math.abs(amt)>0))continue;
@@ -2286,6 +2376,7 @@ async function importNotesList(list){
     if(have.has(id)){dup++;continue;}
     plan.push(e);cnt[k]=(cnt[k]||0)+1;
   }
+  if(kmErr.length&&!plan.length){showCheck(t('kmBlockT'),t('kmBlockErr')+'\n'+kmErr.join('\n'));return 0;}
   if(!plan.length){toast(t('pasteNone'),3000);return 0;}
   const det=Object.keys(cnt).map(k=>t(k==='rec'?'kRec':k==='km'?'kKm':k==='bank'?'kBank':'kMemo')+' '+cnt[k]).join(' · ');
   if(!confirm(t('pasteConf',plan.length,det,dup)))return 0;
@@ -2293,6 +2384,7 @@ async function importNotesList(list){
   for(const e of list){
     const d=String(e.d||e.date||'').trim();
     const k=e.k||e.kind||'memo';
+    if(k==='km'&&Array.isArray(e.stops)&&!e.__stops){skipped++;continue;}
     if(!/^\d{4}-\d{2}-\d{2}$/.test(d)){skipped++;continue;}
     if(!['km','memo','list','rec','bank'].includes(k)){skipped++;continue;}
     const text=String(e.t||e.text||'').trim();
@@ -2306,7 +2398,7 @@ async function importNotesList(list){
     const rec={id:id,capturedAt:Date.now(),dateKey:d,kind:k,text:text,
       atts:[],geo:null,ext:{src:'paste',batch:batchId},
       events:[{k:'create',t:Date.now(),dur:null}]};
-    if(k==='km'){rec.km=km>0?fmtKm(km):null;if(e.why)rec.why=String(e.why).trim();}
+    if(k==='km'){rec.km=km>0?fmtKm(km):null;if(e.why)rec.why=String(e.why).trim();if(e.__stops){rec.stops=e.__stops;rec.legs=e.__legs;rec.km=km;}}
     if(k==='rec'||k==='bank'){rec.amt=Math.round(amt*100)/100;if(e.ref)rec.ref=String(e.ref);if(e.tva)rec.tva=parseFloat(e.tva)||null;}
     if(k==='rec'&&e.pay)rec.pay=normPay(e.pay);
     if(k==='rec'){rec.ext.nf=1;rec.fid=[];newRecs.push(id);}
@@ -2314,6 +2406,7 @@ async function importNotesList(list){
     await notePut(rec);have.add(id);added++;
   }
   toast(t('tPasted',added,skipped),3200);
+  if(kmErr.length)showCheck(t('kmBlockT'),t('kmBlockErr')+'\n'+kmErr.join('\n'));
   if(added)showUndo(batchId,added);
   render();
   if(newRecs.length)openLink(newRecs[0],newRecs);
@@ -2476,7 +2569,7 @@ function normPay(v){const k=String(v||'').trim().toLowerCase();return PAY_MAP[k]
 /* 补字段块:{"kouunn":1,"set":[{"d":"2026-09-01","t":"Weldom Montceau","amt":44.2,"pay":"CB","ref":"…","tva":7.37,"nt":"新商家名","na":45.2}]}  na=改金额
    按 日期+商家+金额 定位记录;只改给出的字段(pay/ref/tva/nt=改名,改名同步到挂着的文件)。不新增记录。 */
 async function importSet(list){
-  const notes=await noteAll();const recs=notes.filter(n=>n.kind==='rec'),kmsAll=notes.filter(n=>n.kind==='km');
+  const notes=await noteAll();const recs=notes.filter(n=>n.kind==='rec'),kmsAll=notes.filter(n=>n.kind==='km');const KT2=loadKmTable();
   const plan=[],noRec=[],same=[];
   const tag=e=>String(e.d||'')+' '+String(e.t||'')+' '+(e.k==='km'?(parseFloat(e.km)||0)+'km':(parseFloat(e.amt)||0).toFixed(2));
   for(const e of list){
@@ -2485,10 +2578,19 @@ async function importSet(list){
     if(e.k==='km'){
       const km=parseFloat(e.km);const n=kmsAll.find(x=>x.dateKey===d&&(x.text||'')===txt&&Math.abs((x.km||0)-km)<0.05);
       if(!n){noRec.push(tag(e));continue;}
+      const before={pay:n.pay,ref:n.ref,tva:n.tva,text:n.text,why:n.why,km:n.km,stops:n.stops,legs:n.legs};
+      const ch=[];
       const w=e.why!=null?String(e.why).trim():null;
-      if(w===null||w===(n.why||'')){same.push(tag(e));continue;}
-      const before={pay:n.pay,ref:n.ref,tva:n.tva,text:n.text,why:n.why};
-      const ch=['motif:'+(n.why||'—')+'→'+(w||'—')];if(w)n.why=w;else delete n.why;
+      if(w!==null&&w!==(n.why||'')){ch.push('motif:'+(n.why||'—')+'→'+(w||'—'));if(w)n.why=w;else delete n.why;}
+      if(Array.isArray(e.stops)){
+        const r=kmFromStops(e.stops,KT2);
+        if(!r.ok){noRec.push(tag(e)+' ✗ '+r.errs.join(', '));continue;}
+        n.stops=e.stops.map(x=>String(x).trim());n.legs=r.legs;ch.push('km:'+n.km+'→'+r.km+' · '+r.text);n.km=r.km;n.text=r.text;
+      }else{
+        if(e.nk!=null){const v=parseFloat(e.nk);if(v>0&&Math.abs(v-(n.km||0))>0.04){ch.push('km:'+n.km+'→'+v);n.km=Math.round(v*10)/10;delete n.stops;delete n.legs;}}
+        if(e.nt&&String(e.nt).trim()&&String(e.nt).trim()!==n.text){ch.push('trajet:'+n.text+'→'+String(e.nt).trim());n.text=String(e.nt).trim();}
+      }
+      if(!ch.length){same.push(tag(e));continue;}
       plan.push({n,ch,lbl:tag(e),before});continue;
     }
     const amt=parseFloat(e.amt);
@@ -2498,6 +2600,7 @@ async function importSet(list){
     const ch=[];
     if(e.pay!=null){const pv=normPay(e.pay);if(pv!==(n.pay||'')){ch.push('pay:'+(n.pay||'—')+'→'+(pv||'—'));n.pay=pv||undefined;if(!pv)delete n.pay;}}
     if(e.ref!=null&&String(e.ref)!==(n.ref||'')){ch.push('ref:'+(n.ref||'—')+'→'+e.ref);n.ref=String(e.ref);}
+    if(e.nr!=null&&String(e.nr)!==(n.ref||'')){ch.push('ref:'+(n.ref||'—')+'→'+e.nr);n.ref=String(e.nr);}
     if(e.tva!=null){const tv=parseFloat(e.tva);if(!isNaN(tv)&&tv!==n.tva){ch.push('tva:'+(n.tva!=null?n.tva:'—')+'→'+tv);n.tva=tv;}}
     if(e.na!=null){const av=parseFloat(e.na);if(Math.abs(av)>0&&Math.abs(av-(n.amt||0))>0.004){ch.push('montant:'+n.amt+'→'+av.toFixed(2));n.amt=Math.round(av*100)/100;}}
     if(e.nt&&String(e.nt).trim()&&String(e.nt).trim()!==n.text){ch.push('nom:'+n.text+'→'+String(e.nt).trim());n.text=String(e.nt).trim();n.__rename=1;}
@@ -2517,7 +2620,7 @@ async function importSet(list){
   let out=t('setBlockRep',plan.length,noRec.length,same.length)+'\n\n'+t('setBlockDoneH')+'\n'+plan.map(p=>p.lbl+' · '+p.ch.join(' · ')).join('\n');
   if(noRec.length)out+='\n\n'+t('lkBlockNoRec')+'\n'+noRec.join('\n');
   showCheck(t('setBlockT'),out);
-  showUndoFn(async()=>{const ns=await noteAll(),rs=await dbAll();let k=0;for(const sn of snap){const n=ns.find(x=>x.id===sn.id);if(!n)continue;for(const f of ['pay','ref','tva','why','amt']){if(sn[f]===undefined)delete n[f];else n[f]=sn[f];}if(n.text!==sn.text){n.text=sn.text;for(const fid of (n.fid||[])){const r=rs.find(x=>x.id===fid);if(r){r.label=sn.text;await dbPut(r);}}}await notePut(n);k++;}return k;},plan.length);
+  showUndoFn(async()=>{const ns=await noteAll(),rs=await dbAll();let k=0;for(const sn of snap){const n=ns.find(x=>x.id===sn.id);if(!n)continue;for(const f of ['pay','ref','tva','why','amt','km','stops','legs']){if(sn[f]===undefined)delete n[f];else n[f]=sn[f];}if(n.text!==sn.text){n.text=sn.text;for(const fid of (n.fid||[])){const r=rs.find(x=>x.id===fid);if(r){r.label=sn.text;await dbPut(r);}}}await notePut(n);k++;}return k;},plan.length);
   return plan.length;
 }
 /* 删除块:{"kouunn":1,"del":[{"d":"2026-08-18","t":"Joybuy","amt":75.04},{"d":"2026-07-14","k":"km","t":"KOUUNN → … → KOUUNN","km":90}]}
@@ -2598,13 +2701,15 @@ document.getElementById('chkClose').onclick=()=>closeSheet('chkSheet');
 document.getElementById('lkSheet').onclick=e=>{if(e.target.id==='lkSheet'){closeSheet('lkSheet');lkCur=null;lkQueue=[];}};
 document.getElementById('chkSheet').onclick=e=>{if(e.target.id==='chkSheet')closeSheet('chkSheet');};
 function tryParseFeed(raw){
-  if(!raw||!/"kouunn"|"notes"\s*:|"link"\s*:|"set"\s*:|"del"\s*:|"km"\s*:|"items"\s*:/.test(raw))return null;
+  if(!raw||!/"kouunn"|"notes"\s*:|"link"\s*:|"set"\s*:|"del"\s*:|"stations"\s*:|"dist"\s*:|"km"\s*:|"items"\s*:/.test(raw))return null;
   try{
     const m=raw.match(/\{[\s\S]*\}|\[[\s\S]*\]/);
     const data=JSON.parse(m?m[0]:raw);
     if(data&&!Array.isArray(data)&&Array.isArray(data.link)&&data.link.length){const l=[];l.__link=data.link;return l;}
     if(data&&!Array.isArray(data)&&Array.isArray(data.set)&&data.set.length){const l=[];l.__set=data.set;return l;}
     if(data&&!Array.isArray(data)&&Array.isArray(data.del)&&data.del.length){const l=[];l.__del=data.del;return l;}
+    if(data&&!Array.isArray(data)&&Array.isArray(data.stations)&&data.stations.length){const l=[];l.__stations=data.stations;return l;}
+    if(data&&!Array.isArray(data)&&Array.isArray(data.dist)&&data.dist.length){const l=[];l.__dist=data.dist;return l;}
     const list=Array.isArray(data)?data:(data&&data.notes);
     return (Array.isArray(list)&&list.length)?list:null;
   }catch(e){return null;}
@@ -2660,6 +2765,7 @@ document.getElementById('bkFile').onchange=async e=>{
         }
         savePlaces(mine);
       }
+      if(data.kmTable&&data.kmTable.st){const T=loadKmTable();for(const k in data.kmTable.st)if(!T.st[k])T.st[k]=data.kmTable.st[k];for(const k in (data.kmTable.d||{}))if(!T.d[k])T.d[k]=data.kmTable.d[k];saveKmTable(T);}
     }else if(data.app!=='inbox'){toast(t('tBadFile'));return;}
     for(const raw of (data.notes||[])){
       if(!raw.id){skipped++;continue;}

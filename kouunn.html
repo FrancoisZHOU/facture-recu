@@ -2658,18 +2658,21 @@ async function importDel(list){
   return plan.length;
 }
 /* 挂钩块:{"kouunn":1,"link":[{"f":"2026-09-01_01.jpg","d":"2026-09-01","t":"Weldom Montceau","amt":44.2}]}
-   f=ZIP里的导出文件名(或 id=fichiers.csv里的id);d/t/amt 定位记录。文件挂上记录后改名改日期。 */
+   f=ZIP里的导出文件名 或 导入时的原始文件名(或 id=fichiers.csv里的id);d/t/amt 定位记录。文件挂上记录后改名改日期。 */
 async function importLinks(list){
   const all=await dbAll(),notes=await noteAll();
   const allRecs=notes.filter(n=>n.kind==='rec');
   const names=exportNames(all,allRecs);
   const byName=new Map(),byId=new Map(all.map(r=>[r.id,r]));
   for(const [id,nm] of names)byName.set(nm,id);
+  /* 原始文件名也能定位(导入时的 name,如 Commande1000078232.pdf);只对还没挂的文件、且名字唯一时生效 */
+  const byOrig=new Map();for(const r of all){if(r.nid||!r.name)continue;const k=String(r.name).trim().toLowerCase();byOrig.set(k,byOrig.has(k)?null:r.id);}
   const plan=[],noFile=[],noRec=[],already=[];
   const tag=e=>String(e.f||e.id||'?')+' → '+String(e.d||'')+' '+String(e.t||'')+' '+(parseFloat(e.amt)||0).toFixed(2);
   for(const e of list){
     if(!e||typeof e!=='object')continue;
-    const r=e.id?byId.get(String(e.id)):byId.get(byName.get(String(e.f||'')));
+    const fk=String(e.f||'');
+    const r=e.id?byId.get(String(e.id)):(byId.get(byName.get(fk))||byId.get(byOrig.get(fk.trim().toLowerCase())));
     if(!r){noFile.push(tag(e));continue;}
     const amt=parseFloat(e.amt),d=String(e.d||'').trim(),txt=String(e.t||'').trim();
     const n=allRecs.find(x=>x.dateKey===d&&(x.text||'')===txt&&Math.abs((x.amt||0)-amt)<0.005&&(!e.ref||!x.ref||String(x.ref)===String(e.ref)));

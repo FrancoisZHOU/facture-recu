@@ -2666,26 +2666,28 @@ async function importLinks(list){
   const byName=new Map(),byId=new Map(all.map(r=>[r.id,r]));
   for(const [id,nm] of names)byName.set(nm,id);
   /* 原始文件名也能定位(导入时的 name,如 Commande1000078232.pdf);只对还没挂的文件、且名字唯一时生效 */
-  const byOrig=new Map();for(const r of all){if(r.nid||!r.name)continue;const k=String(r.name).trim().toLowerCase();byOrig.set(k,byOrig.has(k)?null:r.id);}
+  const byOrig=new Map(),byOrigAll=new Map();for(const r of all){if(!r.name)continue;const k=String(r.name).trim().toLowerCase();byOrigAll.set(k,byOrigAll.has(k)?null:r.id);if(!r.nid)byOrig.set(k,byOrig.has(k)?null:r.id);}
   const plan=[],noFile=[],noRec=[],already=[];
   const tag=e=>String(e.f||e.id||'?')+' → '+String(e.d||'')+' '+String(e.t||'')+' '+(parseFloat(e.amt)||0).toFixed(2);
   for(const e of list){
     if(!e||typeof e!=='object')continue;
     const fk=String(e.f||'');
-    const r=e.id?byId.get(String(e.id)):(byId.get(byName.get(fk))||byId.get(byOrig.get(fk.trim().toLowerCase())));
+    const r=e.id?byId.get(String(e.id)):(byId.get(byName.get(fk))||byId.get(byOrig.get(fk.trim().toLowerCase()))||(e.move?byId.get(byOrigAll.get(fk.trim().toLowerCase())):null));
     if(!r){noFile.push(tag(e));continue;}
     const amt=parseFloat(e.amt),d=String(e.d||'').trim(),txt=String(e.t||'').trim();
     const n=allRecs.find(x=>x.dateKey===d&&(x.text||'')===txt&&Math.abs((x.amt||0)-amt)<0.005&&(!e.ref||!x.ref||String(x.ref)===String(e.ref)));
     if(!n){noRec.push(tag(e));continue;}
-    if(r.nid){if(r.nid===n.id)already.push(tag(e));else noFile.push(tag(e)+' (déjà lié)');continue;}
+    if(r.nid){if(r.nid===n.id){already.push(tag(e));continue;}if(!e.move){noFile.push(tag(e)+' (déjà lié)');continue;}}
+    /* "move":1 → 文件已挂在别的记录上时,从旧记录摘下再挂到这条 */
     if(plan.some(p=>p.r===r))continue;
     plan.push({r,n});
   }
   if(!plan.length){showCheck(t('lkBlockT'),t('lkBlockRep',0,noFile.length,noRec.length,already.length)+fmtLists(noFile,noRec,already));return 0;}
   if(!confirm(t('lkBlockConf',plan.length,noFile.length+noRec.length)))return 0;
   const touched=new Map();
-  const snap=plan.map(p=>({rid:p.r.id,label:p.r.label,dateKey:p.r.dateKey,nid:p.n.id,nf:!!(p.n.ext&&p.n.ext.nf)}));
+  const snap=plan.map(p=>({rid:p.r.id,label:p.r.label,dateKey:p.r.dateKey,nid:p.n.id,nf:!!(p.n.ext&&p.n.ext.nf),oldNid:p.r.nid||null}));
   for(const {r,n} of plan){
+    if(r.nid&&r.nid!==n.id){const o=touched.get(r.nid)||notes.find(x=>x.id===r.nid);if(o){o.fid=(o.fid||[]).filter(x=>x!==r.id);touched.set(o.id,o);}}
     r.nid=n.id;r.label=n.text||'';r.dateKey=n.dateKey;await dbPut(r);
     (n.fid=n.fid||[]).push(r.id);if(n.ext)delete n.ext.nf;else n.ext={};touched.set(n.id,n);
   }
@@ -2693,7 +2695,7 @@ async function importLinks(list){
   render();
   const done=plan.map(p=>(names.get(p.r.id)||p.r.id)+' → '+recLabel(p.n));
   showCheck(t('lkBlockT'),t('lkBlockRep',plan.length,noFile.length,noRec.length,already.length)+'\n\n'+t('lkBlockDoneH')+'\n'+done.join('\n')+fmtLists(noFile,noRec,already));
-  showUndoFn(async()=>{const ns=await noteAll(),rs=await dbAll();let k=0;for(const sn of snap){const r=rs.find(x=>x.id===sn.rid);const n=ns.find(x=>x.id===sn.nid);if(r){delete r.nid;r.label=sn.label||'';r.dateKey=sn.dateKey;await dbPut(r);}if(n){n.fid=(n.fid||[]).filter(f=>f!==sn.rid);if(!n.fid.length&&sn.nf){n.ext=n.ext||{};n.ext.nf=1;}await notePut(n);}k++;}return k;},plan.length);
+  showUndoFn(async()=>{const ns=await noteAll(),rs=await dbAll();let k=0;for(const sn of snap){const r=rs.find(x=>x.id===sn.rid);const n=ns.find(x=>x.id===sn.nid);if(r){if(sn.oldNid)r.nid=sn.oldNid;else delete r.nid;r.label=sn.label||'';r.dateKey=sn.dateKey;await dbPut(r);}if(n){n.fid=(n.fid||[]).filter(f=>f!==sn.rid);if(!n.fid.length&&sn.nf){n.ext=n.ext||{};n.ext.nf=1;}await notePut(n);}if(sn.oldNid){const o=ns.find(x=>x.id===sn.oldNid);if(o&&!(o.fid||[]).includes(sn.rid)){(o.fid=o.fid||[]).push(sn.rid);await notePut(o);}}k++;}return k;},plan.length);
   return plan.length;
   function fmtLists(a,b,c){
     let s='';
